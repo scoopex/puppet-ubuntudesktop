@@ -9,7 +9,9 @@
   "dependencies": [
          { "name": "puppetlabs/stdlib" },
          { "name": "adrien-alternatives" },
-             { "name": "herculesteam-augeasproviders_sysctl" }
+         { "name": "puppet-virtualbox" },
+         { "name": "garethr/docker" },
+         { "name": "herculesteam-augeasproviders_sysctl" }
     ],
 
   "issues_url": null

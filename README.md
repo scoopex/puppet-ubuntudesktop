@@ -3,6 +3,7 @@
  * Clone repo
    ```
    sudo bash
+   apt install git
    cd /root
    git clone  git@github.com:scoopex/puppet-ubuntudesktop.git
    ```

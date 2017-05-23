@@ -1,0 +1,9 @@
+#!/bin/bash
+
+unset LC_ALL
+unset LANG
+set -x
+apt autoremove
+apt-get update
+apt-get upgrade
+apt-get dist-upgrade
