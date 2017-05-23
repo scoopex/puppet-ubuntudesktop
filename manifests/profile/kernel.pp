@@ -1,4 +1,4 @@
-class profile::kernel {
+class ubuntudesktop::profile::kernel {
 
    sysctl { "vm.swappiness":
         ensure  => present,

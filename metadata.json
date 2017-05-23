@@ -1,0 +1,17 @@
+{
+  "name": "ubuntudesktop",
+  "version": "1.1.2",
+  "author": "Marc Schoechlin",
+  "summary": "Setup my personal ubuntu linux desktop .",
+  "license": "n/a",
+  "source": "git@github.com:scoopex/puppet-ubuntu-desktop.git",
+  "project_page": null,
+  "dependencies": [
+         { "name": "puppetlabs/stdlib" },
+         { "name": "adrien-alternatives" },
+             { "name": "herculesteam-augeasproviders_sysctl" }
+    ],
+
+  "issues_url": null
+}
+

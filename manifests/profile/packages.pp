@@ -1,10 +1,9 @@
-class profile::packages {
+class ubuntudesktop::profile::packages {
 
 #########################################################################
 ### STANDARD PACKAGES
  $packages = [ 'ubuntu-restricted-extras',
-	'gcgxine',
-	'icedax',
+   'icedax',
 	'tagtool',
 	'easytag',
 	'id3tool',
@@ -48,7 +47,7 @@ class profile::packages {
 
  package { $packages:
     ensure => installed,
- ]
+ }
 
 #########################################################################
 ### VIM

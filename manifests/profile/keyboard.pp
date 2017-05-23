@@ -1,4 +1,4 @@
-class profile::keyboard {
+class ubuntudesktop::profile::keyboard {
 
   augeas{ 'bar':
     context =>  "/files/etc/default/keyboard",
