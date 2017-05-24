@@ -2,6 +2,8 @@
 
 I use this repo/code to setup my personal system.
 
+This project is GNU GPLv3 (see LICENCE file).
+
 # Setup my workstation
 
  * Clone repo
@@ -37,3 +39,7 @@ I use this repo/code to setup my personal system.
  * Configure Nextcloud
  * Configure Backup
  * Setup ms-env
+ * Testing
+   * Puppet-Lint
+   * RSPec Tests
+   * Serverspec Tests

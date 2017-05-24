@@ -12,7 +12,6 @@
          { "name": "puppet-virtualbox" },
          { "name": "garethr/docker" },
          { "name": "herculesteam-augeasproviders_sysctl" },
-         { "name": "maestrodev-wget" }
     ],
 
   "issues_url": null

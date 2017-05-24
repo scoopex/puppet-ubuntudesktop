@@ -44,7 +44,6 @@ class ubuntudesktop::profile::software {
    'gnuplot', 'gnuplot-qt', 
    'graphviz', 
    'hplip',
-   'iptraf',
    'pidgin',
    'remmina', 'remmina-plugin-rdp',
    'rsync',
@@ -143,12 +142,14 @@ class { 'virtualbox':
   }
 
   # TODO: check if there are ubuntu packages in future
-  wget::fetch { 'https://raw.githubusercontent.com/spotify/docker-gc/master/docker-gc':
-	  destination => '/usr/local/sbin/docker-gc',
-	  cache_dir   => '/var/cache/wget',
-	  cache_file  => 'docker-gc',
-     execuser  => 'root',
-     mode   => '0755',
+  file { '/usr/local/sbin/docker-gc':
+    owner   => 'root',
+    group  => 'root',
+    mode   => '0755',
+    backup => false,
+    source => 'https://raw.githubusercontent.com/spotify/docker-gc/master/docker-gc',
+    checksum  => 'md5',
+    checksum_value  => '9d2a6feffab10e9bcea20c6c22bcebba',
   }
 
   file { '/etc/sudoers.d/docker-gc':

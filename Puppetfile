@@ -18,5 +18,3 @@ mod 'herculesteam-augeasproviders_sysctl'
 mod 'adrien-alternatives'
 mod 'puppet-virtualbox'
 mod 'garethr/docker'
-mod 'maestrodev-wget'
-
