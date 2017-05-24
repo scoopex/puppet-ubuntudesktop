@@ -25,6 +25,13 @@ This project is GNU GPLv3 (see LICENCE file).
    puppet apply --modulepath /etc/puppetlabs/puppet/modules/ /etc/puppetlabs/puppet/modules/ubuntudesktop/manifests/localrun.pp  --test
    ```
 
+# Develop
+
+```
+bundle install
+rake
+```
+
 # Open TODOs
 
  * Use gconftool to provision specific settings

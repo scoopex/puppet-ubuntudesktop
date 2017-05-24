@@ -10,7 +10,7 @@
 class ubuntudesktop (
       $user = 'marc',
 ) {
-	include ubuntudesktop::profile::kernel
-	include ubuntudesktop::profile::software
-	include ubuntudesktop::profile::system
+  include ubuntudesktop::profile::kernel
+  include ubuntudesktop::profile::software
+  include ubuntudesktop::profile::system
 }

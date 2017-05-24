@@ -1,25 +1,34 @@
-class ubuntudesktop::profile::system {
-  
-  # Mount Options
+# == Class: ubuntudesktop::profile::system
+#
+# Setup my personal ubuntu desktop
+#
+# === Authors
+#
+# Marc Schoechlin <marc.schoechlin@256bit.org>
+#
+#
 
-  mount {"/":
-        device  => "/dev/mapper/ubuntu--vg-root",
-        fstype  => "ext4",
-	     ensure  => "mounted",
-	     options => "defaults,noatime,nodiratime",
+class ubuntudesktop::profile::system {
+
+  # Mount Options
+  mount { '/':
+    ensure  => 'mounted',
+    device  => '/dev/mapper/ubuntu--vg-root',
+    fstype  => 'ext4',
+    options => 'defaults,noatime,nodiratime',
   }
 
   # Disable capslock
   augeas{ 'disable_capslock':
-    context =>  "/files/etc/default/keyboard",
+    context =>  '/files/etc/default/keyboard',
     changes =>  "set XKBOPTIONS 'ctrl:nocaps'",
-    onlyif  =>  "match XKBOPTIONS not_include 'ctrl:nocaps' ",
+    onlyif  =>  "match XKBOPTIONS not_include 'ctrl:nocaps'",
   }
 
   # Disable crash reporter
   augeas{ 'disable_apport':
-    context =>  "/files/etc/default/apport",
-    changes =>  "set enabled '0'",
+    context =>  '/files/etc/default/apport',
+    changes =>  'set enabled \'0\'',
   }
 
   # configure sudo
@@ -40,9 +49,9 @@ class ubuntudesktop::profile::system {
     source => "puppet:///modules/${module_name}/ubuntu-update",
   }
   file { '/etc/sudoers.d/ubuntu-update':
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
     content => "
      ${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/ubuntu-update
     "
@@ -50,26 +59,27 @@ class ubuntudesktop::profile::system {
 
   # Apparmor
   package { 'apparmor-utils':
-     ensure => installed,
+    ensure => installed,
   }->
   exec { 'aa-enforce /etc/apparmor.d/usr.bin.firefox':
-     user    => 'root',
-     unless  => 'sh -c "aa-status|grep -q firefox"',
-     path    => '/usr/bin:/usr/sbin:/bin',
-  }
-  
-  # Disable the guest access
-  file { '/etc/lightdm/lightdm.conf.d/50-no-guest.conf':
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644',
-    content => "
-[SeatDefaults]
-allow-guest=false
-    "
+    user   => 'root',
+    unless => 'sh -c "aa-status|grep -q firefox"',
+    path   => '/usr/bin:/usr/sbin:/bin',
   }
 
+  # Disable the guest access
+  file { '/etc/lightdm/lightdm.conf.d/50-no-guest.conf':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => '
+  [SeatDefaults]
+  allow-guest=false
+      '
+    }
+
   package { 'nfs-common':
-     ensure => installed,
+    ensure => installed,
   }
+
 }
