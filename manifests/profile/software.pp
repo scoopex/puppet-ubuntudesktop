@@ -95,6 +95,7 @@ class ubuntudesktop::profile::software {
    'splint',
    'strace',
    'subversion',
+   'devscripts', 'debhelper', 'build-essential', 'dh-make',
  ]
 
  package { $packages:
@@ -122,24 +123,44 @@ class { 'virtualbox':
 
 #virtualbox::extpack { 'Oracle_VM_VirtualBox_Extension_Pack':
 #    ensure           => present,
-#    source           => 'http://download.virtualbox.org/virtualbox/4.3.20/Oracle_VM_VirtualBox_Extension_Pack-4.3.20.vbox-extpack',
-#    checksum_string  => '4b7546ddf94308901b629865c54d5840',
+#    source           => 'http://download.virtualbox.org/virtualbox/5.1.22/Oracle_VM_VirtualBox_Extension_Pack-5.1.22-115126.vbox-extpack',
+#    checksum_string  => '244e6f450cba64e0b025711050db3c43e6ce77e12cd80bcd08796315a90c8aaf',
 #    follow_redirects => true,
 #}
 
 
 #########################################################################
-### Virtualbox
+### Docker
 
-class { '::docker':
-     dns => '8.8.8.8',
-     version => 'latest',
-     ip_forward      => true,
-     iptables        => true,
-     ip_masq         => true,
-     docker_users    => [ $::ubuntudesktop::user ],
-     manage_kernel   => false,
-}
+  class { '::docker':
+       dns => '8.8.8.8',
+       version => 'latest',
+       ip_forward      => true,
+       iptables        => true,
+       ip_masq         => true,
+       docker_users    => [ $::ubuntudesktop::user ],
+       manage_kernel   => false,
+  }
+
+  # TODO: check if there are ubuntu packages in future
+  wget::fetch { 'https://raw.githubusercontent.com/spotify/docker-gc/master/docker-gc':
+	  destination => '/usr/local/sbin/docker-gc',
+	  cache_dir   => '/var/cache/wget',
+	  cache_file  => 'docker-gc',
+     execuser  => 'root',
+     mode   => '0755',
+  }
+
+  file { '/etc/sudoers.d/docker-gc':
+    owner   => 'root',
+    group  => 'root',
+    mode   => '0755',
+    content => "
+     ${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/docker-gc
+    "
+  }
+
+
 #########################################################################
 ### OpenVPN
 
