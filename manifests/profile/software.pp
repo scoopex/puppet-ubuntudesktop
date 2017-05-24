@@ -192,7 +192,7 @@ class { 'virtualbox':
 #########################################################################
 ### VIM
 
-  package { [ 'vim', 'vim-gtk3', 'vim-syntastic', 'vim-python-jedi', 'ctags' ]:
+  package { [ 'vim', 'vim-gtk3', 'vim-syntastic', 'vim-python-jedi', 'exuberant-ctags' ]:
     ensure => installed,
   }
   -> alternatives { 'editor':
