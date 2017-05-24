@@ -11,4 +11,7 @@ PuppetLint.configuration.send('disable_arrow_alignment')
 # Useless, i see no advantage
 PuppetLint.configuration.send('disable_trailing_whitespace')
 
-task :default => [:spec, :lint]
+# Useless, i see no advantage
+PuppetLint.configuration.send('')
+
+task :default => [:lint, :validate, :spec]

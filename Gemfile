@@ -5,4 +5,5 @@ gem 'rspec-puppet'
 gem 'puppet-strings'
 gem 'puppet'
 gem 'puppet-lint'
+#gem 'metadata-json-lint'
 
