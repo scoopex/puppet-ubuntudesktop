@@ -11,7 +11,7 @@
          { "name": "adrien-alternatives" },
          { "name": "puppet-virtualbox" },
          { "name": "garethr/docker" },
-         { "name": "herculesteam-augeasproviders_sysctl" },
+         { "name": "herculesteam-augeasproviders_sysctl" }
     ],
 
   "issues_url": null
