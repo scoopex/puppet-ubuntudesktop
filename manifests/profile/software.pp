@@ -107,6 +107,7 @@ class ubuntudesktop::profile::software {
     'strace',
     'subversion',
     'devscripts', 'debhelper', 'build-essential', 'dh-make',
+    'ldap-utils',
   ]
 
   package { $packages:
