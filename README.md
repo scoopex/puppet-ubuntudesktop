@@ -2,7 +2,7 @@
 
 I use this repo/code to setup my personal system.
 
-This project is GNU GPLv3 (see LICENCE file).
+This project is GNU GPLv3 (see LICENCE file). Contributions or forks are welcome.
 
 # Setup my workstation
 
@@ -35,11 +35,10 @@ rake
 
 # Open TODOs
 
- * Check exitcodes of all setup.sh commands
- * Rollout ms-env 
- * Sellect correct puppet install for ubuntu 17.04 
- * Add the correct Virtualbox apt keys
+ * Enable all neccessary package sources
  * Add a custom/local configuration
+ * Rollout ms-env 
+ * Add the correct Virtualbox apt keys
  * Set root password to same password like "marc"
  * Use gconftool to provision specific settings
    ```
