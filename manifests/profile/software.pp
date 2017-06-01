@@ -55,7 +55,7 @@ class ubuntudesktop::profile::software {
     'gnuplot', 'gnuplot-qt',
     'graphviz',
     'hplip',
-    'pidgin',
+    'pidgin', 'pidgin-sipe',
     'remmina', 'remmina-plugin-rdp',
     'rsync',
     'enigmail',

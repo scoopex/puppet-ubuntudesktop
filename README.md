@@ -11,7 +11,8 @@ This project is GNU GPLv3 (see LICENCE file).
    sudo bash
    apt install git
    cd /root
-   git clone  git@github.com:scoopex/puppet-ubuntudesktop.git
+   git clone https://github.com/scoopex/puppet-ubuntudesktop.git
+   git clone git@github.com:scoopex/puppet-ubuntudesktop.git # alternative way
    cd /root/puppet-ubuntudesktop
    ```
 
@@ -34,6 +35,12 @@ rake
 
 # Open TODOs
 
+ * Check exitcodes of all setup.sh commands
+ * Rollout ms-env 
+ * Sellect correct puppet install for ubuntu 17.04 
+ * Add the correct Virtualbox apt keys
+ * Add a custom/local configuration
+ * Set root password to same password like "marc"
  * Use gconftool to provision specific settings
    ```
    gconftool-2  --recursive-list /
