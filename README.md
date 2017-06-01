@@ -8,12 +8,12 @@ This project is GNU GPLv3 (see LICENCE file).
 
  * Clone repo
    ```
-   sudo bash
-   apt install git
-   cd /root
+   sudo apt install git
+   mkdir -p ~/src/
+   cd ~/src/
    git clone https://github.com/scoopex/puppet-ubuntudesktop.git
    git clone git@github.com:scoopex/puppet-ubuntudesktop.git # alternative way
-   cd /root/puppet-ubuntudesktop
+   cd ~/src/puppet-ubuntudesktop
    ```
 
  * Install Puppet infrastructure
