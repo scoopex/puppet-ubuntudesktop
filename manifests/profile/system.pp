@@ -64,6 +64,19 @@ class ubuntudesktop::profile::system {
      ${ubuntudesktop::user} ALL = NOPASSWD:/opt/puppetlabs/bin/puppet
     "
   }
+  # Install a tiny script to update the system
+  file { '/usr/sbin/passwd-sync':
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+    source => "puppet:///modules/${module_name}/passwd-sync",
+  }
+  -> exec { "/usr/sbin/passwd-sync ${ubuntudesktop::user} root set":
+    user   => 'root',
+    unless => "/usr/sbin/passwd-sync ${ubuntudesktop::user} root check",
+    path   => '/usr/bin:/usr/sbin:/bin',
+  }
+
 
 
 

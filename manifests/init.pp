@@ -8,7 +8,7 @@
 #
 #
 class ubuntudesktop (
-      $user = 'marc',
+  String[2] $user = 'marc',
 ) {
   include ubuntudesktop::profile::kernel
   include ubuntudesktop::profile::software

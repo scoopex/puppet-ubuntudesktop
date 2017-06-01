@@ -39,7 +39,6 @@ rake
  * Add a custom/local configuration
  * Rollout ms-env 
  * Add the correct Virtualbox apt keys
- * Set root password to same password like "marc"
  * Use gconftool to provision specific settings
    ```
    gconftool-2  --recursive-list /

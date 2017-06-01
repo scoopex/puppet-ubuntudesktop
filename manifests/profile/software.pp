@@ -14,6 +14,7 @@ class ubuntudesktop::profile::software {
 ### STANDARD PACKAGES
 
   $packages = [ 'ubuntu-restricted-extras',
+    'keepass2',
     'virtualenv',
     'wavemon',
     'wakeonlan',
