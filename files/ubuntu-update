@@ -3,6 +3,7 @@
 unset LC_ALL
 unset LANG
 set -x
+set -e
 apt autoremove
 apt-get update
 apt-get upgrade

@@ -9,10 +9,12 @@ fi
 
 set -x
 set -e
+
 sudo apt update
 sudo apt install wget -y
+
 sudo rm -rf /tmp/setup-ubuntu/
-sudo mkdir -p /tmp/setup-ubuntu
+sudo mkdir /tmp/setup-ubuntu
 sudo wget https://apt.puppetlabs.com/puppetlabs-release-pc1-${REL}.deb
 sudo dpkg -i puppetlabs-*.deb
 sudo apt update

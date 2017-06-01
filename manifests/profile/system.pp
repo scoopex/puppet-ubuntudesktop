@@ -56,6 +56,16 @@ class ubuntudesktop::profile::system {
      ${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/ubuntu-update
     "
   }
+  file { '/etc/sudoers.d/puppet':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => "
+     ${ubuntudesktop::user} ALL = NOPASSWD:/opt/puppetlabs/bin/puppet
+    "
+  }
+
+
 
   # Apparmor
   package { 'apparmor-utils':
