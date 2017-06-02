@@ -1,10 +1,15 @@
 #!/bin/bash
 
+
+if [ "$(whoami)" != "root" ];then
+  echo "INFO: not root, executing myself with sudo"
+  exec sudo $0
+fi
 unset LC_ALL
 unset LANG
 set -x
 set -e
 apt autoremove
-apt-get update
-apt-get upgrade
-apt-get dist-upgrade
+apt update
+apt upgrade
+apt dist-upgrade
