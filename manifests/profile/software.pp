@@ -14,6 +14,8 @@ class ubuntudesktop::profile::software {
 ### STANDARD PACKAGES
 
   $packages = [ 'ubuntu-restricted-extras',
+    'cifs-utils',
+    'chromium-browser',
     'keepass2',
     'virtualenv',
     'wavemon',
@@ -208,5 +210,30 @@ class { 'virtualbox':
 #     unless  => 'vim-addons | grep -q installed',
 #     path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
 #   }
+
+  file { '/etc/apparmor.d/local/usr.bin.firefox':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => "
+# Site-specific additions and overrides for usr.bin.firefox.
+# For more details, please see /etc/apparmor.d/local/README.
+
+# aa-disable /etc/apparmor.d/usr.bin.firefox
+# vi /etc/apparmor.d/local
+# aa-enforce /etc/apparmor.d/usr.bin.firefox
+# killall firefox
+# firefox
+allow /usr/bin/gvim ixr,
+allow /usr/bin/vim.gtk3 ixr,
+    ",
+   require => Package['apparmor-utils'],
+  }
+  -> exec { 'aa-enforce /etc/apparmor.d/usr.bin.firefox':
+    user   => 'root',
+    unless => 'sh -c "aa-status|grep -q firefox"',
+    path   => '/usr/bin:/usr/sbin:/bin',
+  }
+
 
 }

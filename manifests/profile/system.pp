@@ -77,17 +77,9 @@ class ubuntudesktop::profile::system {
     path   => '/usr/bin:/usr/sbin:/bin',
   }
 
-
-
-
   # Apparmor
   package { 'apparmor-utils':
     ensure => installed,
-  }
-  -> exec { 'aa-enforce /etc/apparmor.d/usr.bin.firefox':
-    user   => 'root',
-    unless => 'sh -c "aa-status|grep -q firefox"',
-    path   => '/usr/bin:/usr/sbin:/bin',
   }
 
   # Disable the guest access
