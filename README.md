@@ -1,11 +1,15 @@
 # Overview
 
 I use this repo/code to setup my personal system.
+Puppet is executed without a server.
 
 This project is GNU GPLv3 (see LICENCE file). Contributions or forks are welcome.
 
 # Setup my workstation
 
+ * Install ubuntu
+    * activate disk encryption with LVM (not homedir-enrcyryption)    
+    * select all additional software components
  * Clone repo
    ```
    sudo apt install git
@@ -23,7 +27,7 @@ This project is GNU GPLv3 (see LICENCE file). Contributions or forks are welcome
 
  * Execute setup
    ```
-   puppet apply --modulepath /etc/puppetlabs/puppet/modules/ /etc/puppetlabs/puppet/modules/ubuntudesktop/manifests/localrun.pp  --test
+   ./run-puppet.sh
    ```
 
 # Develop
@@ -31,11 +35,11 @@ This project is GNU GPLv3 (see LICENCE file). Contributions or forks are welcome
 ```
 bundle install
 rake
+./run-puppet.sh --noop
 ```
 
 # Open TODOs
 
- * Enable all neccessary package sources
  * Add a custom/local configuration
  * Rollout ms-env 
  * Add the correct Virtualbox apt keys

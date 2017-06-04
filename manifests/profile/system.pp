@@ -42,7 +42,7 @@ class ubuntudesktop::profile::system {
   }
 
   # Install a tiny script to update the system
-  file { '/usr/sbin/ubuntu-update':
+  file { '/usr/local/sbin/ubuntu-update':
     owner  => 'root',
     group  => 'root',
     mode   => '0755',
