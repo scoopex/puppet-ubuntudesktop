@@ -92,9 +92,4 @@ class ubuntudesktop::profile::system {
   allow-guest=false
       '
     }
-
-  package { 'nfs-common':
-    ensure => installed,
-  }
-
 }
