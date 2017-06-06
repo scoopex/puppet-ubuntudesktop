@@ -31,7 +31,10 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
 ### STANDARD PACKAGES
 
   $default_packages = [ 'ubuntu-restricted-extras',
+    'grip',
     'battery-stats',
+    'ruby-bundler',
+    'geeqie',
     'firefox', 'firefox-locale-de',
     'cifs-utils',
     'tree',
@@ -173,6 +176,7 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
 
     # TODO: check if there are ubuntu packages in future
     file { '/usr/local/sbin/docker-gc':
+      ensure         => present,
       owner          => 'root',
       group          => 'root',
       mode           => '0755',
@@ -182,6 +186,7 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
       checksum_value => '9d2a6feffab10e9bcea20c6c22bcebba',
     }
     file { '/etc/sudoers.d/docker-gc':
+      ensure  => present,
       owner   => 'root',
       group   => 'root',
       mode    => '0755',
