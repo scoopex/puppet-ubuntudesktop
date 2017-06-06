@@ -189,7 +189,7 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
       ensure  => present,
       owner   => 'root',
       group   => 'root',
-      mode    => '0755',
+      mode    => '0644',
       content => "
 ${mscubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/docker-gc
       "
@@ -207,7 +207,7 @@ ${mscubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/docker-gc
     file { '/etc/sudoers.d/openvpn':
       owner   => 'root',
       group   => 'root',
-      mode    => '0755',
+      mode    => '0644',
       content => "
 ${mscubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/openvpn
       "
