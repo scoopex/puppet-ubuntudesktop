@@ -24,7 +24,7 @@ sudo apt install puppet-agent librarian-puppet git -y
 sudo apt autoremove -y
 sudo ln -snf /opt/puppetlabs/bin/puppet /usr/local/sbin/puppet
 sudo ln -snf $SDIR/Puppetfile /etc/puppetlabs/puppet/Puppetfile
-sudo ln -snf $SDIR /etc/puppetlabs/puppet/modules/ubuntudesktop
+sudo ln -snf $SDIR /etc/puppetlabs/puppet/modules/mscubuntudesktop
 
 cd /etc/puppetlabs/puppet/
 sudo librarian-puppet install --verbose

@@ -15,9 +15,9 @@ This project is GNU GPLv3 (see LICENCE file). Contributions or forks are welcome
    sudo apt install git
    mkdir -p ~/src/
    cd ~/src/
-   git clone https://github.com/scoopex/puppet-ubuntudesktop.git
-   git clone git@github.com:scoopex/puppet-ubuntudesktop.git # alternative way
-   cd ~/src/puppet-ubuntudesktop
+   git clone https://github.com/scoopex/puppet-mscubuntudesktop.git
+   git clone git@github.com:scoopex/puppet-mscubuntudesktop.git # alternative way
+   cd ~/src/puppet-mscubuntudesktop
    ```
 
  * Install Puppet infrastructure

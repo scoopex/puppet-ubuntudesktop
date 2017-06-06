@@ -1,4 +1,4 @@
-# == Class: ubuntudesktop::profile::kernel
+# == Class: mscubuntudesktop::profile::kernel
 #
 # Setup my personal ubuntu desktop
 #
@@ -8,7 +8,7 @@
 #
 #
 
-class ubuntudesktop::profile::kernel {
+class mscubuntudesktop::profile::kernel {
 
   sysctl { 'vm.swappiness':
     ensure  => present,

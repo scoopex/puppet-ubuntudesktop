@@ -1,4 +1,4 @@
-# == Class: ubuntudesktop::profile::software
+# == Class: mscubuntudesktop::profile::software
 #
 # Setup my personal ubuntu desktop
 #
@@ -8,7 +8,7 @@
 #
 #
 
-class ubuntudesktop::profile::software (
+class mscubuntudesktop::profile::software (
   Array[String] $packages_additional = [],
   Array[String] $packages_exclude = [],
   Boolean $nextcloud = true,
@@ -170,7 +170,7 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
       ip_forward    => true,
       iptables      => true,
       ip_masq       => true,
-      docker_users  => [ $::ubuntudesktop::user ],
+      docker_users  => [ $::mscubuntudesktop::user ],
       manage_kernel => false,
     }
 
@@ -191,7 +191,7 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
       group   => 'root',
       mode    => '0755',
       content => "
-${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/docker-gc
+${mscubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/docker-gc
       "
     }
   }
@@ -209,7 +209,7 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/docker-gc
       group   => 'root',
       mode    => '0755',
       content => "
-${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/openvpn
+${mscubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/openvpn
       "
     }
   }
