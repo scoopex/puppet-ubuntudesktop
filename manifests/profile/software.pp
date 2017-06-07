@@ -117,7 +117,7 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
     'splint',
     'strace',
     'subversion',
-    'devscripts', 'debhelper', 'build-essential', 'dh-make',
+    'devscripts', 'debhelper', 'dh-make',
     'ldap-utils',
   ]
 
@@ -127,7 +127,6 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
   package { $install_packages:
     ensure => installed,
   }
-
 
 #########################################################################
 ### Nextcloud
@@ -157,6 +156,10 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
     #    checksum_string  => '244e6f450cba64e0b025711050db3c43e6ce77e12cd80bcd08796315a90c8aaf',
     #    follow_redirects => true,
     #}
+  }else{
+    package { [ 'dkms', 'build-essential',]: 
+      ensure => installed,
+    }
   }
 
 
