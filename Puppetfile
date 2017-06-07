@@ -14,7 +14,8 @@ forge "https://forgeapi.puppetlabs.com"
 mod 'puppetlabs/stdlib'
 
 # Modules
-mod 'herculesteam-augeasproviders_sysctl'
+#mod 'herculesteam-augeasproviders_sysctl'
+mod 'thias-sysctl'
 mod 'adrien-alternatives'
 mod 'puppet-virtualbox'
 mod 'garethr/docker'
