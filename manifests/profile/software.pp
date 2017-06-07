@@ -148,13 +148,13 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
 ### Virtualbox
 
   if ($virtualbox){
-    class { 'virtualbox':
-    }
-
     if ! defined(Package['dkms']) {
       package { 'dkms':
         ensure => installed,
       }
+    }
+    class { 'virtualbox':
+      require => Package['dkms'],
     }
 
     #virtualbox::extpack { 'Oracle_VM_VirtualBox_Extension_Pack':
