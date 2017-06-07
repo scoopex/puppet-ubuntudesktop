@@ -203,7 +203,14 @@ ${mscubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/docker-gc
 ### OpenVPN
 
   if ($openvpn){
-    package { [ 'openvpn', 'network-manager-openvpn', 'network-manager-openvpn-gnome', ]:
+
+    if ! defined ('openvpn') {
+      package { 'openvpn':
+         ensure => installed,
+      }
+    }
+
+    package { [ 'network-manager-openvpn', 'network-manager-openvpn-gnome', ]:
       ensure => installed,
     }
 
