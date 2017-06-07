@@ -75,7 +75,6 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
     'ant',
     'screen',
     'dia',
-    'dkms',
     'ncdu',
     'gimp',
     'gnuplot', 'gnuplot-qt',
@@ -150,6 +149,12 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
 
   if ($virtualbox){
     class { 'virtualbox':
+    }
+
+    if ! defined(Package['dkms']) {
+      package { 'dkms':
+        ensure => installed,
+      }
     }
 
     #virtualbox::extpack { 'Oracle_VM_VirtualBox_Extension_Pack':
