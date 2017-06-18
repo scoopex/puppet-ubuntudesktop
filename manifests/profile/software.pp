@@ -124,9 +124,7 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
   $install_packages = $default_packages + $packages_additional
   $install_packages_with_excludes = $install_packages - $packages_exclude
 
-  package { $install_packages:
-    ensure => installed,
-  }
+  ensure_resource('package', $install_packages , {'ensure' => 'present'})
 
 #########################################################################
 ### Nextcloud
@@ -147,21 +145,17 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
 ### Virtualbox
 
   if ($virtualbox){
+    ensure_resource('package', [ 'dkms', 'build-essential',] , {'ensure' => 'present'})
     class { 'virtualbox':
+      require => Package['dkms']
     }
-
     #virtualbox::extpack { 'Oracle_VM_VirtualBox_Extension_Pack':
     #    ensure           => present,
     #    source           => 'http://download.virtualbox.org/virtualbox/5.1.22/Oracle_VM_VirtualBox_Extension_Pack-5.1.22-115126.vbox-extpack',
     #    checksum_string  => '244e6f450cba64e0b025711050db3c43e6ce77e12cd80bcd08796315a90c8aaf',
     #    follow_redirects => true,
     #}
-  }else{
-    package { [ 'dkms', 'build-essential',]:
-      ensure => installed,
-    }
   }
-
 
 #########################################################################
 ### Docker
@@ -204,10 +198,7 @@ ${mscubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/docker-gc
 
   if ($openvpn){
 
-    package { [ 'network-manager-openvpn', 'network-manager-openvpn-gnome', ]:
-      ensure => installed,
-    }
-
+    ensure_resource('package', [ 'network-manager-openvpn', 'network-manager-openvpn-gnome', 'openvpn', ] , {'ensure' => 'present'})
     file { '/etc/sudoers.d/openvpn':
       owner   => 'root',
       group   => 'root',
@@ -222,11 +213,10 @@ ${mscubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/openvpn
 ### VIM
 
   if ($vim){
-     package { [ 'vim', 'vim-gtk3', 'vim-syntastic', 'vim-python-jedi', 'exuberant-ctags', 'vim-pathogen' ]:
-       ensure => installed,
-     }
-     -> alternatives { 'editor':
+     ensure_resource('package', [ 'vim', 'vim-gtk3', 'vim-syntastic', 'vim-python-jedi', 'exuberant-ctags', 'vim-pathogen' ] , {'ensure' => 'present'})
+     alternatives { 'editor':
        path => '/usr/bin/vim.basic',
+       require => Package['vim']
      }
 
      file { '/etc/apparmor.d/local/usr.bin.firefox':
@@ -267,9 +257,9 @@ allow /usr/bin/vim.gtk3 ixr,
       key      => {
         'id'     => 'BBEBDCB318AD50EC6865090613B00F1FD2C19886',
         'server' => 'hkp://keyserver.ubuntu.com:80',
-    },
-  }
-    package { 'spotify-client':
+      },
+    }
+    -> package { 'spotify-client':
             ensure => installed,
     }
   }
