@@ -40,7 +40,6 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
     'tree',
     'chromium-browser',
     'keepass2',
-    'virtualenv',
     'wavemon',
     'wakeonlan',
     'w3m',
@@ -119,6 +118,7 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
     'subversion',
     'devscripts', 'debhelper', 'dh-make',
     'ldap-utils',
+    'python-pip', 'virtualenv', 'build-essential', 'libssl-dev', 'libffi-dev', 'python-dev',
   ]
 
   $install_packages = $default_packages + $packages_additional
@@ -157,7 +157,7 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
     #    follow_redirects => true,
     #}
   }else{
-    package { [ 'dkms', 'build-essential',]: 
+    package { [ 'dkms', 'build-essential',]:
       ensure => installed,
     }
   }
@@ -222,28 +222,28 @@ ${mscubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/openvpn
 ### VIM
 
   if ($vim){
-    package { [ 'vim', 'vim-gtk3', 'vim-syntastic', 'vim-python-jedi', 'exuberant-ctags', 'vim-pathogen' ]:
-      ensure => installed,
-    }
-    -> alternatives { 'editor':
-      path => '/usr/bin/vim.basic',
-    }
+     package { [ 'vim', 'vim-gtk3', 'vim-syntastic', 'vim-python-jedi', 'exuberant-ctags', 'vim-pathogen' ]:
+       ensure => installed,
+     }
+     -> alternatives { 'editor':
+       path => '/usr/bin/vim.basic',
+     }
 
-    file { '/etc/apparmor.d/local/usr.bin.firefox':
-      owner   =>  'root',
-      group   =>  'root',
-      mode    =>  '0644',
-      content =>  "
+     file { '/etc/apparmor.d/local/usr.bin.firefox':
+       owner   =>  'root',
+       group   =>  'root',
+       mode    =>  '0644',
+       content =>  "
 # Site-specific additions and overrides for usr.bin.firefox.
 # For more details, please see /etc/apparmor.d/local/README.
 allow /usr/bin/gvim ixr,
 allow /usr/bin/vim.gtk3 ixr,
       ",
-       require => [ 
+       require => [
          Package['apparmor-utils'],
          Package['firefox'],
        ]
-    }
+     }
     -> exec { 'aa-enforce /etc/apparmor.d/usr.bin.firefox':
       user   => 'root',
       unless => 'sh -c "aa-status|grep -q firefox"',
