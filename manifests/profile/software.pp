@@ -197,8 +197,8 @@ ${mscubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/docker-gc
 ### OpenVPN
 
   if ($openvpn){
+    ensure_resource('package', [ 'network-manager-openvpn', 'network-manager-openvpn-gnome', ] , {'ensure' => 'present'})
 
-    ensure_resource('package', [ 'network-manager-openvpn', 'network-manager-openvpn-gnome', 'openvpn', ] , {'ensure' => 'present'})
     file { '/etc/sudoers.d/openvpn':
       owner   => 'root',
       group   => 'root',
