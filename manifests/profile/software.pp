@@ -118,7 +118,8 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
     'subversion',
     'devscripts', 'debhelper', 'dh-make',
     'ldap-utils',
-    'python-pip', 'virtualenv', 'build-essential', 'libssl-dev', 'libffi-dev', 'python-dev',
+    'python-pip', 'virtualenv', 'build-essential', 'libssl-dev', 'libffi-dev', 'python-dev', 'pychecker', 'pyflakes', 'pylint', 
+    'python3-pylint-flask', 'python3-pyflakes', 'python3-flake8', 'pylint3',
   ]
 
   $install_packages = $default_packages + $packages_additional
