@@ -31,6 +31,9 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
 ### STANDARD PACKAGES
 
   $default_packages = [ 'ubuntu-restricted-extras',
+    'whois',
+    'inotify-tools',
+    'highlight',
     'grip',
     'wcalc',
     'battery-stats',
@@ -119,7 +122,7 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
     'subversion',
     'devscripts', 'debhelper', 'dh-make',
     'ldap-utils',
-    'python-pip', 'virtualenv', 'build-essential', 'libssl-dev', 'libffi-dev', 'python-dev', 'pychecker', 'pyflakes', 'pylint', 'ipython3',
+    'python-pip', 'virtualenv', 'build-essential', 'libssl-dev', 'libffi-dev', 'python-dev', 'pychecker', 'pyflakes', 'pylint', 'ipython3', 'python-autopep8',
     'python3-pylint-flask', 'python3-pyflakes', 'python3-flake8', 'pylint3',
     'python3-nose', 'python3-nose-cov', 'python3-nose-json', 'python3-nose-parameterized', 'python3-nose-timer', 'python3-nose-yanc',
     'unity-tweak-tool',
