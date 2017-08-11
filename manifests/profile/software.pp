@@ -31,7 +31,11 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
 ### STANDARD PACKAGES
 
   $default_packages = [ 'ubuntu-restricted-extras',
+    'libterm-readline-gnu-perl',
     'whois',
+    'linphone',
+    'apache2-utils',
+    'siege',
     'inotify-tools',
     'highlight',
     'grip',
@@ -114,7 +118,7 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
     'texlive-latex-base', 'texlive-latex-base-doc', 'texlive-latex-extra', 'texlive-latex-recommended',
     'texlive-latex-recommended-doc', 'texlive-pictures', 'texlive-pictures-doc', 'texlive-pstricks', 'texlive-pstricks-doc',
     'rtorrent',
-    'scribus',
+    'scribus', 'inkscape',
     'siege',
     'socat',
     'splint',
