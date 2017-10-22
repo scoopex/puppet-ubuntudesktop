@@ -31,6 +31,10 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
 ### STANDARD PACKAGES
 
   $default_packages = [ 'ubuntu-restricted-extras',
+    'pandoc', 'grip',
+    'youtube-dl',
+    'xine-ui',
+    'mosh',
     'libterm-readline-gnu-perl',
     'whois',
     'linphone',
@@ -38,7 +42,6 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
     'siege',
     'inotify-tools',
     'highlight',
-    'grip',
     'wcalc',
     'battery-stats',
     'ruby-bundler',
