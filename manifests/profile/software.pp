@@ -22,9 +22,9 @@ class mscubuntudesktop::profile::software (
 #########################################################################
 ### STANDARD PACKAGE SOURCES
 
-apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
+apt::source { "archive.ubuntu.com-mscdesktop":
   location => 'http://archive.canonical.com/ubuntu',
-  repos    => "${::lsbdistcodename} partner",
+  repos    => "partner",
 }
 
 #########################################################################
@@ -130,7 +130,7 @@ apt::source { "archive.ubuntu.com-${::lsbdistcodename}":
     'devscripts', 'debhelper', 'dh-make',
     'ldap-utils',
     'python-pip', 'virtualenv', 'build-essential', 'libssl-dev', 'libffi-dev', 'python-dev', 'pychecker', 'pyflakes', 'pylint', 'ipython3', 'python-autopep8',
-    'python3-pylint-flask', 'python3-pyflakes', 'python3-flake8', 'pylint3',
+    'python3-pylint-flask', 'python3-pyflakes', 'python3-flake8', 'pylint3', 'python3-packaging',
     'python3-nose', 'python3-nose-cov', 'python3-nose-json', 'python3-nose-parameterized', 'python3-nose-timer', 'python3-nose-yanc',
     'unity-tweak-tool',
   ]
