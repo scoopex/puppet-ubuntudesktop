@@ -1,0 +1,45 @@
+# built following
+# http://ehaselwanter.com/en/blog/2014/05/08/using-test-kitchen-with-puppet/
+# and ported concepts from test-kitchen using chef
+---
+driver:
+  provision: true
+
+provisioner:
+  name: puppet_apply
+  manifests_path: manifests
+  manifest: localrun.pp
+  modules_path: modules
+  hiera_data_path: data
+  hiera_deep_merge: true
+  puppet_verbose: true
+  puppet_debug: false
+  require_chef_for_busser: false
+  require_puppet_repo: false
+  custom_options: '--show_diff'
+  verify_host_key: false
+
+transport:
+  name: sftp
+
+busser:
+  ruby_bindir: /usr/bin
+
+platforms:
+  - name: ubuntu-17.10-vagrant-puppet4-mscubuntudesktop
+    driver_plugin: vagrant
+    driver:
+      vagrantfile_erb: Vagrantfile.erb
+      box: bento/ubuntu-17.10
+      box_url: https://app.vagrantup.com/bento/boxes/ubuntu-17.10
+      #network:
+      #- ['private_network', {ip: '192.168.33.33'}]
+      #- ["forwarded_port", {guest: 8080, host: 8080}]
+      provisioner:
+        require_puppet_repo: true
+        puppet_apt_repo: "http://apt.puppetlabs.com/puppetlabs-release-artful.deb"
+
+suites:
+  - name: default
+    includes: 
+      - ubuntu-17.10-vagrant-puppet4-mscubuntudesktop

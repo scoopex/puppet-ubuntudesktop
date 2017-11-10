@@ -38,6 +38,15 @@ rake
 ./run-puppet.sh --noop
 ```
 
+# Run testsetup in kitchen
+
+ * Execute testsetup in kitchen
+   See: https://github.com/scoopex/puppet-kitchen_template
+ * Start Virtualbox and access display
+ * Login with default password:
+   * Login: marc
+   * Password: install
+
 # Open TODOs
 
  * Add a custom/local configuration
