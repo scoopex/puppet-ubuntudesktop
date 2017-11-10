@@ -32,9 +32,9 @@ platforms:
       vagrantfile_erb: Vagrantfile.erb
       box: bento/ubuntu-17.10
       box_url: https://app.vagrantup.com/bento/boxes/ubuntu-17.10
-      #network:
-      #- ['private_network', {ip: '192.168.33.33'}]
-      #- ["forwarded_port", {guest: 8080, host: 8080}]
+      customize: 
+        memory: 2048
+      gui: true
       provisioner:
         require_puppet_repo: true
         puppet_apt_repo: "http://apt.puppetlabs.com/puppetlabs-release-artful.deb"
