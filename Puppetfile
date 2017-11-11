@@ -17,5 +17,9 @@ mod 'puppetlabs/stdlib'
 #mod 'herculesteam-augeasproviders_sysctl'
 mod 'thias-sysctl'
 mod 'adrien-alternatives'
-mod 'puppet-virtualbox'
-mod 'garethr/docker'
+
+mod 'puppet-virtualbox',
+   :git => 'git@github.com:scoopex/puppet-virtualbox.git'
+
+mod 'garethr/docker',
+   :git => 'git@github.com:garethr/garethr-docker.git'

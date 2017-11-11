@@ -12,8 +12,8 @@ class mscubuntudesktop::profile::software (
   Array[String] $packages_additional = [],
   Array[String] $packages_exclude = [],
   Boolean $nextcloud = true,
-  Boolean $virtualbox = true,
-  Boolean $docker = true,
+  Boolean $virtualbox = false,
+  Boolean $docker = false,
   Boolean $openvpn = true,
   Boolean $vim = true,
   Boolean $spotify = true,
@@ -194,7 +194,7 @@ apt::source { "archive.ubuntu.com-mscdesktop":
       backup         => false,
       source         => 'https://raw.githubusercontent.com/spotify/docker-gc/master/docker-gc',
       checksum       => 'md5',
-      checksum_value => '9d2a6feffab10e9bcea20c6c22bcebba',
+      checksum_value => '82744942490fe6359bfc9a4b0c54fceb',
     }
     file { '/etc/sudoers.d/docker-gc':
       ensure  => present,
@@ -264,12 +264,13 @@ allow /usr/bin/vim.gtk3 ixr,
 ### VIM
 
   if ($spotify){
+
     apt::source { 'spotify':
       location => 'http://repository.spotify.com',
       release  => 'stable',
       repos    => 'non-free',
       key      => {
-        'id'     => 'BBEBDCB318AD50EC6865090613B00F1FD2C19886',
+        'id'     => '0DF731E45CE24F27EEEB1450EFDC8610341D9410',
         'server' => 'hkp://keyserver.ubuntu.com:80',
       },
     }

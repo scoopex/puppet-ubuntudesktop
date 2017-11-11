@@ -1,16 +1,18 @@
-# Overview
+Overview
+=========
 
-I use this repo/code to setup my personal system.
-Puppet is executed without a server.
+I use this repo/code to setup my personal workstation/laptop system.
+Puppet is executed in serverless mode using "puppet apply".
 
 This project is GNU GPLv3 (see LICENCE file). Contributions or forks are welcome.
 
-# Setup my workstation
+ Usage
+=========
 
- * Install ubuntu
+ * install ubuntu
     * activate disk encryption with LVM (not homedir-enrcyryption)    
     * select all additional software components
- * Clone repo
+ * clone repo
    ```
    sudo apt install git
    mkdir -p ~/src/github
@@ -20,7 +22,7 @@ This project is GNU GPLv3 (see LICENCE file). Contributions or forks are welcome
    cd ~/src/github/puppet-mscubuntudesktop
    ```
 
- * Install Puppet infrastructure
+ * Install Puppet infrastructure 
    ```
    ./setup.sh
    ```
@@ -30,7 +32,8 @@ This project is GNU GPLv3 (see LICENCE file). Contributions or forks are welcome
    ./run-puppet.sh
    ```
 
-# Develop
+Develop
+=========
 
 ```
 bundle install
@@ -43,12 +46,14 @@ rake
  * Execute testsetup in kitchen
    See: https://github.com/scoopex/puppet-kitchen_template
  * Start Virtualbox and access display
- * Login with default password:
+ * Login with default password
    * Login: marc
    * Password: install
 
-# Open TODOs
+Open TODOs
+==========
 
+ * Migrate to Puppet 5
  * Add a custom/local configuration
  * Rollout ms-env 
  * Add the correct Virtualbox apt keys
@@ -57,13 +62,11 @@ rake
    gconftool-2  --recursive-list /
    ```
  * Autostart & Configure: clipit
- * Autostart & Configure: pidgin
  * Set Terminal Settings
    * Scrolling
    * Hotkeys
  * Configure Nextcloud
  * Configure Backup
- * Setup ms-env
  * Testing
    * Puppet-Lint
    * RSPec Tests
