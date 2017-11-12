@@ -12,7 +12,7 @@ class mscubuntudesktop::profile::software (
   Array[String] $packages_additional = [],
   Array[String] $packages_exclude = [],
   Boolean $nextcloud = true,
-  Boolean $virtualbox = false,
+  Boolean $virtualbox = true,
   Boolean $docker = false,
   Boolean $openvpn = true,
   Boolean $vim = true,

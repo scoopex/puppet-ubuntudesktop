@@ -21,5 +21,4 @@ mod 'adrien-alternatives'
 mod 'puppet-virtualbox',
    :git => 'git@github.com:scoopex/puppet-virtualbox.git'
 
-mod 'garethr/docker',
-   :git => 'git@github.com:garethr/garethr-docker.git'
+mod 'garethr/docker'

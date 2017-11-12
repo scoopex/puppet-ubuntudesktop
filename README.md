@@ -54,6 +54,10 @@ Open TODOs
 ==========
 
  * Migrate to Puppet 5
+ * Do not use my own virtualbox release
+   * https://github.com/scoopex/puppet-virtualbox
+   * https://github.com/voxpupuli/puppet-virtualbox/issues/57
+ * Enable docker automated install 
  * Add a custom/local configuration
  * Rollout ms-env 
  * Add the correct Virtualbox apt keys
