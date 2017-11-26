@@ -12,7 +12,7 @@ class mscubuntudesktop::profile::software (
   Array[String] $packages_additional = [],
   Array[String] $packages_exclude = [],
   Boolean $nextcloud = true,
-  Boolean $virtualbox = true,
+  Boolean $virtualbox = false,
   Boolean $docker = false,
   Boolean $openvpn = true,
   Boolean $vim = true,
@@ -133,6 +133,8 @@ apt::source { "archive.ubuntu.com-mscdesktop":
     'python3-pylint-flask', 'python3-pyflakes', 'python3-flake8', 'pylint3', 'python3-packaging',
     'python3-nose', 'python3-nose-cov', 'python3-nose-json', 'python3-nose-parameterized', 'python3-nose-timer', 'python3-nose-yanc',
     'unity-tweak-tool',
+    'pdfshuffler', 
+    #'pdfchain',
   ]
 
   $install_packages = $default_packages + $packages_additional
