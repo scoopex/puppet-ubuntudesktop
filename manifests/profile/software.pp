@@ -90,7 +90,6 @@ apt::source { "archive.ubuntu.com-mscdesktop":
     'gnuplot', 'gnuplot-qt',
     'graphviz',
     'hplip',
-    'pidgin', 'pidgin-sipe',
     'remmina', 'remmina-plugin-rdp',
     'rsync',
     'enigmail',

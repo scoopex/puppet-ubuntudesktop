@@ -5,6 +5,8 @@ REL="$(lsb_release -c -s)"
 
 if [ "$(lsb_release -c -s)" = "zesty" ];then
   REL="yakkety"
+elif [ "$(lsb_release -c -s)" = "artful" ];then
+  REL="yakkety"
 fi
 
 set -x
@@ -25,7 +27,8 @@ sudo apt install puppet-agent librarian-puppet git -y
 sudo apt autoremove -y
 sudo ln -snf /opt/puppetlabs/bin/puppet /usr/local/sbin/puppet
 sudo ln -snf $SDIR/Puppetfile /etc/puppetlabs/puppet/Puppetfile
+sudo mkdir -p /etc/puppetlabs/puppet/modules
 sudo ln -snf $SDIR /etc/puppetlabs/puppet/modules/mscubuntudesktop
 
 cd /etc/puppetlabs/puppet/
-sudo librarian-puppet install --verbose
+sudo librarian-puppet install

@@ -19,6 +19,6 @@ mod 'thias-sysctl'
 mod 'adrien-alternatives'
 
 mod 'puppet-virtualbox',
-   :git => 'git@github.com:scoopex/puppet-virtualbox.git'
+   :git => 'https://github.com/scoopex/puppet-virtualbox.git'
 
 mod 'garethr/docker'
