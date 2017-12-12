@@ -62,6 +62,7 @@ class mscubuntudesktop::profile::system {
     mode    => '0644',
     content => "
 ${mscubuntudesktop::user} ALL = NOPASSWD:/opt/puppetlabs/bin/puppet
+${mscubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/puppet
     "
   }
   # Install a tiny script to update the system
@@ -83,13 +84,13 @@ ${mscubuntudesktop::user} ALL = NOPASSWD:/opt/puppetlabs/bin/puppet
   }
 
   # Disable the guest access
-  file { '/etc/lightdm/lightdm.conf.d/50-no-guest.conf':
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => '
-  [SeatDefaults]
-  allow-guest=false
-      '
-    }
+#  file { '/etc/lightdm/lightdm.conf.d/50-no-guest.conf':
+#    owner   => 'root',
+#    group   => 'root',
+#    mode    => '0644',
+#    content => '
+#  [SeatDefaults]
+#  allow-guest=false
+#      '
+#    }
 }

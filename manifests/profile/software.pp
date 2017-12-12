@@ -128,7 +128,7 @@ apt::source { "archive.ubuntu.com-mscdesktop":
     'subversion',
     'devscripts', 'debhelper', 'dh-make',
     'ldap-utils',
-    'python-pip', 'virtualenv', 'build-essential', 'libssl-dev', 'libffi-dev', 'python-dev', 'pychecker', 'pyflakes', 'pylint', 'ipython3', 'python-autopep8',
+    'python-pip', 'virtualenv', 'python3-virtualenv', 'build-essential', 'libssl-dev', 'libffi-dev', 'python-dev', 'pychecker', 'pyflakes', 'pylint', 'ipython3', 'python-autopep8',
     'python3-pylint-flask', 'python3-pyflakes', 'python3-flake8', 'pylint3', 'python3-packaging',
     'python3-nose', 'python3-nose-cov', 'python3-nose-json', 'python3-nose-parameterized', 'python3-nose-timer', 'python3-nose-yanc',
     'unity-tweak-tool',
@@ -213,15 +213,16 @@ ${mscubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/docker-gc
 
   if ($openvpn){
     ensure_resource('package', [ 'network-manager-openvpn', 'network-manager-openvpn-gnome', ] , {'ensure' => 'present'})
+  }
 
-    file { '/etc/sudoers.d/openvpn':
+  file { '/etc/sudoers.d/vpn':
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
       content => "
 ${mscubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/openvpn
-      "
-    }
+${mscubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
+"
   }
 
 #########################################################################

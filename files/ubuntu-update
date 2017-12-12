@@ -9,7 +9,7 @@ unset LC_ALL
 unset LANG
 set -x
 set -e
-apt autoremove
-apt update
-apt upgrade
-apt dist-upgrade
+apt autoremove -y
+apt update 
+apt upgrade -y
+apt dist-upgrade -y
