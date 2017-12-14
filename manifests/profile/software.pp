@@ -35,7 +35,7 @@ apt::source { "archive.ubuntu.com-mscdesktop":
     'youtube-dl',
     'xine-ui',
     'mosh',
-    'libterm-readline-gnu-perl',
+    'libterm-readline-gnu-perl', 'perl-doc',
     'whois',
     'linphone',
     'apache2-utils',
