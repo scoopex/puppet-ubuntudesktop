@@ -37,7 +37,6 @@ apt::source { "archive.ubuntu.com-mscdesktop":
     'mosh',
     'libterm-readline-gnu-perl', 'perl-doc',
     'whois',
-    'linphone',
     'apache2-utils',
     'siege',
     'inotify-tools',
