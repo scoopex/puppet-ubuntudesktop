@@ -32,3 +32,8 @@ sudo ln -snf $SDIR /etc/puppetlabs/puppet/modules/mscubuntudesktop
 
 cd /etc/puppetlabs/puppet/
 sudo librarian-puppet install
+
+sudo systemctl disable mcollective.service 
+sudo systemctl disable puppet.service
+sudo systemctl stop mcollective.service 
+sudo systemctl stop puppet.service
