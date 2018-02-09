@@ -33,7 +33,9 @@ apt::source { "archive.ubuntu.com-mscdesktop":
   $default_packages = [ 'ubuntu-restricted-extras',
     'pandoc', 'grip',
     'youtube-dl',
+    'wine-stable', 
     'xine-ui',
+    'rpm',
     'mosh',
     'libterm-readline-gnu-perl', 'perl-doc',
     'whois',
@@ -92,7 +94,7 @@ apt::source { "archive.ubuntu.com-mscdesktop":
     'remmina', 'remmina-plugin-rdp',
     'rsync',
     'enigmail',
-    'default-jdk',
+    'default-jdk', 'maven', 'visualvm', 
     'git', 'git-man', 'tig', 'diffutils', 'diffstat', 'myrepos',
     'shutter',
     'curl', 'wget',
@@ -133,6 +135,7 @@ apt::source { "archive.ubuntu.com-mscdesktop":
     'unity-tweak-tool',
     'pdfshuffler', 
     #'pdfchain',
+    'percona-toolkit',
   ]
 
   $install_packages = $default_packages + $packages_additional
@@ -208,7 +211,7 @@ ${mscubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/docker-gc
   }
 
 #########################################################################
-### OpenVPN
+### VPN
 
   if ($openvpn){
     ensure_resource('package', [ 'network-manager-openvpn', 'network-manager-openvpn-gnome', ] , {'ensure' => 'present'})
