@@ -1,13 +1,7 @@
 #!/bin/bash
 
 SDIR="$(dirname $(readlink -f $0))"
-REL="$(lsb_release -c -s)"
-
-if [ "$(lsb_release -c -s)" = "zesty" ];then
-  REL="yakkety"
-elif [ "$(lsb_release -c -s)" = "artful" ];then
-  REL="yakkety"
-fi
+REL="xenial"
 
 set -x
 set -e
@@ -18,8 +12,12 @@ sudo apt install wget -y
 sudo rm -rf /tmp/setup-ubuntu/
 mkdir /tmp/setup-ubuntu
 cd /tmp/setup-ubuntu
-sudo wget https://apt.puppetlabs.com/puppetlabs-release-pc1-${REL}.deb
-sudo dpkg -i puppetlabs-*.deb
+
+
+sudo apt-get purge puppet*  hiera* -y 
+sudo apt-get autoremove -y
+sudo wget -P /var/tmp/ http://apt.puppetlabs.com/puppet5-release-$REL.deb
+sudo dpkg -i /var/tmp/puppet5-release-$REL.deb
 sudo apt update
 sudo apt upgrade -y
 sudo apt dist-upgrade -y
@@ -29,9 +27,6 @@ sudo ln -snf /opt/puppetlabs/bin/puppet /usr/local/sbin/puppet
 sudo ln -snf $SDIR/Puppetfile /etc/puppetlabs/puppet/Puppetfile
 sudo mkdir -p /etc/puppetlabs/puppet/modules
 sudo ln -snf $SDIR /etc/puppetlabs/puppet/modules/mscubuntudesktop
-
-cd /etc/puppetlabs/puppet/
-sudo librarian-puppet install
 
 sudo systemctl disable mcollective.service 
 sudo systemctl disable puppet.service
