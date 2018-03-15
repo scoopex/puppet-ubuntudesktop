@@ -136,7 +136,7 @@ apt::source { "archive.ubuntu.com-mscdesktop":
     'pdfshuffler', 
     #'pdfchain',
     'percona-toolkit',
-    'ipmiutil', 'xtightvncviewer',
+    'ipmitool', 'xtightvncviewer',
   ]
 
   $install_packages = $default_packages + $packages_additional
