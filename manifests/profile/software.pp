@@ -33,7 +33,7 @@ apt::source { "archive.ubuntu.com-mscdesktop":
   $default_packages = [ 'ubuntu-restricted-extras',
     'pandoc', 'grip',
     'youtube-dl',
-    'wine-stable', 
+    'wine-stable', 'playonlinux',
     'xine-ui',
     'rpm',
     'mosh',
@@ -94,7 +94,7 @@ apt::source { "archive.ubuntu.com-mscdesktop":
     'remmina', 'remmina-plugin-rdp',
     'rsync',
     'enigmail',
-    'default-jdk', 'maven', 'visualvm', 
+    'default-jdk', 'maven', 'visualvm', 'icedtea-netx', 'icedtea-plugin',
     'git', 'git-man', 'tig', 'diffutils', 'diffstat', 'myrepos',
     'shutter',
     'curl', 'wget',
@@ -136,6 +136,7 @@ apt::source { "archive.ubuntu.com-mscdesktop":
     'pdfshuffler', 
     #'pdfchain',
     'percona-toolkit',
+    'ipmiutil', 'xtightvncviewer',
   ]
 
   $install_packages = $default_packages + $packages_additional
