@@ -59,7 +59,6 @@ apt::source { "archive.ubuntu.com-mscdesktop":
     'xsel',
     'clipit',
     'icedax',
-    'tagtool',
     'easytag',
     'id3tool',
     'lame',
@@ -137,6 +136,7 @@ apt::source { "archive.ubuntu.com-mscdesktop":
     #'pdfchain',
     'percona-toolkit',
     'ipmiutil', 'xtightvncviewer',
+    'golang-go', 'packer'
   ]
 
   $install_packages = $default_packages + $packages_additional
