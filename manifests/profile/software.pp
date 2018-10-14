@@ -136,7 +136,8 @@ apt::source { "archive.ubuntu.com-mscdesktop":
     #'pdfchain',
     'percona-toolkit',
     'ipmiutil', 'xtightvncviewer',
-    'golang-go', 'packer'
+    'golang-go', 'packer', 
+    'bless', 
   ]
 
   $install_packages = $default_packages + $packages_additional
