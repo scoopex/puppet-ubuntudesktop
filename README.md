@@ -6,10 +6,10 @@ Puppet is executed in serverless mode using "puppet apply".
 
 This project is GNU GPLv3 (see LICENCE file). Contributions or forks are welcome.
 
- Usage
-=========
+How to use that setup
+=====================
 
- * install ubuntu
+ * manually install ubuntu of use a preeseed setup
     * activate disk encryption with LVM (not homedir-enrcyryption)    
     * select all additional software components
  * clone repo
@@ -17,9 +17,9 @@ This project is GNU GPLv3 (see LICENCE file). Contributions or forks are welcome
    sudo apt install git
    mkdir -p ~/src/github
    cd ~/src/github
-   git clone https://github.com/scoopex/puppet-mscubuntudesktop.git
-   git clone git@github.com:scoopex/puppet-mscubuntudesktop.git # alternative way
-   cd ~/src/github/puppet-mscubuntudesktop
+   git clone https://github.com/scoopex/puppet-ubuntudesktop.git
+   git clone git@github.com:scoopex/puppet-ubuntudesktop.git # alternative way
+   cd ~/src/github/puppet-ubuntudesktop
    ```
 
  * Install Puppet infrastructure 

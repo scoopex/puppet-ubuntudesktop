@@ -1,4 +1,4 @@
-# == Class: mscubuntudesktop::profile::software
+# == Class: ubuntudesktop::profile::software
 #
 # Setup my personal ubuntu desktop
 #
@@ -8,27 +8,31 @@
 #
 #
 
-class mscubuntudesktop::profile::software (
-  Array[String] $packages_additional = [],
-  Array[String] $packages_exclude = [],
-  Boolean $nextcloud = true,
-  Boolean $virtualbox = false,
-  Boolean $docker = false,
-  Boolean $openvpn = true,
-  Boolean $vim = true,
-  Boolean $spotify = true,
-){
+class ubuntudesktop::profile::software (
+  Array[String] $packages_additional            = [],
+  Array[String] $packages_exclude               = [],
+  Boolean $nextcloud                            = true,
+  Boolean $virtualbox                           = true,
+  String $virtualbox_version,
+  String $virtualbox_extpack_url,
+  Boolean $docker                               = true,
+  Boolean $openvpn                              = true,
+  Boolean $vim                                  = true,
+  Boolean $spotify                              = true,
+  Boolean $teams                                = true,
+  Boolean $pycharm                              = true,
+) {
 
-#########################################################################
-### STANDARD PACKAGE SOURCES
+  #########################################################################
+  ### STANDARD PACKAGE SOURCES
 
-apt::source { "archive.ubuntu.com-mscdesktop":
-  location => 'http://archive.canonical.com/ubuntu',
-  repos    => "partner",
-}
+  apt::source { "archive.ubuntu.com-mscdesktop":
+    location => 'http://archive.canonical.com/ubuntu',
+    repos    => "partner",
+  }
 
-#########################################################################
-### STANDARD PACKAGES
+  #########################################################################
+  ### STANDARD PACKAGES
 
   $default_packages = [ 'ubuntu-restricted-extras',
     'pandoc', 'grip',
@@ -128,27 +132,28 @@ apt::source { "archive.ubuntu.com-mscdesktop":
     'subversion',
     'devscripts', 'debhelper', 'dh-make',
     'ldap-utils',
-    'python-pip', 'virtualenv', 'python3-virtualenv', 'build-essential', 'libssl-dev', 'libffi-dev', 'python-dev', 'pychecker', 'pyflakes', 'pylint', 'ipython3', 'python-autopep8',
+    'python-pip', 'virtualenv', 'python3-virtualenv', 'build-essential', 'libssl-dev', 'libffi-dev', 'python-dev', 'pychecker', 'pyflakes', 'pylint',
+    'ipython3', 'python-autopep8',
     'python3-pylint-flask', 'python3-pyflakes', 'python3-flake8', 'pylint3', 'python3-packaging',
     'python3-nose', 'python3-nose-cov', 'python3-nose-json', 'python3-nose-parameterized', 'python3-nose-timer', 'python3-nose-yanc',
     'unity-tweak-tool',
-    'pdfshuffler', 
+    'pdfshuffler',
     #'pdfchain',
     'percona-toolkit',
     'ipmiutil', 'xtightvncviewer',
-    'golang-go', 'packer', 
-    'bless', 
+    'golang-go', 'packer',
+    'bless',
   ]
 
   $install_packages = $default_packages + $packages_additional
   $install_packages_with_excludes = $install_packages - $packages_exclude
 
-  ensure_resource('package', $install_packages , {'ensure' => 'present'})
+  ensure_resource('package', $install_packages, { 'ensure' => 'present' })
 
-#########################################################################
-### Nextcloud
+  #########################################################################
+  ### Nextcloud
 
-  if ($nextcloud){
+  if ($nextcloud) {
     exec { 'add-apt-repository ppa:nextcloud-devs/client && apt-get update':
       user    => 'root',
       unless  => "test -f /etc/apt/sources.list.d/nextcloud-devs-ubuntu-client-${::lsbdistcodename}.list",
@@ -160,128 +165,148 @@ apt::source { "archive.ubuntu.com-mscdesktop":
     }
   }
 
-#########################################################################
-### Virtualbox
+  #########################################################################
+  ### Virtualbox
 
-  if ($virtualbox){
-    ensure_resource('package', [ 'dkms', 'build-essential',] , {'ensure' => 'present'})
+  if ($virtualbox) {
+    ensure_resource('package', [ 'dkms', 'build-essential', ], { 'ensure' => 'present' })
     class { 'virtualbox':
-      require => Package['dkms']
+      require => Package['dkms'],
+      version => '6.1',
     }
-    #virtualbox::extpack { 'Oracle_VM_VirtualBox_Extension_Pack':
-    #    ensure           => present,
-    #    source           => 'http://download.virtualbox.org/virtualbox/5.1.22/Oracle_VM_VirtualBox_Extension_Pack-5.1.22-115126.vbox-extpack',
-    #    checksum_string  => '244e6f450cba64e0b025711050db3c43e6ce77e12cd80bcd08796315a90c8aaf',
-    #    follow_redirects => true,
-    #}
+    virtualbox::extpack { 'Oracle_VM_VirtualBox_Extension_Pack':
+      ensure           => present,
+      source           => $virtualbox_extpack_url,
+      verify_checksum  => false,
+      follow_redirects => true,
+    }
   }
 
-#########################################################################
-### Docker
+  #########################################################################
+  ### Docker
 
-  if ($docker){
+  if ($docker) {
     class { '::docker':
-      dns           => '8.8.8.8',
-      version       => 'latest',
-      ip_forward    => true,
-      iptables      => true,
-      ip_masq       => true,
-      docker_users  => [ $::mscubuntudesktop::user ],
-      manage_kernel => false,
+      dns          => '8.8.8.8',
+      version      => 'latest',
+      ip_forward   => true,
+      iptables     => true,
+      ip_masq      => true,
+      docker_users => [ $::ubuntudesktop::user ],
     }
 
-    # TODO: check if there are ubuntu packages in future
-    file { '/usr/local/sbin/docker-gc':
-      ensure         => present,
-      owner          => 'root',
-      group          => 'root',
-      mode           => '0755',
-      backup         => false,
-      source         => 'https://raw.githubusercontent.com/spotify/docker-gc/master/docker-gc',
-      checksum       => 'md5',
-      checksum_value => '82744942490fe6359bfc9a4b0c54fceb',
-    }
-    file { '/etc/sudoers.d/docker-gc':
+    file { '/etc/cron.d/docker-gc':
       ensure  => present,
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
       content => "
-${mscubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/docker-gc
+@daily root /usr/bin/docker image prune -a --filter 'until=48h' -f 2>&1|logger -t docker-image-prune
       "
     }
+
   }
 
-#########################################################################
-### VPN
+  #########################################################################
+  ### VPN
 
-  if ($openvpn){
-    ensure_resource('package', [ 'network-manager-openvpn', 'network-manager-openvpn-gnome', ] , {'ensure' => 'present'})
+  if ($openvpn) {
+    ensure_resource('package', [ 'network-manager-openvpn', 'network-manager-openvpn-gnome', ], { 'ensure' => 'present' })
   }
 
   file { '/etc/sudoers.d/vpn':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => "
+${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/openvpn
+${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
+"
+  }
+
+  #########################################################################
+  ### VIM
+
+  if ($vim) {
+    ensure_resource('package', [ 'vim', 'vim-gtk3', 'vim-syntastic', 'vim-python-jedi', 'exuberant-ctags', 'vim-pathogen' ], { 'ensure' => 'present' }
+    )
+    alternatives { 'editor':
+      path    => '/usr/bin/vim.basic',
+      require => Package['vim']
+    }
+
+    file { '/etc/apparmor.d/local/usr.bin.firefox':
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
       content => "
-${mscubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/openvpn
-${mscubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
-"
-  }
-
-#########################################################################
-### VIM
-
-  if ($vim){
-     ensure_resource('package', [ 'vim', 'vim-gtk3', 'vim-syntastic', 'vim-python-jedi', 'exuberant-ctags', 'vim-pathogen' ] , {'ensure' => 'present'})
-     alternatives { 'editor':
-       path => '/usr/bin/vim.basic',
-       require => Package['vim']
-     }
-
-     file { '/etc/apparmor.d/local/usr.bin.firefox':
-       owner   =>  'root',
-       group   =>  'root',
-       mode    =>  '0644',
-       content =>  "
 # Site-specific additions and overrides for usr.bin.firefox.
 # For more details, please see /etc/apparmor.d/local/README.
 allow /usr/bin/gvim ixr,
 allow /usr/bin/vim.gtk3 ixr,
       ",
-       require => [
-         Package['apparmor-utils'],
-         Package['firefox'],
-       ]
-     }
+      require => [
+        Package['apparmor-utils'],
+        Package['firefox'],
+      ]
+    }
     -> exec { 'aa-enforce /etc/apparmor.d/usr.bin.firefox':
       user   => 'root',
       unless => 'sh -c "aa-status|grep -q firefox"',
       path   => '/usr/bin:/usr/sbin:/bin',
     }
   }
-# TODO
-#   exec { 'vim-addons -w install puppet':
-#     user    => 'root',
-#     unless  => 'vim-addons | grep -q installed',
-#     path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-#   }
-#########################################################################
-### VIM
 
-  if ($spotify){
+  #########################################################################
+  ### VIM
 
-    apt::source { 'spotify':
-      location => 'http://repository.spotify.com',
-      release  => 'stable',
-      repos    => 'non-free',
-      key      => {
-        'id'     => '931FF8E79F0876134EDDBDCCA87FF9DF48BF1C90',
-        'server' => 'hkp://keyserver.ubuntu.com:80',
-      },
-    }
-    -> package { 'spotify-client':
-            ensure => installed,
+  if ($spotify) {
+
+    # apt::source { 'spotify':
+    #   location => 'http://repository.spotify.com',
+    #   release  => 'stable',
+    #   repos    => 'non-free',
+    #   key      => {
+    #     'id'     => '931FF8E79F0876134EDDBDCCA87FF9DF48BF1C90',
+    #     'server' => 'hkp://keyserver.ubuntu.com:80',
+    #   },
+    # }
+    # -> package { 'spotify-client':
+    #   ensure => installed,
+    # }
+
+    exec { 'snap install spotify':
+      user   => 'root',
+      unless => 'snap list spotify',
+      path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
     }
   }
+
+  #########################################################################
+  ### M$ Teams
+  # https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software
+
+  if ($teams) {
+    apt::source { 'teams':
+      location => 'https://packages.microsoft.com/repos/ms-teams',
+      release  => 'stable',
+      repos    => 'main',
+      key      => {
+        'id'     => 'BC528686B50D79E339D3721CEB3E94ADBE1229CF',
+        'server' => 'https://packages.microsoft.com/keys/microsoft.asc',
+      },
+    }
+    -> package { 'teams':
+      ensure => installed,
+    }
+  }
+
+  if ($pycharm) {
+    exec { 'snap install pycharm-community --classic':
+      user   => 'root',
+      unless => 'snap list pycharm-community ',
+      path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    }
+  }
+
 }

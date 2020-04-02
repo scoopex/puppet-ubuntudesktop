@@ -8,9 +8,9 @@ driver:
 provisioner:
   name: puppet_apply
   manifests_path: manifests
-  manifest: localrun.pp
+  manifest: local.pp
   modules_path: modules
-  hiera_data_path: data
+  hiera_data_path: data_testing
   hiera_deep_merge: true
   puppet_verbose: true
   puppet_debug: false
@@ -18,6 +18,9 @@ provisioner:
   require_puppet_repo: false
   custom_options: '--show_diff'
   verify_host_key: false
+  hiera_config_path: "hiera-testing.yaml"
+  #custom_options: '--show_diff --debug'
+  #custom_options: '--show_diff --noop'
 
 transport:
   name: sftp
@@ -26,20 +29,24 @@ busser:
   ruby_bindir: /usr/bin
 
 platforms:
-  - name: ubuntu-17.10-vagrant-puppet4-mscubuntudesktop
+  - name: ubuntu-desktop
     driver_plugin: vagrant
+    driver_config:
+      customize:
+        audio: "none"
     driver:
-      vagrantfile_erb: Vagrantfile.erb
-      box: bento/ubuntu-17.10
-      box_url: https://app.vagrantup.com/bento/boxes/ubuntu-17.10
+      vagrantfile_erb: vagrantfiles/Vagrantfile-debianoid.erb
+      box: bento/ubuntu-18.04
+      box_url: https://app.vagrantup.com/bento/boxes/ubuntu-18.04
       customize: 
-        memory: 2048
+        memory: 4096
       gui: true
-      provisioner:
-        require_puppet_repo: true
-        puppet_apt_repo: "http://apt.puppetlabs.com/puppetlabs-release-artful.deb"
+      synced_folders:
+        - ['./files', '/tmp/files']
+      #network:
+      #- ['private_network', {ip: '192.168.33.33'}]
+      #- ["forwarded_port", {guest: 8080, host: 8080}]
+      #
 
 suites:
   - name: default
-    includes: 
-      - ubuntu-17.10-vagrant-puppet4-mscubuntudesktop

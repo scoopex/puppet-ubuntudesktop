@@ -56,39 +56,46 @@ Vagrant.configure("2") do |c|
       -nodes \
       -days 365 \
       -newkey rsa:2048 \
-      -keyout /etc\/ssl\/localtest.key \
+      -keyout /etc/ssl/localtest.key \
       -out /etc/ssl/localtest.crt \
-      -subj '/C=DE/ST=./L=Stuttgart/O=./OU=FOO/CN'
+      -subj '/C=DE/ST=Town/L=Baz/O=BAR/OU=FOO/CN=IT'
+    cat /etc/ssl/localtest.crt /etc/ssl/localtest.key > /etc/ssl/localtest.pem
 
     echo "installing dummy ssl certificate"
     mkdir -p /etc/foo-ssl/star_foobar_net/
     ln -s /etc/ssl/localtest.key  /etc/foo-ssl/star_foobar_net/star_foobar_net.key
     ln -s /etc/ssl/localtest.crt  /etc/foo-ssl/star_foobar_net/star_foobar_net.crt
     ln -s /etc/ssl/localtest.crt  /etc/foo-ssl/star_foobar_net/star_foobar_net.ca-bundle
-    ln -s /etc/ssl/localtest.crt  /etc/foo-ssl/star_foobar_net/star_foobar_net.pem
+    ln -s /etc/ssl/localtest.pem  /etc/foo-ssl/star_foobar_net/star_foobar_net.pem
 
     echo "reinstalling puppet from upstream distribution repository"
     apt-get purge -y \
     puppet* \
     hiera* && \
     apt-get autoremove -y
-    sudo wget -P /var/tmp/ http://apt.puppetlabs.com/puppet5-release-xenial.deb
-    sudo dpkg -i /var/tmp/puppet5-release-xenial.deb
+    wget -P /var/tmp/ http://apt.puppetlabs.com/puppet6-release-$(lsb_release -c -s).deb
+    dpkg -i /var/tmp/*.deb
     apt-get update -y && apt-get install -y puppet-agent
-    apt-get install -y ruby vim git
+    apt-get install -y ruby vim git curl lvm2
     ln -s /opt/puppetlabs/bin/puppet /usr/bin/puppet
     mkdir -pv /opt/chef/embedded/bin/
     ln -snf /usr/bin/ruby /opt/chef/embedded/bin/
+    cd /etc/
+    dpkg --get-selections|awk '$2 ~ /^install$/{print  $1}'|sort > package.list
+    git init
+    git add -A .
+    git commit -m "initial state" -a
+
     useradd -m marc
     echo -e "install\ninstall\n" | (passwd marc)
     apt-get install ubuntu-desktop -y; systemctl restart network-manager; apt-get install ubuntu-desktop -y
     apt-get install gdm3 -y
-    cd /tmp
-    wget http://download.virtualbox.org/virtualbox/5.2.0/VBoxGuestAdditions_5.2.0.iso
-    mount -o loop VBoxGuestAdditions_5.2.0.iso /mnt/
-    apt-get install linux-headers-generic -y
-    cd /mnt
-    ./VBoxLinuxAdditions.run
+#    cd /tmp
+#    wget http://download.virtualbox.org/virtualbox/5.2.0/VBoxGuestAdditions_5.2.0.iso
+#    mount -o loop VBoxGuestAdditions_5.2.0.iso /mnt/
+#    apt-get install linux-headers-generic -y
+#    cd /mnt
+#    ./VBoxLinuxAdditions.run
     systemctl restart gdm3
     
     EOF

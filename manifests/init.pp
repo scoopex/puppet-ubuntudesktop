@@ -1,4 +1,4 @@
-# == Class: mscubuntudesktop
+# == Class: ubuntudesktop
 #
 # Setup my personal ubuntu desktop
 #
@@ -7,10 +7,10 @@
 # Marc Schoechlin <marc.schoechlin@256bit.org>
 #
 #
-class mscubuntudesktop (
+class ubuntudesktop (
   String[2] $user = 'schoecmc',
 ) {
-  include mscubuntudesktop::profile::kernel
-  include mscubuntudesktop::profile::software
-  include mscubuntudesktop::profile::system
+  include ubuntudesktop::profile::kernel
+  include ubuntudesktop::profile::software
+  include ubuntudesktop::profile::system
 }

@@ -1,5 +1,5 @@
 {
-  "name": "mscubuntudesktop",
+  "name": "ubuntudesktop",
   "version": "1.1.2",
   "author": "Marc Schoechlin",
   "summary": "Setup my personal ubuntu linux desktop.",
@@ -8,10 +8,11 @@
   "project_page": null,
   "dependencies": [
          { "name": "puppetlabs/stdlib" },
+         { "name": "thias-sysctl" },
          { "name": "adrien-alternatives" },
          { "name": "puppet-virtualbox" },
-         { "name": "garethr/docker" },
-         { "name": "herculesteam-augeasproviders_sysctl" }
+         { "name": "puppetlabs-docker" },
+         { "name": "puppet-archive" }
     ],
 
   "issues_url": null

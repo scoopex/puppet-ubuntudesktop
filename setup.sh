@@ -26,7 +26,7 @@ sudo apt autoremove -y
 sudo ln -snf /opt/puppetlabs/bin/puppet /usr/local/sbin/puppet
 sudo ln -snf $SDIR/Puppetfile /etc/puppetlabs/puppet/Puppetfile
 sudo mkdir -p /etc/puppetlabs/puppet/modules
-sudo ln -snf $SDIR /etc/puppetlabs/puppet/modules/mscubuntudesktop
+sudo ln -snf $SDIR /etc/puppetlabs/puppet/modules/ubuntudesktop
 
 sudo systemctl disable mcollective.service 
 sudo systemctl disable puppet.service

@@ -1,3 +1,0 @@
----
-mscubuntudesktop::profiles::lighttpd::installed: true
-mscubuntudesktop::profiles::lighttpd::message: "Welcome at the demo installation"

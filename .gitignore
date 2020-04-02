@@ -1,0 +1,8 @@
+*.lock
+*.swp
+.kitchen/*
+.librarian/*
+.tmp/*
+.idea/*
+.librarian/*
+*.lock

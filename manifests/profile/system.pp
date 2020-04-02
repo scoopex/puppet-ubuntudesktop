@@ -1,4 +1,4 @@
-# == Class: mscubuntudesktop::profile::system
+# == Class: ubuntudesktop::profile::system
 #
 # Setup my personal ubuntu desktop
 #
@@ -8,7 +8,7 @@
 #
 #
 
-class mscubuntudesktop::profile::system {
+class ubuntudesktop::profile::system {
 
   # Mount Options
   mount { '/':
@@ -53,7 +53,7 @@ class mscubuntudesktop::profile::system {
     group   => 'root',
     mode    => '0644',
     content => "
-     ${mscubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/ubuntu-update
+     ${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/ubuntu-update
     "
   }
   file { '/etc/sudoers.d/puppet':
@@ -61,8 +61,8 @@ class mscubuntudesktop::profile::system {
     group   => 'root',
     mode    => '0644',
     content => "
-${mscubuntudesktop::user} ALL = NOPASSWD:/opt/puppetlabs/bin/puppet
-${mscubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/puppet
+${ubuntudesktop::user} ALL = NOPASSWD:/opt/puppetlabs/bin/puppet
+${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/puppet
     "
   }
   # Install a tiny script to update the system
@@ -72,9 +72,9 @@ ${mscubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/puppet
     mode   => '0755',
     source => "puppet:///modules/${module_name}/passwd-sync",
   }
-  -> exec { "/usr/sbin/passwd-sync ${mscubuntudesktop::user} root set":
+  -> exec { "/usr/sbin/passwd-sync ${ubuntudesktop::user} root set":
     user   => 'root',
-    unless => "/usr/sbin/passwd-sync ${mscubuntudesktop::user} root check",
+    unless => "/usr/sbin/passwd-sync ${ubuntudesktop::user} root check",
     path   => '/usr/bin:/usr/sbin:/bin',
   }
 
