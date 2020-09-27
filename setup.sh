@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SDIR="$(dirname $(readlink -f $0))"
-REL="xenial"
+REL="focal"
 
 set -x
 set -e
@@ -16,8 +16,8 @@ cd /tmp/setup-ubuntu
 
 sudo apt-get purge puppet*  hiera* -y 
 sudo apt-get autoremove -y
-sudo wget -P /var/tmp/ http://apt.puppetlabs.com/puppet5-release-$REL.deb
-sudo dpkg -i /var/tmp/puppet5-release-$REL.deb
+sudo wget -P /var/tmp/ http://apt.puppetlabs.com/puppet6-release-$REL.deb
+sudo dpkg -i /var/tmp/puppet6-release-$REL.deb
 sudo apt update
 sudo apt upgrade -y
 sudo apt dist-upgrade -y

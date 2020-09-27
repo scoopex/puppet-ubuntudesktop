@@ -9,18 +9,20 @@
 #
 
 class ubuntudesktop::profile::software (
-  Array[String] $packages_additional            = [],
-  Array[String] $packages_exclude               = [],
-  Boolean $nextcloud                            = true,
-  Boolean $virtualbox                           = true,
+  Array[String] $packages_additional = [],
+  Array[String] $packages_exclude    = [],
+  Boolean $nextcloud                 = true,
+  Boolean $virtualbox                = true,
   String $virtualbox_version,
   String $virtualbox_extpack_url,
-  Boolean $docker                               = true,
-  Boolean $openvpn                              = true,
-  Boolean $vim                                  = true,
-  Boolean $spotify                              = true,
-  Boolean $teams                                = true,
-  Boolean $pycharm                              = true,
+  Boolean $docker                    = true,
+  Boolean $openvpn                   = false,
+  Boolean $vim                       = true,
+  Boolean $spotify                   = true,
+  Boolean $teams                     = true,
+  Boolean $pycharm                   = true,
+  Boolean $intellij                  = true,
+  Boolean $kubernetes_client         = true,
 ) {
 
   #########################################################################
@@ -54,15 +56,12 @@ class ubuntudesktop::profile::software (
     'firefox', 'firefox-locale-de',
     'cifs-utils',
     'tree',
-    'chromium-browser',
     'keepass2',
     'wavemon',
     'wakeonlan',
     'w3m',
     'xalan',
     'xsel',
-    'clipit',
-    'icedax',
     'easytag',
     'id3tool',
     'lame',
@@ -114,7 +113,7 @@ class ubuntudesktop::profile::software (
     'imagemagick',
     'ipcalc',
     'jq',
-    'mysql-client',
+    'bolt',
     'ncftp',
     'ndiff',
     'pwgen',
@@ -132,16 +131,14 @@ class ubuntudesktop::profile::software (
     'subversion',
     'devscripts', 'debhelper', 'dh-make',
     'ldap-utils',
-    'python-pip', 'virtualenv', 'python3-virtualenv', 'build-essential', 'libssl-dev', 'libffi-dev', 'python-dev', 'pychecker', 'pyflakes', 'pylint',
+    'python-pip', 'virtualenv', 'virtualenvwrapper','python3-virtualenv', 'build-essential', 'libssl-dev', 'libffi-dev', 'python-dev', 'pychecker', 'pyflakes', 'pylint',
     'ipython3', 'python-autopep8',
     'python3-pylint-flask', 'python3-pyflakes', 'python3-flake8', 'pylint3', 'python3-packaging',
     'python3-nose', 'python3-nose-cov', 'python3-nose-json', 'python3-nose-parameterized', 'python3-nose-timer', 'python3-nose-yanc',
-    'unity-tweak-tool',
     'pdfshuffler',
     #'pdfchain',
     'percona-toolkit',
     'ipmiutil', 'xtightvncviewer',
-    'golang-go', 'packer',
     'bless',
   ]
 
@@ -258,23 +255,9 @@ allow /usr/bin/vim.gtk3 ixr,
   }
 
   #########################################################################
-  ### VIM
+  ### SPOTIFY
 
   if ($spotify) {
-
-    # apt::source { 'spotify':
-    #   location => 'http://repository.spotify.com',
-    #   release  => 'stable',
-    #   repos    => 'non-free',
-    #   key      => {
-    #     'id'     => '931FF8E79F0876134EDDBDCCA87FF9DF48BF1C90',
-    #     'server' => 'hkp://keyserver.ubuntu.com:80',
-    #   },
-    # }
-    # -> package { 'spotify-client':
-    #   ensure => installed,
-    # }
-
     exec { 'snap install spotify':
       user   => 'root',
       unless => 'snap list spotify',
@@ -308,5 +291,35 @@ allow /usr/bin/vim.gtk3 ixr,
       path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
     }
   }
+  if ($intellij) {
+    exec { 'snap install intellij-idea-community --classic':
+      user   => 'root',
+      unless => 'snap list intellij-idea-community ',
+      path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    }
+    # exec { 'snap install gradle':
+    #   user   => 'root',
+    #   unless => 'snap list gradle ',
+    #   path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    # }
+  }
 
+  if ($kubernetes_client) {
+    exec { 'snap install kontena-lens':
+      user   => 'root',
+      unless => 'snap list kontena-lens',
+      path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    }
+    exec { 'snap install kubectl':
+      user   => 'root',
+      unless => 'snap list kubectl',
+      path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    }
+  }
+
+  exec { 'snap install chromium':
+    user   => 'root',
+    unless => 'snap list chromium',
+    path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+  }
 }
