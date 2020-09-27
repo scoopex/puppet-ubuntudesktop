@@ -37,9 +37,10 @@ class ubuntudesktop::profile::software (
   ### STANDARD PACKAGES
 
   $default_packages = [ 'ubuntu-restricted-extras',
+    'gnome-tweaks',
     'pandoc', 'grip',
     'youtube-dl',
-    'wine-stable', 'playonlinux',
+    'wine-stable', 'playonlinux', 'winetricks',
     'xine-ui',
     'rpm',
     'mosh',
@@ -305,12 +306,12 @@ allow /usr/bin/vim.gtk3 ixr,
   }
 
   if ($kubernetes_client) {
-    exec { 'snap install kontena-lens':
+    exec { 'snap install kontena-lens --classic':
       user   => 'root',
       unless => 'snap list kontena-lens',
       path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
     }
-    exec { 'snap install kubectl':
+    exec { 'snap install kubectl --classic':
       user   => 'root',
       unless => 'snap list kubectl',
       path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',

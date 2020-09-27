@@ -82,15 +82,4 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/puppet
   package { 'apparmor-utils':
     ensure => installed,
   }
-
-  # Disable the guest access
-#  file { '/etc/lightdm/lightdm.conf.d/50-no-guest.conf':
-#    owner   => 'root',
-#    group   => 'root',
-#    mode    => '0644',
-#    content => '
-#  [SeatDefaults]
-#  allow-guest=false
-#      '
-#    }
 }
