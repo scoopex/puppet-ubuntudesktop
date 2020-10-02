@@ -13,13 +13,13 @@ class ubuntudesktop::profile::software (
   Array[String] $packages_exclude    = [],
   Boolean $nextcloud                 = true,
   Boolean $virtualbox                = true,
-  String $virtualbox_version,
-  String $virtualbox_extpack_url,
+  String $virtualbox_version = "6.1",
+  String $virtualbox_extpack_url = "https://download.virtualbox.org/virtualbox/6.1.4/Oracle_VM_VirtualBox_Extension_Pack-6.1.4.vbox-extpack",
   Boolean $docker                    = true,
   Boolean $openvpn                   = false,
   Boolean $vim                       = true,
   Boolean $spotify                   = true,
-  Boolean $teams                     = true,
+  Boolean $teams                     = false,
   Boolean $pycharm                   = true,
   Boolean $intellij                  = true,
   Boolean $kubernetes_client         = true,
@@ -40,6 +40,7 @@ class ubuntudesktop::profile::software (
     'gnome-tweaks',
     'pandoc', 'grip',
     'youtube-dl',
+    'copyq',
     'wine-stable', 'playonlinux', 'winetricks',
     'xine-ui',
     'rpm',
@@ -51,7 +52,6 @@ class ubuntudesktop::profile::software (
     'inotify-tools',
     'highlight',
     'wcalc',
-    'battery-stats',
     'ruby-bundler',
     'geeqie',
     'firefox', 'firefox-locale-de',
@@ -97,9 +97,10 @@ class ubuntudesktop::profile::software (
     'remmina', 'remmina-plugin-rdp',
     'rsync',
     'enigmail',
-    'default-jdk', 'maven', 'visualvm', 'icedtea-netx', 'icedtea-plugin',
+    'default-jdk', 'maven', 'visualvm', 'icedtea-netx', 
+    #'icedtea-plugin',
     'git', 'git-man', 'tig', 'diffutils', 'diffstat', 'myrepos',
-    'shutter',
+    #'shutter',
     'curl', 'wget',
     'htop',
     'iftop', 'iptraf-ng',
@@ -120,7 +121,9 @@ class ubuntudesktop::profile::software (
     'pwgen',
     'puppet-lint',
     'texlive-base', 'texlive-binaries', 'texlive-extra-utils', 'texlive-fonts-extra', 'texlive-fonts-recommended',
-    'texlive-fonts-recommended-doc', 'texlive-font-utils', 'texlive-generic-recommended', 'texlive-lang-german',
+    'texlive-fonts-recommended-doc', 'texlive-font-utils', 
+    #'texlive-generic-recommended', 
+    'texlive-lang-german',
     'texlive-latex-base', 'texlive-latex-base-doc', 'texlive-latex-extra', 'texlive-latex-recommended',
     'texlive-latex-recommended-doc', 'texlive-pictures', 'texlive-pictures-doc', 'texlive-pstricks', 'texlive-pstricks-doc',
     'rtorrent',
@@ -132,8 +135,8 @@ class ubuntudesktop::profile::software (
     'subversion',
     'devscripts', 'debhelper', 'dh-make',
     'ldap-utils',
-    'python-pip', 'virtualenv', 'virtualenvwrapper','python3-virtualenv', 'build-essential', 'libssl-dev', 'libffi-dev', 'python-dev', 'pychecker', 'pyflakes', 'pylint',
-    'ipython3', 'python-autopep8',
+    'python3-pip', 'virtualenv', 'virtualenvwrapper','python3-virtualenv', 'build-essential', 'libssl-dev', 'libffi-dev', 'python-dev', 'pylint', 'pyflakes', 'pylint',
+    'ipython3', 'python3-autopep8',
     'python3-pylint-flask', 'python3-pyflakes', 'python3-flake8', 'pylint3', 'python3-packaging',
     'python3-nose', 'python3-nose-cov', 'python3-nose-json', 'python3-nose-parameterized', 'python3-nose-timer', 'python3-nose-yanc',
     'pdfshuffler',
@@ -177,6 +180,11 @@ class ubuntudesktop::profile::software (
       source           => $virtualbox_extpack_url,
       verify_checksum  => false,
       follow_redirects => true,
+    }
+    exec { "usermod -a -G vboxusers ${::ubuntudesktop::user}":
+      user   => 'root',
+      unless => "id ${::ubuntudesktop::user}|grep vboxusers",
+      path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
     }
   }
 
@@ -283,6 +291,10 @@ allow /usr/bin/vim.gtk3 ixr,
     -> package { 'teams':
       ensure => installed,
     }
+  }else{
+    package { 'teams':
+      ensure => absent,
+    }
   }
 
   if ($pycharm) {
@@ -316,6 +328,12 @@ allow /usr/bin/vim.gtk3 ixr,
       unless => 'snap list kubectl',
       path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
     }
+    exec { 'snap install helm --classic':
+      user   => 'root',
+      unless => 'snap list helm',
+      path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    }
+
   }
 
   exec { 'snap install chromium':
