@@ -61,6 +61,7 @@ class ubuntudesktop::profile::system {
     group   => 'root',
     mode    => '0644',
     content => "
+${ubuntudesktop::user} ALL = NOPASSWD:/usr/bin/librarian-puppet
 ${ubuntudesktop::user} ALL = NOPASSWD:/opt/puppetlabs/bin/puppet
 ${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/puppet
     "

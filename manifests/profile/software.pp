@@ -11,20 +11,36 @@
 class ubuntudesktop::profile::software (
   Array[String] $packages_additional = [],
   Array[String] $packages_exclude    = [],
+  Array[String] $ide_snaps           = ["intellij-idea-community", "pycharm-community", "gradle"],
   Boolean $nextcloud                 = true,
   Boolean $virtualbox                = true,
-  String $virtualbox_version = "6.1",
-  String $virtualbox_extpack_url = "https://download.virtualbox.org/virtualbox/6.1.4/Oracle_VM_VirtualBox_Extension_Pack-6.1.4.vbox-extpack",
+  String $virtualbox_version         = "6.1",
+  String $virtualbox_extpack_url     =
+  "https://download.virtualbox.org/virtualbox/6.1.4/Oracle_VM_VirtualBox_Extension_Pack-6.1.4.vbox-extpack",
   Boolean $docker                    = true,
   Boolean $openvpn                   = false,
   Boolean $vim                       = true,
   Boolean $spotify                   = true,
   Boolean $teams                     = false,
-  Boolean $pycharm                   = true,
-  Boolean $intellij                  = true,
   Boolean $kubernetes_client         = true,
 ) {
-
+  # Install Helper Files
+  file { '/opt/ubuntudesktop/':
+    ensure => 'directory',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+  }
+  file { "/opt/ubuntudesktop/helpers":
+    ensure  => 'directory',
+    mode => '0755',
+    owner   => 'root',
+    group   => 'root',
+    source  => 'puppet:///modules/ubuntudesktop/helpers',
+    backup  => false,
+    recurse => remote,
+    require => File["/opt/ubuntudesktop/"]
+  }
   #########################################################################
   ### STANDARD PACKAGE SOURCES
 
@@ -97,7 +113,7 @@ class ubuntudesktop::profile::software (
     'remmina', 'remmina-plugin-rdp',
     'rsync',
     'enigmail',
-    'default-jdk', 'maven', 'visualvm', 'icedtea-netx', 
+    'default-jdk', 'maven', 'visualvm', 'icedtea-netx',
     #'icedtea-plugin',
     'git', 'git-man', 'tig', 'diffutils', 'diffstat', 'myrepos',
     #'shutter',
@@ -121,11 +137,12 @@ class ubuntudesktop::profile::software (
     'pwgen',
     'puppet-lint',
     'texlive-base', 'texlive-binaries', 'texlive-extra-utils', 'texlive-fonts-extra', 'texlive-fonts-recommended',
-    'texlive-fonts-recommended-doc', 'texlive-font-utils', 
+    'texlive-fonts-recommended-doc', 'texlive-font-utils',
     #'texlive-generic-recommended', 
     'texlive-lang-german',
     'texlive-latex-base', 'texlive-latex-base-doc', 'texlive-latex-extra', 'texlive-latex-recommended',
-    'texlive-latex-recommended-doc', 'texlive-pictures', 'texlive-pictures-doc', 'texlive-pstricks', 'texlive-pstricks-doc',
+    'texlive-latex-recommended-doc', 'texlive-pictures', 'texlive-pictures-doc', 'texlive-pstricks',
+    'texlive-pstricks-doc',
     'rtorrent',
     'scribus', 'inkscape',
     'siege',
@@ -135,10 +152,12 @@ class ubuntudesktop::profile::software (
     'subversion',
     'devscripts', 'debhelper', 'dh-make',
     'ldap-utils',
-    'python3-pip', 'virtualenv', 'virtualenvwrapper','python3-virtualenv', 'build-essential', 'libssl-dev', 'libffi-dev', 'python-dev', 'pylint', 'pyflakes', 'pylint',
+    'python3-pip', 'virtualenv', 'virtualenvwrapper', 'python3-virtualenv', 'build-essential', 'libssl-dev',
+    'libffi-dev', 'python3-dev', 'pylint', 'pyflakes',
     'ipython3', 'python3-autopep8',
-    'python3-pylint-flask', 'python3-pyflakes', 'python3-flake8', 'pylint3', 'python3-packaging',
-    'python3-nose', 'python3-nose-cov', 'python3-nose-json', 'python3-nose-parameterized', 'python3-nose-timer', 'python3-nose-yanc',
+    'python3-pylint-flask', 'python3-pyflakes', 'python3-flake8', 'python3-packaging',
+    'python3-nose', 'python3-nose-cov', 'python3-nose-json', 'python3-nose-parameterized', 'python3-nose-timer',
+    'python3-nose-yanc',
     'pdfshuffler',
     #'pdfchain',
     'percona-toolkit',
@@ -217,7 +236,8 @@ class ubuntudesktop::profile::software (
   ### VPN
 
   if ($openvpn) {
-    ensure_resource('package', [ 'network-manager-openvpn', 'network-manager-openvpn-gnome', ], { 'ensure' => 'present' })
+    ensure_resource('package', [ 'network-manager-openvpn', 'network-manager-openvpn-gnome', ], { 'ensure' => 'present'
+    })
   }
 
   file { '/etc/sudoers.d/vpn':
@@ -234,7 +254,8 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
   ### VIM
 
   if ($vim) {
-    ensure_resource('package', [ 'vim', 'vim-gtk3', 'vim-syntastic', 'vim-python-jedi', 'exuberant-ctags', 'vim-pathogen' ], { 'ensure' => 'present' }
+    ensure_resource('package', [ 'vim', 'vim-gtk3', 'vim-syntastic', 'vim-python-jedi', 'exuberant-ctags',
+      'vim-pathogen' ], { 'ensure' => 'present' }
     )
     alternatives { 'editor':
       path    => '/usr/bin/vim.basic',
@@ -267,10 +288,7 @@ allow /usr/bin/vim.gtk3 ixr,
   ### SPOTIFY
 
   if ($spotify) {
-    exec { 'snap install spotify':
-      user   => 'root',
-      unless => 'snap list spotify',
-      path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    ubuntudesktop::snap_install { "spotify":
     }
   }
 
@@ -291,49 +309,26 @@ allow /usr/bin/vim.gtk3 ixr,
     -> package { 'teams':
       ensure => installed,
     }
-  }else{
+  }else {
     package { 'teams':
       ensure => absent,
     }
   }
-
-  if ($pycharm) {
-    exec { 'snap install pycharm-community --classic':
-      user   => 'root',
-      unless => 'snap list pycharm-community ',
-      path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+  if ($ide_snaps) {
+    ubuntudesktop::snap_install { intellij_ide_snaps:
+      extra_args => "--classic"
     }
-  }
-  if ($intellij) {
-    exec { 'snap install intellij-idea-community --classic':
-      user   => 'root',
-      unless => 'snap list intellij-idea-community ',
-      path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-    }
-    # exec { 'snap install gradle':
-    #   user   => 'root',
-    #   unless => 'snap list gradle ',
-    #   path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-    # }
   }
 
   if ($kubernetes_client) {
-    exec { 'snap install kontena-lens --classic':
-      user   => 'root',
-      unless => 'snap list kontena-lens',
-      path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    ubuntudesktop::snap_install { ["helm", "kubectl", "kontena-lens"]:
+      extra_args => "--classic"
     }
-    exec { 'snap install kubectl --classic':
-      user   => 'root',
-      unless => 'snap list kubectl',
-      path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    ubuntudesktop::deb_package_install_from_url { "kubefwd":
+      uri => "https://github.com/txn2/kubefwd/releases/download/1.14.7/kubefwd_1.14.7_linux_amd64.deb"
     }
-    exec { 'snap install helm --classic':
-      user   => 'root',
-      unless => 'snap list helm',
-      path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    ubuntudesktop::install_helper {"ubuntu-desktop_install_argocd":
     }
-
   }
 
   exec { 'snap install chromium':
@@ -341,4 +336,9 @@ allow /usr/bin/vim.gtk3 ixr,
     unless => 'snap list chromium',
     path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
   }
+
+  ubuntudesktop::deb_package_install_from_url { "discord":
+    uri => "https://discord.com/api/download?platform=linux&format=deb",
+  }
+
 }
