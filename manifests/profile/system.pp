@@ -53,7 +53,7 @@ class ubuntudesktop::profile::system {
     group   => 'root',
     mode    => '0644',
     content => "
-     ${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/ubuntu-update
+${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/ubuntu-update
     "
   }
   file { '/etc/sudoers.d/puppet':
