@@ -327,6 +327,14 @@ allow /usr/bin/vim.gtk3 ixr,
     ubuntudesktop::deb_package_install_from_url { "kubefwd":
       uri => "https://github.com/txn2/kubefwd/releases/download/1.14.7/kubefwd_1.14.7_linux_amd64.deb"
     }
+    file { '/etc/sudoers.d/kubefwd':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => "
+${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/bin/kubefwd
+"
+    }
     ubuntudesktop::install_helper {"ubuntu-desktop_install_argocd":
     }
   }
