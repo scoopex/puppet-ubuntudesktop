@@ -332,7 +332,7 @@ allow /usr/bin/vim.gtk3 ixr,
     group   => 'root',
     mode    => '0644',
     content => "
-${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/bin/kubefwd
+${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
 "
     }
     ubuntudesktop::install_helper {"ubuntu-desktop_install_argocd":
