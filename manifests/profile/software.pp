@@ -11,7 +11,7 @@
 class ubuntudesktop::profile::software (
   Array[String] $packages_additional = [],
   Array[String] $packages_exclude    = [],
-  Array[String] $ide_snaps           = ["intellij-idea-community", "pycharm-community", "gradle"],
+  Array[String] $ide_snaps           = ["intellij-idea-community", "pycharm-community", "gradle", "gitkraken"],
   Boolean $nextcloud                 = true,
   Boolean $virtualbox                = true,
   String $virtualbox_version         = "6.1",
@@ -21,7 +21,7 @@ class ubuntudesktop::profile::software (
   Boolean $openvpn                   = false,
   Boolean $vim                       = true,
   Boolean $spotify                   = true,
-  Boolean $teams                     = false,
+  Boolean $teams                     = true,
   Boolean $kubernetes_client         = true,
 ) {
   # Install Helper Files
@@ -59,6 +59,7 @@ class ubuntudesktop::profile::software (
     'copyq',
     'wine-stable', 'playonlinux', 'winetricks',
     'xine-ui',
+    'postgresql-client-common', 'postgresql-client-12',
     'rpm',
     'mosh',
     'libterm-readline-gnu-perl', 'perl-doc',
@@ -163,6 +164,7 @@ class ubuntudesktop::profile::software (
     'percona-toolkit',
     'ipmiutil', 'xtightvncviewer',
     'bless',
+    'apt-listchanges',
   ]
 
   $install_packages = $default_packages + $packages_additional
