@@ -11,7 +11,7 @@
 class ubuntudesktop::profile::software (
   Array[String] $packages_additional = [],
   Array[String] $packages_exclude    = [],
-  Array[String] $ide_snaps           = ["intellij-idea-community", "pycharm-community", "gradle", "gitkraken"],
+  Array[String] $ide_snaps           = ["intellij-idea-community", "pycharm-community", "gradle", "gitkraken", "code"],
   Boolean $nextcloud                 = true,
   Boolean $virtualbox                = true,
   String $virtualbox_version         = "6.1",
@@ -53,7 +53,7 @@ class ubuntudesktop::profile::software (
   ### STANDARD PACKAGES
 
   $default_packages = [ 'ubuntu-restricted-extras',
-    'gnome-tweaks',
+    'gnome-tweaks', 'gnome-shell-extensions',
     'pandoc', 'grip',
     'youtube-dl',
     'copyq',
