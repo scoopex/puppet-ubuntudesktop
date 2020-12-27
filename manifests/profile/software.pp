@@ -238,7 +238,8 @@ class ubuntudesktop::profile::software (
       mode    => '0644',
       content => '{
 "experimental": true
-}'
+}',
+    notify => Service["docker"]
     }
   }
 
@@ -334,8 +335,21 @@ allow /usr/bin/vim.gtk3 ixr,
     ubuntudesktop::snap_install { ["helm", "kubectl", "kontena-lens"]:
       extra_args => "--classic"
     }
-    ubuntudesktop::deb_package_install_from_url { "kubefwd":
-      uri => "https://github.com/txn2/kubefwd/releases/download/1.17.3/kubefwd_amd64.deb"
+#    ubuntudesktop::deb_package_install_from_url { "kubefwd":
+#      uri => "https://github.com/txn2/kubefwd/releases/download/1.17.3/kubefwd_amd64.deb"
+#    }
+
+    githubreleases_download {
+      '/tmp/kubefwd_amd64.deb':
+      author     => 'txn2',
+      repository => 'kubefwd',
+      asset_contenttype => 'application\/x-deb',
+      asset_filepattern => 'kubefwd_amd64.deb',
+    }
+    package{ 'kubefwd':
+      ensure => latest,
+      source => "/tmp/kubefwd_amd64.deb",
+      require => Githubreleases_download['/tmp/kubefwd_amd64.deb'],
     }
     file { '/etc/sudoers.d/kubefwd':
     owner   => 'root',
@@ -345,8 +359,16 @@ allow /usr/bin/vim.gtk3 ixr,
 ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
 "
     }
-    ubuntudesktop::install_helper {"ubuntu-desktop_install_argocd":
+
+    githubreleases_download {
+      '/tmp/k9s_Linux_x86_64.tar.gz':
+      author     => 'derailed',
+      repository => 'k9s',
+      asset_filepattern => 'k9s_Linux_x86_64.tar.gz',
     }
+
+
+    ubuntudesktop::install_helper {"ubuntu-desktop_install_argocd": }
   }
 
   exec { 'snap install chromium':
