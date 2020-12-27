@@ -231,7 +231,15 @@ class ubuntudesktop::profile::software (
 @daily root /usr/bin/docker image prune -a --filter 'until=48h' -f 2>&1|logger -t docker-image-prune
       "
     }
-
+    file { '/etc/docker/daemon.json':
+      ensure  => present,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => '{
+"experimental": true
+}'
+    }
   }
 
   #########################################################################
