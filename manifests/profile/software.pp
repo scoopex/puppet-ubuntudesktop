@@ -335,9 +335,26 @@ allow /usr/bin/vim.gtk3 ixr,
     ubuntudesktop::snap_install { ["helm", "kubectl", "kontena-lens"]:
       extra_args => "--classic"
     }
-#    ubuntudesktop::deb_package_install_from_url { "kubefwd":
-#      uri => "https://github.com/txn2/kubefwd/releases/download/1.17.3/kubefwd_amd64.deb"
-#    }
+
+    githubreleases_download {
+      '/tmp/k9s_Linux_x86_64.tar.gz':
+      author            => 'derailed',
+      repository        => 'k9s',
+      asset_filepattern => 'k9s_Linux_x86_64.tar.gz',
+      notify            => Exec["k9s_install"]
+    }
+    exec { 'k9s_install':
+      user        => 'root',
+      refreshonly => true
+      command     => 'tar zxvf k9s_Linux_arm64.tar.gz -C /usr/local/bin/ k9s',
+      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    }
+    file { '/usr/local/bin/k9s':
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      require => Exec["k9s_install"]
+    }
 
     githubreleases_download {
       '/tmp/kubefwd_amd64.deb':
@@ -359,14 +376,6 @@ allow /usr/bin/vim.gtk3 ixr,
 ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
 "
     }
-
-    githubreleases_download {
-      '/tmp/k9s_Linux_x86_64.tar.gz':
-      author     => 'derailed',
-      repository => 'k9s',
-      asset_filepattern => 'k9s_Linux_x86_64.tar.gz',
-    }
-
 
     ubuntudesktop::install_helper {"ubuntu-desktop_install_argocd": }
   }
