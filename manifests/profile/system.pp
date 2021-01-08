@@ -56,6 +56,13 @@ class ubuntudesktop::profile::system {
 ${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/ubuntu-update
     "
   }
+
+  file_line { 'sudo_env_keep':
+      path => '/etc/sudoers',
+      line => 'Defaults        env_keep += "HOME"',
+      after => '.*env_reset.*'
+  }
+
   file { '/etc/sudoers.d/puppet':
     owner   => 'root',
     group   => 'root',
