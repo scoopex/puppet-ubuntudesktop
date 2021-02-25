@@ -13,7 +13,7 @@ class ubuntudesktop::profile::software (
   Array[String] $packages_exclude    = [],
   Array[String] $ide_snaps           = ["intellij-idea-community", "pycharm-community", "gradle", "gitkraken", "code", "dbeaver-ce" ],
   Boolean $nextcloud                 = true,
-  Boolean $virtualbox                = true,
+  Boolean $virtualbox                = false,
   String $virtualbox_version         = "6.1",
   String $virtualbox_extpack_url     =
   "https://download.virtualbox.org/virtualbox/6.1.4/Oracle_VM_VirtualBox_Extension_Pack-6.1.4.vbox-extpack",
@@ -113,7 +113,6 @@ class ubuntudesktop::profile::software (
     'hplip',
     'remmina', 'remmina-plugin-rdp',
     'rsync',
-    'enigmail',
     'default-jdk', 'maven', 'visualvm', 'icedtea-netx',
     #'icedtea-plugin',
     'git', 'git-man', 'tig', 'diffutils', 'diffstat', 'myrepos',
@@ -336,8 +335,7 @@ allow /usr/bin/vim.gtk3 ixr,
       extra_args => "--classic"
     }
 
-    githubreleases_download {
-      '/tmp/k9s_Linux_x86_64.tar.gz':
+    githubreleases_download { '/tmp/k9s_Linux_x86_64.tar.gz':
       author            => 'derailed',
       repository        => 'k9s',
       asset_filepattern => 'k9s_Linux_x86_64.tar.gz',
@@ -345,8 +343,8 @@ allow /usr/bin/vim.gtk3 ixr,
     }
     exec { 'k9s_install':
       user        => 'root',
-      refreshonly => true
-      command     => 'tar zxvf k9s_Linux_arm64.tar.gz -C /usr/local/bin/ k9s',
+      refreshonly => true,
+      command     => 'tar -C /usr/local/bin/ -zxvf /tmp/k9s_Linux_x86_64.tar.gz k9s',
       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
     }
     file { '/usr/local/bin/k9s':
@@ -363,10 +361,12 @@ allow /usr/bin/vim.gtk3 ixr,
       asset_contenttype => 'application\/x-deb',
       asset_filepattern => 'kubefwd_amd64.deb',
     }
-    package{ 'kubefwd':
-      ensure => latest,
-      source => "/tmp/kubefwd_amd64.deb",
-      require => Githubreleases_download['/tmp/kubefwd_amd64.deb'],
+    exec { 'kubefwd_install':
+      user        => 'root',
+      refreshonly => true,
+      command     => 'dpkg -i /tmp/kubefwd_amd64.deb',
+      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+      subscribe   => Githubreleases_download['/tmp/kubefwd_amd64.deb'],
     }
     file { '/etc/sudoers.d/kubefwd':
     owner   => 'root',

@@ -10,6 +10,17 @@
 
 class ubuntudesktop::profile::system {
 
+  augeas{ 'set_grub_opts':
+    context =>  '/files/etc/default/grub',
+    changes =>  "set GRUB_TIMEOUT '\"-1\"'",
+    notify => Exec['update-grub']
+  }
+  exec { "update-grub":
+    user   => 'root',
+    path   => '/usr/bin:/usr/sbin:/bin',
+    refreshonly => true,
+  }
+
   # Mount Options
   mount { '/':
     ensure  => 'mounted',
