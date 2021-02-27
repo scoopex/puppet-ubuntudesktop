@@ -87,7 +87,6 @@ class ubuntudesktop::profile::software (
     'libmad0',
     'mpg321',
     'libavcodec-extra',
-    'libdvd-pkg',
     'p7zip-rar',
     'p7zip-full',
     'unace',

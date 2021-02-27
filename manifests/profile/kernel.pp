@@ -26,4 +26,7 @@ class ubuntudesktop::profile::kernel {
     ensure => present,
     value  => '65536',
   }
+
+  ensure_resource('package', ["linux-image-oem-${facts[os][release][major]}b"], { 'ensure' => 'present' })
+
 }
