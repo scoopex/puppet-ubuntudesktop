@@ -170,6 +170,16 @@ class ubuntudesktop::profile::software (
 
   ensure_resource('package', $install_packages, { 'ensure' => 'present' })
 
+
+  $install_python_packages = ['python3.9', 'python3.9-dev', 'python3.9-doc', 'python3.9-venv', 'libpython3.9-testsuite', 'libpython3.9-stdlib']
+
+  ensure_resource('package', $install_python_packages, { 'ensure' => 'present', notify => Alternatives['python3'] })
+
+  alternatives { 'python3':
+      path    => '/usr/bin/python3.8',
+  }
+
+
   #########################################################################
   ### Nextcloud
 
@@ -337,6 +347,7 @@ allow /usr/bin/vim.gtk3 ixr,
     githubreleases_download { '/tmp/k9s_Linux_x86_64.tar.gz':
       author            => 'derailed',
       repository        => 'k9s',
+      asset             => true,
       asset_filepattern => 'k9s_Linux_x86_64.tar.gz',
       notify            => Exec["k9s_install"]
     }
@@ -357,15 +368,15 @@ allow /usr/bin/vim.gtk3 ixr,
       '/tmp/kubefwd_amd64.deb':
       author     => 'txn2',
       repository => 'kubefwd',
-      asset_contenttype => 'application\/x-deb',
       asset_filepattern => 'kubefwd_amd64.deb',
+      asset             => true,
+      notify            => Exec["kubefwd_install"]
     }
     exec { 'kubefwd_install':
       user        => 'root',
       refreshonly => true,
       command     => 'dpkg -i /tmp/kubefwd_amd64.deb',
       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-      subscribe   => Githubreleases_download['/tmp/kubefwd_amd64.deb'],
     }
     file { '/etc/sudoers.d/kubefwd':
     owner   => 'root',

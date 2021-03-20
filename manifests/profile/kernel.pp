@@ -27,6 +27,11 @@ class ubuntudesktop::profile::kernel {
     value  => '65536',
   }
 
+  sysctl { 'fs.inotify.max_user_watches':
+    ensure => present,
+    value  => '524288',
+  }
+
   ensure_resource('package', ["linux-image-oem-${facts[os][release][major]}b", "linux-headers-oem-${facts[os][release][major]}b"], { 'ensure' => 'present' })
 
 }
