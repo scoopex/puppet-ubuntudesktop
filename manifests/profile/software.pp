@@ -55,11 +55,10 @@ class ubuntudesktop::profile::software (
   $default_packages = [ 'ubuntu-restricted-extras',
     'gnome-tweaks', 'gnome-shell-extensions',
     'pandoc', 'grip',
-    'youtube-dl',
-    'copyq',
     'wine-stable', 'playonlinux', 'winetricks',
     'xine-ui',
-    'postgresql-client-common', 'postgresql-client-12',
+    'postgresql-client-common', 'postgresql-client-12', 'pgtop', 'pg-activity', 'pgcli',
+    's3cmd',
     'rpm',
     'mosh',
     'libterm-readline-gnu-perl', 'perl-doc',
@@ -177,6 +176,15 @@ class ubuntudesktop::profile::software (
 
   alternatives { 'python3':
       path    => '/usr/bin/python3.8',
+  }
+
+
+  exec { 'curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl && chmod 755 /usr/local/bin/youtube-dl':
+    user    => 'root',
+    unless  => "test -f /usr/local/bin/youtube-dl",
+    path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    creates => "/usr/local/bin/youtube-dl",
+    require => Package['curl'],
   }
 
 
