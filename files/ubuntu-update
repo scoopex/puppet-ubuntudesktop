@@ -13,3 +13,4 @@ apt autoremove -y
 apt update 
 apt upgrade -y
 apt dist-upgrade -y
+fwupdmgr update

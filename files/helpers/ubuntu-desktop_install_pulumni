@@ -1,0 +1,21 @@
+#/bin/bash
+
+VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/latest" | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
+
+
+if [ "$1" = "check" ];then
+   if [ -f "/opt/ubuntudestop/argocd-linux-amd64_${VERSION}" ];then
+      touch "/opt/ubuntudestop/argocd-linux-amd64_${VERSION}"
+      exit 0
+   fi
+   echo "INFO: /opt/ubuntudestop/argocd-linux-amd64_${VERSION} is not installed"
+   exit 1
+fi
+
+wget -q -c -O "/opt/ubuntudesktop/argocd-linux-amd64_${VERSION}" https://github.com/argoproj/argo-cd/releases/download/$VERSION/argocd-linux-amd64
+if [ "$?" = "0" ];then
+   touch "/opt/ubuntudesktop/argocd-linux-amd64_${VERSION}"
+   chmod 755 "/opt/ubuntudesktop/argocd-linux-amd64_${VERSION}"
+   ln -snf "/opt/ubuntudesktop/argocd-linux-amd64_${VERSION}" /usr/local/bin/argocd
+   find /opt/ubuntudesktop/ -name "argocd-linux-amd64_*" -mtime +14 -delete
+fi

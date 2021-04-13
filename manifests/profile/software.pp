@@ -298,6 +298,7 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
 # For more details, please see /etc/apparmor.d/local/README.
 allow /usr/bin/gvim ixr,
 allow /usr/bin/vim.gtk3 ixr,
+allow /usr/bin/chrome-gnome-shell ixr,
       ",
       require => [
         Package['apparmor-utils'],
