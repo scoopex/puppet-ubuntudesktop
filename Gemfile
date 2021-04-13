@@ -9,7 +9,7 @@ gem 'kitchen-puppet'
 gem 'kitchen-sync'
 gem 'kitchen-vagrant'
 gem 'librarian-puppet'
-gem 'puppet', '4.8.2'
+gem 'puppet', ">= 6.13.0"
 gem 'puppet-lint'
 gem 'puppetlabs_spec_helper'
 gem 'rspec-puppet'
