@@ -79,6 +79,7 @@ class ubuntudesktop::profile::software (
     'w3m',
     'xalan',
     'xsel',
+    'qmmp',
     'easytag',
     'id3tool',
     'lame',
