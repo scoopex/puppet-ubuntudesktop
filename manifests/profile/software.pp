@@ -349,6 +349,28 @@ allow /usr/bin/chrome-gnome-shell ixr,
     }
   }
 
+  githubreleases_download { '/tmp/lazygit_Linux_x86_64.tar.gz':
+    author            => 'jesseduffield',
+    repository        => 'lazygit',
+    asset             => true,
+    asset_filepattern => 'lazygit_.*_Linux_x86_64.tar.gz',
+    notify            => Exec["lazygit_install"]
+  }
+
+  exec { 'lazygit_install':
+    user        => 'root',
+    refreshonly => true,
+    command     => 'tar -C /usr/local/bin/ -zxvf /tmp/lazygit_Linux_x86_64.tar.gz lazygit',
+    path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+  }
+  file { '/usr/local/bin/lazygit':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => Exec["lazygit_install"]
+  }
+
+
   if ($kubernetes_client) {
     ubuntudesktop::snap_install { ["helm", "kubectl", "kontena-lens"]:
       extra_args => "--classic"
