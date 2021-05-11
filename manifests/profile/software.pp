@@ -1,4 +1,4 @@
-# == Class: ubuntudesktop::profile::software
+#== Class: ubuntudesktop::profile::software
 #
 # Setup my personal ubuntu desktop
 #
@@ -22,6 +22,8 @@ class ubuntudesktop::profile::software (
   Boolean $vim                       = true,
   Boolean $spotify                   = true,
   Boolean $teams                     = true,
+  Boolean $signal                    = true,
+  Boolean $zoom                      = true,
   Boolean $kubernetes_client         = true,
 ) {
   # Install Helper Files
@@ -179,6 +181,11 @@ class ubuntudesktop::profile::software (
       path    => '/usr/bin/python3.8',
   }
 
+  if ($zoom){
+    ubuntudesktop::deb_package_install_from_url { "zoom":
+      uri => "https://zoom.us/client/latest/zoom_amd64.deb"
+    }
+  }
 
   exec { 'curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl && chmod 755 /usr/local/bin/youtube-dl':
     user    => 'root',
@@ -321,9 +328,20 @@ allow /usr/bin/chrome-gnome-shell ixr,
     }
   }
 
+
+  if ($signal) {
+    exec { 'snap install signal-desktop':
+      user   => 'root',
+      unless => 'snap list signal-desktop',
+      path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    }
+  }
+
+ 
   #########################################################################
   ### M$ Teams
   # https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software
+
 
   if ($teams) {
     apt::source { 'teams':
