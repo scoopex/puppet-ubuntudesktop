@@ -117,7 +117,7 @@ class ubuntudesktop::profile::software (
     'default-jdk', 'maven', 'visualvm', 'icedtea-netx',
     #'icedtea-plugin',
     'git', 'git-man', 'tig', 'diffutils', 'diffstat', 'myrepos',
-    #'shutter',
+    'flameshot',
     'curl', 'wget',
     'htop',
     'iftop', 'iptraf-ng',
