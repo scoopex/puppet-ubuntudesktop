@@ -398,7 +398,7 @@ allow /usr/bin/chrome-gnome-shell ixr,
       author            => 'derailed',
       repository        => 'k9s',
       asset             => true,
-      asset_filepattern => 'k9s_Linux_x86_64.tar.gz',
+      asset_filepattern => 'k9s_v.*_Linux_x86_64.tar.gz',
       notify            => Exec["k9s_install"]
     }
     exec { 'k9s_install':
