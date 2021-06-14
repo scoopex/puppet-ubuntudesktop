@@ -124,7 +124,7 @@ class ubuntudesktop::profile::software (
     'pv',
     'lsscsi',
     'sysstat',
-    'traceroute',
+    'traceroute', 'mtr',
     'net-tools',
     'tcpflow',
     'wireshark',
