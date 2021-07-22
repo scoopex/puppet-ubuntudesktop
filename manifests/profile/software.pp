@@ -389,10 +389,33 @@ allow /usr/bin/chrome-gnome-shell ixr,
   }
 
 
+    githubreleases_download { '/tmp/logcli-linux-amd64.zip':
+      author            => 'grafana',
+      repository        => 'loki',
+      asset             => true,
+      asset_filepattern => 'logcli-linux-amd64.zip',
+      notify            => Exec["logcli_install"]
+    }
+    exec { 'logcli_install':
+      user        => 'root',
+      refreshonly => true,
+      command     => 'unzip -o -d /tmp/ /tmp/logcli-linux-amd64.zip logcli-linux-amd64 && mv /tmp/logcli-linux-amd64 /usr/local/bin/logcli',
+      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    }
+    file { '/usr/local/bin/logcli':
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      require => Exec["k9s_install"]
+    }
+
+
+
   if ($kubernetes_client) {
     ubuntudesktop::snap_install { ["helm", "kubectl", "kontena-lens"]:
       extra_args => "--classic"
     }
+
 
     githubreleases_download { '/tmp/k9s_Linux_x86_64.tar.gz':
       author            => 'derailed',
