@@ -177,7 +177,7 @@ class ubuntudesktop::profile::software (
   ensure_resource('package', $install_python_packages, { 'ensure' => 'present', notify => Alternatives['python3'] })
 
   alternatives { 'python3':
-      path    => '/usr/bin/python3.8',
+      path    => '/usr/bin/python3.9',
   }
 
   if ($zoom){
