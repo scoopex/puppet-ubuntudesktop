@@ -102,7 +102,6 @@ class ubuntudesktop::profile::software (
     'arj',
     'cabextract',
     'file-roller',
-    'flashplugin-installer',
     'a2ps',
     'ant',
     'screen',
