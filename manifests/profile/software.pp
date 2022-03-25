@@ -163,7 +163,7 @@ class ubuntudesktop::profile::software (
     'percona-toolkit',
     'ipmiutil', 'xtightvncviewer',
     'bless',
-    'apt-listchanges',
+    'apt-listchanges', 'apt-file'
   ]
 
   $install_packages = $default_packages + $packages_additional
