@@ -51,6 +51,22 @@ class ubuntudesktop::profile::software (
     repos    => "partner",
   }
 
+  apt::source { 'postgresql':
+    location => 'http://apt.postgresql.org/pub/repos/apt',
+    release  => "${::lsbdistcodename}-pgdg main",
+    repos    => 'main',
+    key      => {
+      'id'     => 'E8697E2EEF76C02D3A6332778881B2A8210976F2',
+      'server' => 'https://www.postgresql.org/media/keys/ACCC4CF8.asc',
+    },
+  }
+
+  
+  $pg_packages = [ 'postgresql-client-common', 'postgresql-client-14', 'pgtop', 'pg-activity', 'pgcli' ]
+  ensure_resource('package', $pg_packages, 
+      { 'ensure' => 'present', require => Apt::Source['postgresql'] }
+  )
+
   #########################################################################
   ### STANDARD PACKAGES
 
@@ -59,7 +75,6 @@ class ubuntudesktop::profile::software (
     'pandoc', 'grip',
     'wine-stable', 'playonlinux', 'winetricks',
     'xine-ui',
-    'postgresql-client-common', 'postgresql-client-12', 'pgtop', 'pg-activity', 'pgcli',
     's3cmd',
     'rpm',
     'mosh',
