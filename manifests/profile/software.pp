@@ -266,7 +266,7 @@ class ubuntudesktop::profile::software (
       group   => 'root',
       mode    => '0644',
       content => "
-@daily root /usr/bin/docker image prune -a --filter 'until=48h' -f 2>&1|logger -t docker-image-prune
+@daily root /usr/bin/docker system prune -a --filter 'until=48h' -f 2>&1|logger -t docker-system-prune
       "
     }
     file { '/etc/docker/daemon.json':
@@ -311,28 +311,30 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
       require => Package['vim']
     }
 
-    file { '/etc/apparmor.d/local/usr.bin.firefox':
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      content => "
-# Site-specific additions and overrides for usr.bin.firefox.
-# For more details, please see /etc/apparmor.d/local/README.
-allow /usr/bin/gvim ixr,
-allow /usr/bin/vim.gtk3 ixr,
-allow /usr/bin/chrome-gnome-shell ixr,
-      ",
-      require => [
-        Package['apparmor-utils'],
-        Package['firefox'],
-      ]
-    }
-    -> exec { 'aa-enforce /etc/apparmor.d/usr.bin.firefox':
-      user   => 'root',
-      unless => 'sh -c "aa-status|grep -q firefox"',
-      path   => '/usr/bin:/usr/sbin:/bin',
-    }
   }
+
+#    file { '/etc/apparmor.d/local/usr.bin.firefox':
+#      owner   => 'root',
+#      group   => 'root',
+#      mode    => '0644',
+#      content => "
+## Site-specific additions and overrides for usr.bin.firefox.
+## For more details, please see /etc/apparmor.d/local/README.
+#allow /usr/bin/gvim ixr,
+#allow /usr/bin/vim.gtk3 ixr,
+#allow /usr/bin/chrome-gnome-shell ixr,
+#      ",
+#      require => [
+#        Package['apparmor-utils'],
+#        Package['firefox'],
+#      ]
+#    }
+#    -> exec { 'aa-enforce /etc/apparmor.d/usr.bin.firefox':
+#      user   => 'root',
+#      unless => 'sh -c "aa-status|grep -q firefox"',
+#      path   => '/usr/bin:/usr/sbin:/bin',
+#    }
+
 
   #########################################################################
   ### SPOTIFY
