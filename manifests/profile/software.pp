@@ -52,7 +52,7 @@ class ubuntudesktop::profile::software (
   }
 
   apt::source { 'postgresql':
-    location => 'http://apt.postgresql.org/pub/repos/apt',
+    location => '[arch=amd64] http://apt.postgresql.org/pub/repos/apt',
     release  => "${::lsbdistcodename}-pgdg main",
     repos    => 'main',
     key      => {
@@ -173,8 +173,7 @@ class ubuntudesktop::profile::software (
     'python3-pylint-flask', 'python3-pyflakes', 'python3-flake8', 'python3-packaging',
     'python3-nose', 'python3-nose-cov', 'python3-nose-json', 'python3-nose-parameterized', 'python3-nose-timer',
     'python3-nose-yanc',
-    'pdfshuffler',
-    #'pdfchain',
+    'pdfarranger',
     'percona-toolkit',
     'ipmiutil', 'xtightvncviewer',
     'bless',
@@ -187,13 +186,9 @@ class ubuntudesktop::profile::software (
   ensure_resource('package', $install_packages, { 'ensure' => 'present' })
 
 
-  $install_python_packages = ['python3.9', 'python3.9-dev', 'python3.9-doc', 'python3.9-venv', 'libpython3.9-testsuite', 'libpython3.9-stdlib']
+  $install_python_packages = ['python3', 'python3-dev', 'python3-doc', 'python3-venv', 'libpython3-stdlib']
 
-  ensure_resource('package', $install_python_packages, { 'ensure' => 'present', notify => Alternatives['python3'] })
-
-  alternatives { 'python3':
-      path    => '/usr/bin/python3.9',
-  }
+  ensure_resource('package', $install_python_packages, { 'ensure' => 'present' })
 
   if ($zoom){
     ubuntudesktop::deb_package_install_from_url { "zoom":

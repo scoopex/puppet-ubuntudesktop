@@ -33,10 +33,10 @@ platforms:
         audio: "none"
     driver:
       vagrantfile_erb: vagrantfiles/Vagrantfile-debianoid.erb
-      box: bento/ubuntu-20.04
+      box: bento/ubuntu-22.04
       box_url: https://app.vagrantup.com/bento/boxes/ubuntu-20.04
       customize: 
-        memory: 4096
+        memory: 8192
       gui: true
       synced_folders:
         - ['./files', '/tmp/files']

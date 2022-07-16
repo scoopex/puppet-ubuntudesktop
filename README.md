@@ -4,6 +4,8 @@ Overview
 I use this repo/code to setup my personal workstation/laptop system.
 Puppet is executed in serverless mode using "puppet apply".
 
+This setup is crafted for Ubuntu 22.04 / Jammy.
+
 This project is GNU GPLv3 (see LICENCE file). Contributions or forks are welcome.
 
 How to use that setup

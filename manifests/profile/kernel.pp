@@ -32,6 +32,6 @@ class ubuntudesktop::profile::kernel {
     value  => '524288',
   }
 
-  ensure_resource('package', ["linux-image-oem-${facts[os][release][major]}b", "linux-headers-oem-${facts[os][release][major]}b"], { 'ensure' => 'present' })
+  #ensure_resource('package', ["linux-image-oem-${facts[os][release][major]}b", "linux-headers-oem-${facts[os][release][major]}b"], { 'ensure' => 'present' })
 
 }
