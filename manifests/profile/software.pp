@@ -331,6 +331,17 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
 #    }
 
 
+    exec { 'aa-enforce /etc/apparmor.d/usr.bin.firefox':
+      user   => 'root',
+      unless => 'sh -c "aa-status|grep -q firefox"',
+      path   => '/usr/bin:/usr/sbin:/bin',
+      require => [
+        Package['apparmor-utils'],
+        Package['firefox'],
+      ]
+    }
+
+
   #########################################################################
   ### SPOTIFY
 
