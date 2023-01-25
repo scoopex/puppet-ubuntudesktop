@@ -28,7 +28,5 @@ sudo ln -snf $SDIR/Puppetfile /etc/puppetlabs/puppet/Puppetfile
 sudo mkdir -p /etc/puppetlabs/puppet/modules
 sudo ln -snf $SDIR /etc/puppetlabs/puppet/modules/ubuntudesktop
 
-sudo systemctl disable mcollective.service 
 sudo systemctl disable puppet.service
-sudo systemctl stop mcollective.service 
 sudo systemctl stop puppet.service

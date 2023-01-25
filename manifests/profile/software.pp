@@ -87,7 +87,6 @@ class ubuntudesktop::profile::software (
     'wcalc',
     'ruby-bundler',
     'geeqie',
-    'firefox', 'firefox-locale-de',
     'cifs-utils',
     'tree',
     'keepass2',
@@ -253,6 +252,7 @@ class ubuntudesktop::profile::software (
       iptables     => true,
       ip_masq      => true,
       docker_users => [ $::ubuntudesktop::user ],
+      use_upstream_package_source => true,
     }
 
     file { '/etc/cron.d/docker-gc':
@@ -307,39 +307,6 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
     }
 
   }
-
-#    file { '/etc/apparmor.d/local/usr.bin.firefox':
-#      owner   => 'root',
-#      group   => 'root',
-#      mode    => '0644',
-#      content => "
-## Site-specific additions and overrides for usr.bin.firefox.
-## For more details, please see /etc/apparmor.d/local/README.
-#allow /usr/bin/gvim ixr,
-#allow /usr/bin/vim.gtk3 ixr,
-#allow /usr/bin/chrome-gnome-shell ixr,
-#      ",
-#      require => [
-#        Package['apparmor-utils'],
-#        Package['firefox'],
-#      ]
-#    }
-#    -> exec { 'aa-enforce /etc/apparmor.d/usr.bin.firefox':
-#      user   => 'root',
-#      unless => 'sh -c "aa-status|grep -q firefox"',
-#      path   => '/usr/bin:/usr/sbin:/bin',
-#    }
-
-
-    exec { 'aa-enforce /etc/apparmor.d/usr.bin.firefox':
-      user   => 'root',
-      unless => 'sh -c "aa-status|grep -q firefox"',
-      path   => '/usr/bin:/usr/sbin:/bin',
-      require => [
-        Package['apparmor-utils'],
-        Package['firefox'],
-      ]
-    }
 
 
   #########################################################################
@@ -439,17 +406,19 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
     }
 
 
-    githubreleases_download { '/tmp/k9s_Linux_x86_64.tar.gz':
+    $k9s_file="k9s_Linux_amd64.tar.gz"
+
+    githubreleases_download { "/tmp/${k9s_file}":
       author            => 'derailed',
       repository        => 'k9s',
       asset             => true,
-      asset_filepattern => 'k9s_Linux_x86_64.tar.gz',
+      asset_filepattern => "${k9s_file}",
       notify            => Exec["k9s_install"]
     }
     exec { 'k9s_install':
       user        => 'root',
       refreshonly => true,
-      command     => 'tar -C /usr/local/bin/ -zxvf /tmp/k9s_Linux_x86_64.tar.gz k9s',
+      command     => "tar -C /usr/local/bin/ -zxvf /tmp/${k9s_file} k9s",
       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
     }
     file { '/usr/local/bin/k9s':
@@ -491,8 +460,16 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
     path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
   }
 
+  ubuntudesktop::snap_install { "firefox":
+  }
+
   ubuntudesktop::deb_package_install_from_url { "discord":
     uri => "https://discord.com/api/download?platform=linux&format=deb",
+  }
+
+  service { 'puppet':
+    ensure => stopped,
+    enable => false
   }
 
 }
