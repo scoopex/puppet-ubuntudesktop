@@ -1,4 +1,4 @@
-define ubuntudesktop::snap_install(
+define ubuntudesktop::helpers::snap_install(
   String $extra_args = "",
 ) {
   exec { "snap install ${title} ${extra_args}":

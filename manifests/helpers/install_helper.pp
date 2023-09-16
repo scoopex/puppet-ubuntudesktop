@@ -1,4 +1,4 @@
-define ubuntudesktop::install_helper(
+define ubuntudesktop::helpers::install_helper(
   String $extra_args = "",
 ) {
   exec { "/opt/ubuntudesktop/helpers/${title} ${extra_args}":

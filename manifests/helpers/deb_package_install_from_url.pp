@@ -1,4 +1,4 @@
-define ubuntudesktop::deb_package_install_from_url (
+define ubuntudesktop::helpers::deb_package_install_from_url (
   String $uri,
 ) {
   archive { "/tmp/${title}.deb":

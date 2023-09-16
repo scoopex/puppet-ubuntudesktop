@@ -6,7 +6,7 @@
 #
 # Marc Schoechlin <marc.schoechlin@256bit.org>
 #
-#
+#u
 
 class ubuntudesktop::profile::software (
   Array[String] $packages_additional = [],
@@ -171,7 +171,7 @@ class ubuntudesktop::profile::software (
   if ($zoom){
 
     ensure_resource('package', ['libxcb-xtest0', 'libegl1-mesa', 'libgl1-mesa-glx'], { 'ensure' => 'present' })
-    ubuntudesktop::deb_package_install_from_url { 'zoom':
+    ubuntudesktop::helpers::deb_package_install_from_url { 'zoom':
       uri => 'https://zoom.us/client/latest/zoom_amd64.deb',
       require => [Package['libxcb-xtest0'], Package['libegl1-mesa'], Package['libgl1-mesa-glx']]
     }
@@ -288,7 +288,7 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
   ### SPOTIFY
 
   if ($spotify) {
-    ubuntudesktop::snap_install { "spotify":
+    ubuntudesktop::helpers::snap_install { "spotify":
     }
   }
 
@@ -305,7 +305,7 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
   #########################################################################
 
 
-  ubuntudesktop::snap_install { $ide_snaps:
+  ubuntudesktop::helpers::snap_install { $ide_snaps:
       extra_args => "--classic"
   }
 
@@ -353,7 +353,7 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
 # 
 
   if ($kubernetes_client) {
-    ubuntudesktop::snap_install { ["helm", "kubectl", "k9s"]:
+    ubuntudesktop::helpers::snap_install { ["helm", "kubectl", "k9s"]:
       extra_args => "--classic"
     }
 
@@ -402,7 +402,7 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
 # ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
 # "
 #     }
-#    ubuntudesktop::install_helper {"ubuntu-desktop_install_argocd": }
+#    ubuntudesktop::helpers::install_helper {"ubuntu-desktop_install_argocd": }
   }
 
   exec { 'snap install chromium':
@@ -411,7 +411,7 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
     path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
   }
 
-  ubuntudesktop::snap_install { "firefox": }
+  ubuntudesktop::helpers::snap_install { "firefox": }
 
   service { 'puppet':
     ensure => stopped,
