@@ -402,4 +402,32 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
 
   ubuntudesktop::helpers::snap_install { ["chromium"]: }
   ubuntudesktop::helpers::snap_install { "firefox": }
+
+  file { '/usr/share/keyrings/element-io-archive-keyring.gpg':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    source  => 'https://packages.element.io/debian/element-io-archive-keyring.gpg',
+  }->
+  file { '/etc/apt/sources.list.d/element-io.list':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => @(EOT)
+      # created by puppet
+      deb [signed-by=/usr/share/keyrings/element-io-archive-keyring.gpg] https://packages.element.io/debian/ default main
+      |EOT
+  }
+  exec { 'apt-get -o Acquire::ForceIPv4=true update':
+    alias   => "apt-get-update-element",
+    user    => 'root',
+    path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    subscribe => [ File['/usr/share/keyrings/element-io-archive-keyring.gpg'],File["/etc/apt/sources.list.d/element-io.list"]]
+  }->
+  package{"element-desktop":
+    require => [ File['/usr/share/keyrings/element-io-archive-keyring.gpg'],File["/etc/apt/sources.list.d/element-io.list"]],
+    subscribe => Exec["apt-get-update-element"]
+  }
 }
