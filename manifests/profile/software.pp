@@ -305,10 +305,8 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
   #########################################################################
 
 
-  if ($ide_snaps) {
-    ubuntudesktop::snap_install { $ide_snaps:
+  ubuntudesktop::snap_install { $ide_snaps:
       extra_args => "--classic"
-    }
   }
 
 #   githubreleases_download { '/tmp/lazygit_Linux_x86_64.tar.gz':
@@ -354,9 +352,8 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
 #   }
 # 
 
-
   if ($kubernetes_client) {
-    ubuntudesktop::snap_install { ["helm", "kubectl", "kontena-lens"]:
+    ubuntudesktop::snap_install { ["helm", "kubectl", "k9s"]:
       extra_args => "--classic"
     }
 
