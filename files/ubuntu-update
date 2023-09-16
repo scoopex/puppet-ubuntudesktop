@@ -9,9 +9,10 @@ unset LC_ALL
 unset LANG
 set -x
 set -e
-apt autoremove -y
-apt update 
-apt upgrade -y
-apt dist-upgrade -y
-apt autoremove -y
+apt autoremove -o Acquire::ForceIPv4=true --purge
+apt update -o Acquire::ForceIPv4=true
+apt upgrade -o Acquire::ForceIPv4=true
+apt autoremove -o Acquire::ForceIPv4=true --purge
+apt dist-upgrade -o Acquire::ForceIPv4=true
+apt autoremove -o Acquire::ForceIPv4=true --purge
 fwupdmgr update

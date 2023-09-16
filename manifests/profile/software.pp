@@ -42,15 +42,11 @@ class ubuntudesktop::profile::software (
     require => File["/opt/ubuntudesktop/"]
   }
   #########################################################################
-  ### STANDARD PACKAGE SOURCES
 
-  apt::source { "archive.ubuntu.com-mscdesktop":
-    location => 'http://archive.canonical.com/ubuntu',
-    repos    => "partner",
-  }
-
-  $pg_packages = [ 'postgresql-client-common', 'postgresql-client', 'pgtop', 'pg-activity', 'pgcli' ]
-    ensure_resource('package', $pg_packages,
+  $pg_packages = [ 'postgresql-client-common', 'postgresql-client', 'pgtop', 'pg-activity', 'pgcli',
+    "mysql-client", ""
+  ]
+  ensure_resource('package', $pg_packages,
         { 'ensure' => 'present' }
   )
 
@@ -420,7 +416,7 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
       deb [signed-by=/usr/share/keyrings/element-io-archive-keyring.gpg] https://packages.element.io/debian/ default main
       |EOT
   }
-  exec { 'apt-get -o Acquire::ForceIPv4=true update':
+  exec { 'apt-get update':
     alias   => "apt-get-update-element",
     user    => 'root',
     path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
