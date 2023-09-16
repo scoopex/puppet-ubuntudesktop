@@ -6,7 +6,7 @@
 #
 # Marc Schoechlin <marc.schoechlin@256bit.org>
 #
-#u
+#
 
 class ubuntudesktop::profile::software (
   Array[String] $packages_additional = [],
@@ -19,7 +19,6 @@ class ubuntudesktop::profile::software (
 #   "https://download.virtualbox.org/virtualbox/6.1.4/Oracle_VM_VirtualBox_Extension_Pack-6.1.4.vbox-extpack",
   Boolean $docker                    = true,
   Boolean $openvpn                   = false,
-  Boolean $vim                       = true,
   Boolean $spotify                   = true,
   Boolean $signal                    = true,
   Boolean $zoom                      = true,
@@ -243,9 +242,7 @@ class ubuntudesktop::profile::software (
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => '{
-"experimental": true
-}',
+      content => '{ "experimental": true }',
       require => Service["docker"]
     }
   }
@@ -272,16 +269,14 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
   #########################################################################
   ### VIM
 
-  if ($vim) {
-    ensure_resource('package', [ 'vim', 'vim-gtk3', 'vim-syntastic', 'vim-python-jedi', 'exuberant-ctags',
-      'vim-pathogen' ], { 'ensure' => 'present' }
-    )
-    alternatives { 'editor':
-      path    => '/usr/bin/vim.basic',
-      require => Package['vim']
-    }
-
+  ensure_resource('package', [ 'vim', 'vim-gtk3', 'vim-syntastic', 'vim-python-jedi', 'exuberant-ctags',
+    'vim-pathogen' ], { 'ensure' => 'present' }
+  )
+  alternatives { 'editor':
+    path    => '/usr/bin/vim.basic',
+    require => Package['vim']
   }
+
 
 
   #########################################################################
@@ -405,17 +400,6 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
 #    ubuntudesktop::helpers::install_helper {"ubuntu-desktop_install_argocd": }
   }
 
-  exec { 'snap install chromium':
-    user   => 'root',
-    unless => 'snap list chromium',
-    path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-  }
-
+  ubuntudesktop::helpers::snap_install { ["chromium"]: }
   ubuntudesktop::helpers::snap_install { "firefox": }
-
-  service { 'puppet':
-    ensure => stopped,
-    enable => false
-  }
-
 }
