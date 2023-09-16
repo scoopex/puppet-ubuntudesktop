@@ -80,8 +80,8 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/ubuntu-update
     mode    => '0644',
     content => "
 ${ubuntudesktop::user} ALL = NOPASSWD:/usr/bin/librarian-puppet
-${ubuntudesktop::user} ALL = NOPASSWD:/opt/puppetlabs/bin/puppet
-${ubuntudesktop::user} ALL = NOPASSWD:/usr/local/sbin/puppet
+${ubuntudesktop::user} ALL = NOPASSWD:/usr/bin/puppet
+${ubuntudesktop::user} ALL = NOPASSWD:/bin/puppet
     "
   }
 

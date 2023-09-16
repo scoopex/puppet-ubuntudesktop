@@ -2,7 +2,7 @@
 set -x
 set -e
 
-cd /etc/puppetlabs/puppet/
+cd /etc/puppet/
 sudo librarian-puppet install --verbose
-sudo puppet apply --modulepath /etc/puppetlabs/puppet/modules/ /etc/puppetlabs/puppet/modules/ubuntudesktop/manifests/local.pp  --test $@
+sudo puppet apply --modulepath /etc/puppet/modules/ /etc/puppet/modules/ubuntudesktop/manifests/local.pp  --test $@
 
