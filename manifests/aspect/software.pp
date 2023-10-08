@@ -22,6 +22,7 @@ class ubuntudesktop::aspect::software (
   Boolean $virtualbox                = true,
   Boolean $docker                    = true,
   Boolean $openvpn                   = false,
+  Boolean $wireguard                 = false,
   Boolean $spotify                   = true,
   Boolean $zoom                      = false,
   Boolean $signal                    = true,
@@ -266,13 +267,15 @@ class ubuntudesktop::aspect::software (
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => "
-${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/openvpn
-${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
-"
+    content => @("EOF")
+    ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/openvpn
+    ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
+    ${ubuntudesktop::user} ALL = NOPASSWD:/usr/bin/wg-quick
+    | EOF
   }
-  ensure_resource('package', [ 'wireguard-tools', 'wireguard'], { 'ensure' => 'present' })
-
+  if ($wireguard) {
+    ensure_resource('package', [ 'wireguard-tools', 'wireguard'], { 'ensure' => 'present' })
+  }
   #########################################################################
   ### VIM
 
@@ -283,8 +286,6 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
     path    => '/usr/bin/vim.basic',
     require => Package['vim']
   }
-
-
 
   #########################################################################
   ### SPOTIFY
@@ -438,6 +439,7 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
   }
   exec { 'apt-get update':
     alias     => "apt-get-update-element",
+    unless    => "which element-desktop",
     user      => 'root',
     path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
     subscribe => [ File['/usr/share/keyrings/element-io-archive-keyring.gpg'], File[

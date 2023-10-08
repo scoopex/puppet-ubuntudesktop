@@ -32,6 +32,4 @@ class ubuntudesktop::aspect::kernel {
     value  => '524288',
   }
 
-  #ensure_resource('package', ["linux-image-oem-${facts[os][release][major]}b", "linux-headers-oem-${facts[os][release][major]}b"], { 'ensure' => 'present' })
-
 }
