@@ -8,7 +8,7 @@
 #
 #
 
-class ubuntudesktop::profile::system {
+class ubuntudesktop::aspect::system {
   augeas{ 'set_grub_opts':
     context =>  '/files/etc/default/grub',
     changes =>  "set GRUB_TIMEOUT '\"-1\"'",

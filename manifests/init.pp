@@ -10,7 +10,7 @@
 class ubuntudesktop (
   String[2] $user = 'marc',
 ) {
-  include ubuntudesktop::profile::kernel
-  include ubuntudesktop::profile::software
-  include ubuntudesktop::profile::system
+  include ubuntudesktop::aspect::kernel
+  include ubuntudesktop::aspect::software
+  include ubuntudesktop::aspect::system
 }

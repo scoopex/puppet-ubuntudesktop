@@ -8,20 +8,23 @@
 #
 #
 
-class ubuntudesktop::profile::software (
+class ubuntudesktop::aspect::software (
   Array[String] $packages_additional = [],
   Array[String] $packages_exclude    = [],
-  Array[String] $ide_snaps           = ["intellij-idea-community", "pycharm-community", "gradle", "code", "dbeaver-ce" ],
+  Array[String] $ide_snaps           = [
+    "intellij-idea-community",
+    "pycharm-community",
+    "gradle",
+    "code",
+    "dbeaver-ce"
+  ],
   Boolean $nextcloud                 = true,
-#   Boolean $virtualbox                = false,
-#   String $virtualbox_version         = "6.1",
-#   String $virtualbox_extpack_url     =
-#   "https://download.virtualbox.org/virtualbox/6.1.4/Oracle_VM_VirtualBox_Extension_Pack-6.1.4.vbox-extpack",
+  Boolean $virtualbox                = true,
   Boolean $docker                    = true,
   Boolean $openvpn                   = false,
   Boolean $spotify                   = true,
+  Boolean $zoom                      = false,
   Boolean $signal                    = true,
-  Boolean $zoom                      = true,
   Boolean $kubernetes_client         = true,
 ) {
   # Install Helper Files
@@ -33,7 +36,7 @@ class ubuntudesktop::profile::software (
   }
   file { "/opt/ubuntudesktop/helpers":
     ensure  => 'directory',
-    mode => '0755',
+    mode    => '0755',
     owner   => 'root',
     group   => 'root',
     source  => 'puppet:///modules/ubuntudesktop/helpers',
@@ -43,11 +46,12 @@ class ubuntudesktop::profile::software (
   }
   #########################################################################
 
-  $pg_packages = [ 'postgresql-client-common', 'postgresql-client', 'pgtop', 'pg-activity', 'pgcli',
-    "mysql-client", ""
+  $pg_packages = [
+    'postgresql-client-common', 'postgresql-client', 'pgtop', 'pg-activity', 'pgcli',
+    "mysql-client",
   ]
   ensure_resource('package', $pg_packages,
-        { 'ensure' => 'present' }
+    { 'ensure' => 'present' }
   )
 
   #########################################################################
@@ -143,7 +147,7 @@ class ubuntudesktop::profile::software (
     'devscripts', 'debhelper', 'dh-make',
     'ldap-utils',
     'python3-pip', 'virtualenv', 'virtualenvwrapper', 'python3-virtualenv', 'build-essential', 'libssl-dev',
-    'libffi-dev', 'python3-dev', 'pylint', 
+    'libffi-dev', 'python3-dev', 'pylint',
     'ipython3', 'python3-autopep8',
     'python3-pylint-flask', 'python3-flake8', 'python3-packaging',
     'pdfarranger',
@@ -163,13 +167,14 @@ class ubuntudesktop::profile::software (
 
   ensure_resource('package', $install_python_packages, { 'ensure' => 'present' })
 
-  if ($zoom){
-
+  if ($zoom) {
     ensure_resource('package', ['libxcb-xtest0', 'libegl1-mesa', 'libgl1-mesa-glx'], { 'ensure' => 'present' })
     ubuntudesktop::helpers::deb_package_install_from_url { 'zoom':
-      uri => 'https://zoom.us/client/latest/zoom_amd64.deb',
+      uri     => 'https://zoom.us/client/latest/zoom_amd64.deb',
       require => [Package['libxcb-xtest0'], Package['libegl1-mesa'], Package['libgl1-mesa-glx']]
     }
+  }else {
+    ensure_resource('package', ['libxcb-xtest0', 'libegl1-mesa', 'libgl1-mesa-glx', "zoom"], { 'ensure' => 'absent' })
   }
 
 
@@ -188,39 +193,45 @@ class ubuntudesktop::profile::software (
     }
   }
 
-#   #########################################################################
-#   ### Virtualbox
-# 
-#   if ($virtualbox) {
-#     ensure_resource('package', [ 'dkms', 'build-essential', ], { 'ensure' => 'present' })
-#     class { 'virtualbox':
-#       require => Package['dkms'],
-#       version => '6.1',
-#     }
-#     virtualbox::extpack { 'Oracle_VM_VirtualBox_Extension_Pack':
-#       ensure           => present,
-#       source           => $virtualbox_extpack_url,
-#       verify_checksum  => false,
-#       follow_redirects => true,
-#     }
-#     exec { "usermod -a -G vboxusers ${::ubuntudesktop::user}":
-#       user   => 'root',
-#       unless => "id ${::ubuntudesktop::user}|grep vboxusers",
-#       path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-#     }
-#   }
+  #   #########################################################################
+  #   ### Virtualbox
+  #
+
+  if ($virtualbox) {
+    ensure_resource('package', [
+      'dkms',
+      'build-essential',
+      'virtualbox',
+      'virtualbox-dkms',
+      'virtualbox-guest-additions-iso'],
+      { 'ensure' => 'present' }
+    )
+    exec { "usermod -a -G vboxusers ${::ubuntudesktop::user}":
+      user    => 'root',
+      unless  => "id ${::ubuntudesktop::user}|grep vboxusers",
+      path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+      require => Package['virtualbox']
+    }
+  }else {
+    ensure_resource('package', [
+      'virtualbox',
+      'virtualbox-dkms',
+      'virtualbox-guest-additions-iso'],
+      { 'ensure' => 'absent' }
+    )
+  }
 
   #########################################################################
   ### Docker
 
   if ($docker) {
     class { '::docker':
-      dns          => '8.8.8.8',
-      version      => 'latest',
-      ip_forward   => true,
-      iptables     => true,
-      ip_masq      => true,
-      docker_users => [ $::ubuntudesktop::user ],
+      dns                         => '8.8.8.8',
+      version                     => 'latest',
+      ip_forward                  => true,
+      iptables                    => true,
+      ip_masq                     => true,
+      docker_users                => [ $::ubuntudesktop::user ],
       use_upstream_package_source => true,
     }
 
@@ -260,7 +271,7 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/openvpn
 ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
 "
   }
-  ensure_resource('package', [ 'wireguard-tools', 'wireguard'], { 'ensure' => 'present'})
+  ensure_resource('package', [ 'wireguard-tools', 'wireguard'], { 'ensure' => 'present' })
 
   #########################################################################
   ### VIM
@@ -292,56 +303,56 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
     }
   }
 
- 
+
   #########################################################################
 
 
   ubuntudesktop::helpers::snap_install { $ide_snaps:
-      extra_args => "--classic"
+    extra_args => "--classic"
   }
 
-#   githubreleases_download { '/tmp/lazygit_Linux_x86_64.tar.gz':
-#     author            => 'jesseduffield',
-#     repository        => 'lazygit',
-#     asset             => true,
-#     asset_filepattern => 'lazygit_.*_Linux_x86_64.tar.gz',
-#     notify            => Exec["lazygit_install"]
-#   }
-# 
-#   exec { 'lazygit_install':
-#     user        => 'root',
-#     refreshonly => true,
-#     command     => 'tar -C /usr/local/bin/ -zxvf /tmp/lazygit_Linux_x86_64.tar.gz lazygit',
-#     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-#   }
-#   file { '/usr/local/bin/lazygit':
-#     owner   => 'root',
-#     group   => 'root',
-#     mode    => '0755',
-#     require => Exec["lazygit_install"]
-#   }
-# 
+  #   githubreleases_download { '/tmp/lazygit_Linux_x86_64.tar.gz':
+  #     author            => 'jesseduffield',
+  #     repository        => 'lazygit',
+  #     asset             => true,
+  #     asset_filepattern => 'lazygit_.*_Linux_x86_64.tar.gz',
+  #     notify            => Exec["lazygit_install"]
+  #   }
+  #
+  #   exec { 'lazygit_install':
+  #     user        => 'root',
+  #     refreshonly => true,
+  #     command     => 'tar -C /usr/local/bin/ -zxvf /tmp/lazygit_Linux_x86_64.tar.gz lazygit',
+  #     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+  #   }
+  #   file { '/usr/local/bin/lazygit':
+  #     owner   => 'root',
+  #     group   => 'root',
+  #     mode    => '0755',
+  #     require => Exec["lazygit_install"]
+  #   }
+  #
 
-#   githubreleases_download { '/tmp/logcli-linux-amd64.zip':
-#     author            => 'grafana',
-#     repository        => 'loki',
-#     asset             => true,
-#     asset_filepattern => 'logcli-linux-amd64.zip',
-#     notify            => Exec["logcli_install"]
-#   }
-#   exec { 'logcli_install':
-#     user        => 'root',
-#     refreshonly => true,
-#     command     => 'unzip -o -d /tmp/ /tmp/logcli-linux-amd64.zip logcli-linux-amd64 && mv /tmp/logcli-linux-amd64 /usr/local/bin/logcli',
-#     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-#   }
-#   file { '/usr/local/bin/logcli':
-#     owner   => 'root',
-#     group   => 'root',
-#     mode    => '0755',
-#     require => Exec["k9s_install"]
-#   }
-# 
+  #   githubreleases_download { '/tmp/logcli-linux-amd64.zip':
+  #     author            => 'grafana',
+  #     repository        => 'loki',
+  #     asset             => true,
+  #     asset_filepattern => 'logcli-linux-amd64.zip',
+  #     notify            => Exec["logcli_install"]
+  #   }
+  #   exec { 'logcli_install':
+  #     user        => 'root',
+  #     refreshonly => true,
+  #     command     => 'unzip -o -d /tmp/ /tmp/logcli-linux-amd64.zip logcli-linux-amd64 && mv /tmp/logcli-linux-amd64 /usr/local/bin/logcli',
+  #     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+  #   }
+  #   file { '/usr/local/bin/logcli':
+  #     owner   => 'root',
+  #     group   => 'root',
+  #     mode    => '0755',
+  #     require => Exec["k9s_install"]
+  #   }
+  #
 
   if ($kubernetes_client) {
     ubuntudesktop::helpers::snap_install { ["helm", "kubectl", "k9s"]:
@@ -349,63 +360,72 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
     }
 
 
-#     $k9s_file="k9s_Linux_amd64.tar.gz"
-# 
-#     githubreleases_download { "/tmp/${k9s_file}":
-#       author            => 'derailed',
-#       repository        => 'k9s',
-#       asset             => true,
-#       asset_filepattern => "${k9s_file}",
-#       notify            => Exec["k9s_install"]
-#     }
-#     exec { 'k9s_install':
-#       user        => 'root',
-#       refreshonly => true,
-#       command     => "tar -C /usr/local/bin/ -zxvf /tmp/${k9s_file} k9s",
-#       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-#     }
-#     file { '/usr/local/bin/k9s':
-#       owner   => 'root',
-#       group   => 'root',
-#       mode    => '0755',
-#       require => Exec["k9s_install"]
-#     }
-# 
-#     githubreleases_download {
-#       '/tmp/kubefwd_amd64.deb':
-#       author     => 'txn2',
-#       repository => 'kubefwd',
-#       asset_filepattern => 'kubefwd_amd64.deb',
-#       asset             => true,
-#       notify            => Exec["kubefwd_install"]
-#     }
-#     exec { 'kubefwd_install':
-#       user        => 'root',
-#       refreshonly => true,
-#       command     => 'dpkg -i /tmp/kubefwd_amd64.deb',
-#       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-#     }
-#     file { '/etc/sudoers.d/kubefwd':
-#     owner   => 'root',
-#     group   => 'root',
-#     mode    => '0644',
-#     content => "
-# ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
-# "
-#     }
-#    ubuntudesktop::helpers::install_helper {"ubuntu-desktop_install_argocd": }
+    #     $k9s_file="k9s_Linux_amd64.tar.gz"
+    #
+    #     githubreleases_download { "/tmp/${k9s_file}":
+    #       author            => 'derailed',
+    #       repository        => 'k9s',
+    #       asset             => true,
+    #       asset_filepattern => "${k9s_file}",
+    #       notify            => Exec["k9s_install"]
+    #     }
+    #     exec { 'k9s_install':
+    #       user        => 'root',
+    #       refreshonly => true,
+    #       command     => "tar -C /usr/local/bin/ -zxvf /tmp/${k9s_file} k9s",
+    #       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    #     }
+    #     file { '/usr/local/bin/k9s':
+    #       owner   => 'root',
+    #       group   => 'root',
+    #       mode    => '0755',
+    #       require => Exec["k9s_install"]
+    #     }
+    #
+    #     githubreleases_download {
+    #       '/tmp/kubefwd_amd64.deb':
+    #       author     => 'txn2',
+    #       repository => 'kubefwd',
+    #       asset_filepattern => 'kubefwd_amd64.deb',
+    #       asset             => true,
+    #       notify            => Exec["kubefwd_install"]
+    #     }
+    #     exec { 'kubefwd_install':
+    #       user        => 'root',
+    #       refreshonly => true,
+    #       command     => 'dpkg -i /tmp/kubefwd_amd64.deb',
+    #       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    #     }
+    #     file { '/etc/sudoers.d/kubefwd':
+    #     owner   => 'root',
+    #     group   => 'root',
+    #     mode    => '0644',
+    #     content => "
+    # ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
+    # "
+    #     }
+    #    ubuntudesktop::helpers::install_helper {"ubuntu-desktop_install_argocd": }
   }
-
+  #
+  # $rustdesk_file="/var/tmp/rustdesk.deb"
+  # githubreleases_download { $rustdesk_file:
+  #   target            => $rustdesk_file,
+  #   author            => 'rustdesk',
+  #   repository        => 'rustdesk',
+  #   asset             => true,
+  #   asset_filepattern => 'rustdesk-.*-x86_64\.deb',
+  # }
+  #
   ubuntudesktop::helpers::snap_install { ["chromium"]: }
   ubuntudesktop::helpers::snap_install { "firefox": }
 
   file { '/usr/share/keyrings/element-io-archive-keyring.gpg':
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    source  => 'https://packages.element.io/debian/element-io-archive-keyring.gpg',
-  }->
+    ensure => present,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
+    source => 'https://packages.element.io/debian/element-io-archive-keyring.gpg',
+  } ->
   file { '/etc/apt/sources.list.d/element-io.list':
     ensure  => present,
     owner   => 'root',
@@ -417,13 +437,15 @@ ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
       |EOT
   }
   exec { 'apt-get update':
-    alias   => "apt-get-update-element",
-    user    => 'root',
-    path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-    subscribe => [ File['/usr/share/keyrings/element-io-archive-keyring.gpg'],File["/etc/apt/sources.list.d/element-io.list"]]
-  }->
-  package{"element-desktop":
-    require => [ File['/usr/share/keyrings/element-io-archive-keyring.gpg'],File["/etc/apt/sources.list.d/element-io.list"]],
+    alias     => "apt-get-update-element",
+    user      => 'root',
+    path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    subscribe => [ File['/usr/share/keyrings/element-io-archive-keyring.gpg'], File[
+      "/etc/apt/sources.list.d/element-io.list"]]
+  } ->
+  package { "element-desktop":
+    require   => [ File['/usr/share/keyrings/element-io-archive-keyring.gpg'], File[
+      "/etc/apt/sources.list.d/element-io.list"]],
     subscribe => Exec["apt-get-update-element"]
   }
 }

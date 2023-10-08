@@ -8,7 +8,7 @@
 #
 #
 
-class ubuntudesktop::profile::kernel {
+class ubuntudesktop::aspect::kernel {
 
   sysctl { 'vm.swappiness':
     ensure  => present,
