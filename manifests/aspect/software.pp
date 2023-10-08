@@ -409,7 +409,7 @@ class ubuntudesktop::aspect::software (
   }
   #
   # $rustdesk_file="/var/tmp/rustdesk.deb"
-  # githubreleases_download { $rustdesk_file:
+  # githubreleases_download { "rustdesk":
   #   target            => $rustdesk_file,
   #   author            => 'rustdesk',
   #   repository        => 'rustdesk',

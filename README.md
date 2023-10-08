@@ -12,8 +12,8 @@ How to use that setup
 =====================
 
  * manually install ubuntu of use a preeseed setup
-    * activate disk encryption with LVM (not homedir-enrcyryption)    
-    * select all additional software components
+   * activate disk encryption with LVM (not homedir-enrcyryption)    
+   * select all additional software components
  * clone repo
    ```
    sudo apt install git
