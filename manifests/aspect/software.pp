@@ -21,7 +21,7 @@ class ubuntudesktop::aspect::software (
   Boolean $nextcloud                 = true,
   Boolean $virtualbox                = true,
   Boolean $docker                    = true,
-  Boolean $openvpn                   = false,
+  Boolean $openvpn                   = true,
   Boolean $wireguard                 = false,
   Boolean $spotify                   = true,
   Boolean $zoom                      = false,
@@ -259,7 +259,7 @@ class ubuntudesktop::aspect::software (
   ### VPN
 
   if ($openvpn) {
-    ensure_resource('package', [ 'network-manager-openvpn', 'network-manager-openvpn-gnome', ], { 'ensure' => 'present'
+    ensure_resource('package', [ 'network-manager-openvpn', 'openvpn'], { 'ensure' => 'present'
     })
   }
 
