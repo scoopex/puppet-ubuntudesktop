@@ -32,7 +32,7 @@ class ubuntudesktop::aspect::system {
   # Disable capslock
   augeas { 'disable_capslock':
     context => '/files/etc/default/keyboard',
-    changes => "set XKBOPTIONS 'ctrl:nocaps'",
+    changes => "set XKBOPTIONS '\"ctrl:nocaps\"'",
     onlyif  => "match XKBOPTIONS not_include 'ctrl:nocaps'",
   }
 
