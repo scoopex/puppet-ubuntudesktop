@@ -75,6 +75,7 @@ class ubuntudesktop::aspect::software (
     'ruby-bundler',
     'cifs-utils',
     'tree',
+    'dialog',
     'keepass2',
     'wavemon',
     'wakeonlan',
