@@ -111,7 +111,7 @@ class ubuntudesktop::aspect::software (
     'hplip',
     'rsync',
     'default-jdk', 'maven', 'visualvm', 'icedtea-netx',
-    'git', 'git-man', 'tig', 'diffutils', 'diffstat', 'myrepos',
+    'git', 'git-man', 'tig', 'diffutils', 'diffstat', 'myrepos', 'git-review',
     'flameshot',
     'curl', 'wget',
     'htop',
