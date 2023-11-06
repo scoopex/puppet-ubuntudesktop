@@ -74,6 +74,7 @@ class ubuntudesktop::aspect::software (
     'wcalc',
     'ruby-bundler',
     'cifs-utils',
+    'xclip',
     'tree',
     'dialog',
     'keepass2',
