@@ -425,7 +425,7 @@ class ubuntudesktop::aspect::software (
 ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
 "
     }
-    ubuntudesktop::helpers::install_helper {"ubuntu-desktop_install_argocd": }
+    #ubuntudesktop::helpers::install_helper {"ubuntu-desktop_install_argocd": }
   }
 
   $rustdesk_file="/var/tmp/rustdesk.deb"
