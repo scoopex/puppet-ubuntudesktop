@@ -135,7 +135,7 @@ class ubuntudesktop::aspect::software (
     'puppet-lint',
     'texlive-base', 'texlive-binaries', 'texlive-extra-utils', 'texlive-fonts-extra', 'texlive-fonts-recommended',
     'texlive-fonts-recommended-doc', 'texlive-font-utils',
-    #'texlive-generic-recommended', 
+    #'texlive-generic-recommended',
     'texlive-lang-german',
     'texlive-latex-base', 'texlive-latex-base-doc', 'texlive-latex-extra', 'texlive-latex-recommended',
     'texlive-latex-recommended-doc', 'texlive-pictures', 'texlive-pictures-doc', 'texlive-pstricks',
@@ -273,6 +273,7 @@ class ubuntudesktop::aspect::software (
     ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/openvpn
     ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
     ${ubuntudesktop::user} ALL = NOPASSWD:/usr/bin/wg-quick
+    ${ubuntudesktop::user} ALL = NOPASSWD:/usr/bin/wg
     | EOF
   }
   if ($wireguard) {
@@ -314,48 +315,67 @@ class ubuntudesktop::aspect::software (
     extra_args => "--classic"
   }
 
-  #   githubreleases_download { '/tmp/lazygit_Linux_x86_64.tar.gz':
-  #     author            => 'jesseduffield',
-  #     repository        => 'lazygit',
-  #     asset             => true,
-  #     asset_filepattern => 'lazygit_.*_Linux_x86_64.tar.gz',
-  #     notify            => Exec["lazygit_install"]
-  #   }
-  #
-  #   exec { 'lazygit_install':
-  #     user        => 'root',
-  #     refreshonly => true,
-  #     command     => 'tar -C /usr/local/bin/ -zxvf /tmp/lazygit_Linux_x86_64.tar.gz lazygit',
-  #     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-  #   }
-  #   file { '/usr/local/bin/lazygit':
-  #     owner   => 'root',
-  #     group   => 'root',
-  #     mode    => '0755',
-  #     require => Exec["lazygit_install"]
-  #   }
-  #
+  githubreleases_download { '/tmp/gitui-linux-musl.tar.gz':
+    author            => 'extrawurst',
+    repository        => 'gitui',
+    asset             => true,
+    asset_filepattern => 'gitui-linux-musl.tar.gz',
+    notify            => Exec["gitui_install"]
+  }
+  exec { 'gitui_install':
+    user        => 'root',
+    refreshonly => true,
+    command     => 'tar -C /usr/local/bin/ -zxvf /tmp/gitui-linux-musl.tar.gz ./gitui',
+    path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+  }
+  file { '/usr/local/bin/gitui':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => Exec["gitui_install"]
+  }
 
-  #   githubreleases_download { '/tmp/logcli-linux-amd64.zip':
-  #     author            => 'grafana',
-  #     repository        => 'loki',
-  #     asset             => true,
-  #     asset_filepattern => 'logcli-linux-amd64.zip',
-  #     notify            => Exec["logcli_install"]
-  #   }
-  #   exec { 'logcli_install':
-  #     user        => 'root',
-  #     refreshonly => true,
-  #     command     => 'unzip -o -d /tmp/ /tmp/logcli-linux-amd64.zip logcli-linux-amd64 && mv /tmp/logcli-linux-amd64 /usr/local/bin/logcli',
-  #     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-  #   }
-  #   file { '/usr/local/bin/logcli':
-  #     owner   => 'root',
-  #     group   => 'root',
-  #     mode    => '0755',
-  #     require => Exec["k9s_install"]
-  #   }
-  #
+
+  githubreleases_download { '/tmp/lazygit_Linux_x86_64.tar.gz':
+    author            => 'jesseduffield',
+    repository        => 'lazygit',
+    asset             => true,
+    asset_filepattern => 'lazygit_.*_Linux_x86_64.tar.gz',
+    notify            => Exec["lazygit_install"]
+  }
+
+  exec { 'lazygit_install':
+    user        => 'root',
+    refreshonly => true,
+    command     => 'tar -C /usr/local/bin/ -zxvf /tmp/lazygit_Linux_x86_64.tar.gz lazygit',
+    path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+  }
+  file { '/usr/local/bin/lazygit':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => Exec["lazygit_install"]
+  }
+
+  githubreleases_download { '/tmp/logcli-linux-amd64.zip':
+    author            => 'grafana',
+    repository        => 'loki',
+    asset             => true,
+    asset_filepattern => 'logcli-linux-amd64.zip',
+    notify            => Exec["logcli_install"]
+  }
+  exec { 'logcli_install':
+    user        => 'root',
+    refreshonly => true,
+    command     => 'unzip -o -d /tmp/ /tmp/logcli-linux-amd64.zip logcli-linux-amd64 && mv /tmp/logcli-linux-amd64 /usr/local/bin/logcli',
+    path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+  }
+  file { '/usr/local/bin/logcli':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => Exec["k9s_install"]
+  }
 
   if ($kubernetes_client) {
     ubuntudesktop::helpers::snap_install { ["helm", "kubectl", "k9s"]:
@@ -363,62 +383,60 @@ class ubuntudesktop::aspect::software (
     }
 
 
-    #     $k9s_file="k9s_Linux_amd64.tar.gz"
-    #
-    #     githubreleases_download { "/tmp/${k9s_file}":
-    #       author            => 'derailed',
-    #       repository        => 'k9s',
-    #       asset             => true,
-    #       asset_filepattern => "${k9s_file}",
-    #       notify            => Exec["k9s_install"]
-    #     }
-    #     exec { 'k9s_install':
-    #       user        => 'root',
-    #       refreshonly => true,
-    #       command     => "tar -C /usr/local/bin/ -zxvf /tmp/${k9s_file} k9s",
-    #       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-    #     }
-    #     file { '/usr/local/bin/k9s':
-    #       owner   => 'root',
-    #       group   => 'root',
-    #       mode    => '0755',
-    #       require => Exec["k9s_install"]
-    #     }
-    #
-    #     githubreleases_download {
-    #       '/tmp/kubefwd_amd64.deb':
-    #       author     => 'txn2',
-    #       repository => 'kubefwd',
-    #       asset_filepattern => 'kubefwd_amd64.deb',
-    #       asset             => true,
-    #       notify            => Exec["kubefwd_install"]
-    #     }
-    #     exec { 'kubefwd_install':
-    #       user        => 'root',
-    #       refreshonly => true,
-    #       command     => 'dpkg -i /tmp/kubefwd_amd64.deb',
-    #       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-    #     }
-    #     file { '/etc/sudoers.d/kubefwd':
-    #     owner   => 'root',
-    #     group   => 'root',
-    #     mode    => '0644',
-    #     content => "
-    # ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
-    # "
-    #     }
-    #    ubuntudesktop::helpers::install_helper {"ubuntu-desktop_install_argocd": }
+    $k9s_file="k9s_Linux_amd64.tar.gz"
+    githubreleases_download { "/tmp/${k9s_file}":
+      author            => 'derailed',
+      repository        => 'k9s',
+      asset             => true,
+      asset_filepattern => "${k9s_file}",
+      notify            => Exec["k9s_install"]
+    }
+    exec { 'k9s_install':
+      user        => 'root',
+      refreshonly => true,
+      command     => "tar -C /usr/local/bin/ -zxvf /tmp/${k9s_file} k9s",
+      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    }
+    file { '/usr/local/bin/k9s':
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      require => Exec["k9s_install"]
+    }
+    githubreleases_download {
+      '/tmp/kubefwd_amd64.deb':
+      author     => 'txn2',
+      repository => 'kubefwd',
+      asset_filepattern => 'kubefwd_amd64.deb',
+      asset             => true,
+      notify            => Exec["kubefwd_install"]
+    }
+    exec { 'kubefwd_install':
+      user        => 'root',
+      refreshonly => true,
+      command     => 'dpkg -i /tmp/kubefwd_amd64.deb',
+      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    }
+    file { '/etc/sudoers.d/kubefwd':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => "
+${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
+"
+    }
+    ubuntudesktop::helpers::install_helper {"ubuntu-desktop_install_argocd": }
   }
-  #
-  # $rustdesk_file="/var/tmp/rustdesk.deb"
-  # githubreleases_download { "rustdesk":
-  #   target            => $rustdesk_file,
-  #   author            => 'rustdesk',
-  #   repository        => 'rustdesk',
-  #   asset             => true,
-  #   asset_filepattern => 'rustdesk-.*-x86_64\.deb',
-  # }
-  #
+
+  $rustdesk_file="/var/tmp/rustdesk.deb"
+  githubreleases_download { "rustdesk":
+     target            => $rustdesk_file,
+     author            => 'rustdesk',
+     repository        => 'rustdesk',
+     asset             => true,
+     asset_filepattern => 'rustdesk-.*-x86_64\.deb',
+  }
+
   ubuntudesktop::helpers::snap_install { ["chromium"]: }
   ubuntudesktop::helpers::snap_install { "firefox": }
 
