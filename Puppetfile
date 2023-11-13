@@ -21,8 +21,4 @@ mod 'puppetlabs-docker', '9.1.0'
 mod 'puppet-archive'
 mod 'puppetlabs-augeas_core', '1.3.0'
 mod 'puppetlabs-mount_core', '1.2.0'
-
-
-#mod 'dodevops-githubreleases', '4.0.0'
-mod 'dodevops-githubreleases',
-  :git => 'https://github.com/scoopex/puppet-githubreleases'
+mod 'dodevops-githubreleases', '4.0.2'
