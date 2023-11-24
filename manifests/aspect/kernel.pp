@@ -32,4 +32,9 @@ class ubuntudesktop::aspect::kernel {
     value  => '524288',
   }
 
+  sysctl { 'kernel.dmesg_restrict':
+    ensure => present,
+    value  => '0',
+  }
+
 }
