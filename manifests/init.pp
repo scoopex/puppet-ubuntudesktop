@@ -9,6 +9,7 @@
 #
 class ubuntudesktop (
   String[2] $user = 'marc',
+  String[2] $homedir = '/home/marc',
 ) {
   include ubuntudesktop::aspect::kernel
   include ubuntudesktop::aspect::software

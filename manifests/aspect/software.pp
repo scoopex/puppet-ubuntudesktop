@@ -72,6 +72,7 @@ class ubuntudesktop::aspect::software (
     'inotify-tools',
     'highlight',
     'wcalc',
+    'zsh',
     'ruby-bundler',
     'cifs-utils',
     'xclip',
