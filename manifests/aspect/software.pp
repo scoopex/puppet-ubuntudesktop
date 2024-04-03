@@ -130,6 +130,7 @@ class ubuntudesktop::aspect::software (
     'ipcalc',
     'jq',
     'bolt',
+    'shellcheck',
     'ncftp',
     'ndiff',
     'pwgen',
