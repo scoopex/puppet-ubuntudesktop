@@ -381,7 +381,7 @@ class ubuntudesktop::aspect::software (
   }
 
   if ($kubernetes_client) {
-    ubuntudesktop::helpers::snap_install { ["helm", "kubectl", "k9s"]:
+    ubuntudesktop::helpers::snap_install { ["helm", "kubectl", ,"kubelogin"]:
       extra_args => "--classic"
     }
 
