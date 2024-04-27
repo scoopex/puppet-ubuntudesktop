@@ -159,7 +159,7 @@ class ubuntudesktop::aspect::software (
     'pdfarranger', 'diffpdf',
     'percona-toolkit',
     'ipmiutil', 'xtightvncviewer',
-    'bless',
+    'hotspot',
     'apt-listchanges', 'apt-file'
   ]
 
@@ -187,12 +187,14 @@ class ubuntudesktop::aspect::software (
   #########################################################################
   ### Nextcloud
 
+  $dist_codename = $os['distro']['codename']
+
   if ($nextcloud) {
     exec { 'add-apt-repository ppa:nextcloud-devs/client && apt-get update':
       user    => 'root',
-      unless  => "test -f /etc/apt/sources.list.d/nextcloud-devs-ubuntu-client-${::lsbdistcodename}.list",
+      unless  => "test -f /etc/apt/sources.list.d/nextcloud-devs-ubuntu-client-${dist_codename}.list",
       path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-      creates => "/etc/apt/sources.list.d/nextcloud-devs-ubuntu-client-${::lsbdistcodename}.list",
+      creates => "/etc/apt/sources.list.d/nextcloud-devs-ubuntu-client-${dist_codename}.list",
     }
     -> package { 'nextcloud-client':
       ensure => installed,
@@ -318,17 +320,17 @@ class ubuntudesktop::aspect::software (
     extra_args => "--classic"
   }
 
-  githubreleases_download { '/tmp/gitui-linux-musl.tar.gz':
+  githubreleases_download { '/tmp/gitui-linux-x86_64.tar.gz':
     author            => 'extrawurst',
     repository        => 'gitui',
     asset             => true,
-    asset_filepattern => 'gitui-linux-musl.tar.gz',
+    asset_filepattern => 'gitui-linux-x86_64.tar.gz',
     notify            => Exec["gitui_install"]
   }
   exec { 'gitui_install':
     user        => 'root',
     refreshonly => true,
-    command     => 'tar -C /usr/local/bin/ -zxvf /tmp/gitui-linux-musl.tar.gz ./gitui',
+    command     => 'tar -C /usr/local/bin/ -zxvf /tmp/gitui-linux-x86_64.tar.gz ./gitui',
     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
   }
   file { '/usr/local/bin/gitui':
@@ -381,7 +383,7 @@ class ubuntudesktop::aspect::software (
   }
 
   if ($kubernetes_client) {
-    ubuntudesktop::helpers::snap_install { ["helm", "kubectl", ,"kubelogin"]:
+    ubuntudesktop::helpers::snap_install { ["helm", "kubectl", "kubelogin"]:
       extra_args => "--classic"
     }
 
