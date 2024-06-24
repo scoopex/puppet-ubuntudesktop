@@ -27,6 +27,11 @@ class ubuntudesktop::aspect::kernel {
     value  => '65536',
   }
 
+  # Allow perf tracing
+  sysctl { 'kernel.perf_event_paranoid': ensure => present, value  => '-1', }
+
+
+
   sysctl { 'fs.inotify.max_user_watches':
     ensure => present,
     value  => '524288',
