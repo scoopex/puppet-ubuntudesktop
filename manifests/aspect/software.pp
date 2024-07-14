@@ -199,6 +199,9 @@ class ubuntudesktop::aspect::software (
     -> package { 'nextcloud-client':
       ensure => installed,
     }
+    -> package { 'dolphin-nextcloud':
+      ensure => installed,
+    }
   }
 
   #   #########################################################################
