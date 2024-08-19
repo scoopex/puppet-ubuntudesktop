@@ -474,6 +474,27 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
   ubuntudesktop::helpers::snap_install { ['chromium']: }
   ubuntudesktop::helpers::snap_install { 'firefox': }
 
+  $chrome_deb = 'google-chrome-stable_current_amd64.deb'
+  $chrome_url = "https://dl.google.com/linux/direct/${chrome_deb}"
+
+  exec { 'download_chrome':
+    command => "wget -O /tmp/${chrome_deb} ${chrome_url}",
+    path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    require => Package['wget'],
+    creates => "/tmp/${chrome_deb}",
+  }
+  -> package { 'google-chrome-stable':
+    ensure   => installed,
+    provider => 'dpkg',
+    source   => "/tmp/${chrome_deb}",
+    require  => Exec['download_chrome'],
+  }
+  file_line { 'disable_i386_architecture':
+    path  => '/etc/apt/sources.list.d/google-chrome.sources',
+    match => 'Architectures:.*',
+    line  => 'Architectures: amd64',
+  }
+
   file { '/usr/share/keyrings/element-io-archive-keyring.gpg':
     ensure => present,
     owner  => 'root',
