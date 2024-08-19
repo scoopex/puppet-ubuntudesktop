@@ -194,7 +194,7 @@ class ubuntudesktop::aspect::software (
       user    => 'root',
       unless  => "test -f /etc/apt/sources.list.d/nextcloud-devs-ubuntu-client-${dist_codename}.list",
       path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
-      creates => "/etc/apt/sources.list.d/nextcloud-devs-ubuntu-client-${dist_codename}.list",
+      creates => "/etc/apt/sources.list.d/nextcloud-devs-ubuntu-client-${dist_codename}.sources",
     }
     -> package { 'nextcloud-client':
       ensure => installed,
@@ -450,7 +450,9 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
     }
     -> exec { 'kind_install':
       user        => 'root',
-      command     => "bash -c '/usr/local/bin/kind completion bash > /etc/bash_completion.d/kind'",
+      provider    => 'shell',
+      command     => '/usr/local/bin/kind completion bash > /etc/bash_completion.d/kind',
+      refreshonly => true,
       path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
     }
     -> file { '/etc/bash_completion.d/kind':
