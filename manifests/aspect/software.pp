@@ -440,7 +440,7 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
       author            => 'kubernetes-sigs',
       repository        => 'kind',
       asset             => true,
-      asset_filepattern => $k9s_file,
+      asset_filepattern => $kind_file,
     }
     -> file { '/usr/local/bin/kind':
       owner  => 'root',
@@ -448,7 +448,16 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
       mode   => '0755',
       source => "file:///tmp/${kind_file}",
     }
-
+    -> exec { 'kind_install':
+      user        => 'root',
+      command     => "bash -c '/usr/local/bin/kind completion bash > /etc/bash_completion.d/kind'",
+      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    }
+    -> file { '/etc/bash_completion.d/kind':
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0755',
+    }
   }
 
   $rustdesk_file='/var/tmp/rustdesk.deb'
