@@ -12,11 +12,11 @@ class ubuntudesktop::aspect::software (
   Array[String] $packages_additional = [],
   Array[String] $packages_exclude    = [],
   Array[String] $ide_snaps           = [
-    "intellij-idea-community",
-    "pycharm-community",
-    "gradle",
-    "code",
-    "dbeaver-ce"
+    'intellij-idea-community',
+    'pycharm-community',
+    'gradle',
+    'code',
+    'dbeaver-ce'
   ],
   Boolean $nextcloud                 = true,
   Boolean $virtualbox                = true,
@@ -35,7 +35,7 @@ class ubuntudesktop::aspect::software (
     group  => 'root',
     mode   => '0755',
   }
-  file { "/opt/ubuntudesktop/helpers":
+  file { '/opt/ubuntudesktop/helpers':
     ensure  => 'directory',
     mode    => '0755',
     owner   => 'root',
@@ -43,13 +43,13 @@ class ubuntudesktop::aspect::software (
     source  => 'puppet:///modules/ubuntudesktop/helpers',
     backup  => false,
     recurse => remote,
-    require => File["/opt/ubuntudesktop/"]
+    require => File['/opt/ubuntudesktop/']
   }
   #########################################################################
 
   $pg_packages = [
     'postgresql-client-common', 'postgresql-client', 'pgtop', 'pg-activity', 'pgcli',
-    "mysql-client",
+    'mysql-client',
   ]
   ensure_resource('package', $pg_packages,
     { 'ensure' => 'present' }
@@ -180,7 +180,7 @@ class ubuntudesktop::aspect::software (
       require => [Package['libxcb-xtest0'], Package['libegl1-mesa'], Package['libgl1-mesa-glx']]
     }
   }else {
-    ensure_resource('package', ['libxcb-xtest0', 'libegl1-mesa', 'libgl1-mesa-glx', "zoom"], { 'ensure' => 'absent' })
+    ensure_resource('package', ['libxcb-xtest0', 'libegl1-mesa', 'libgl1-mesa-glx', 'zoom'], { 'ensure' => 'absent' })
   }
 
 
@@ -261,7 +261,7 @@ class ubuntudesktop::aspect::software (
       group   => 'root',
       mode    => '0644',
       content => '{ "experimental": true }',
-      require => Service["docker"]
+      require => Service['docker']
     }
   }
 
@@ -302,7 +302,7 @@ class ubuntudesktop::aspect::software (
   ### SPOTIFY
 
   if ($spotify) {
-    ubuntudesktop::helpers::snap_install { "spotify":
+    ubuntudesktop::helpers::snap_install { 'spotify':
     }
   }
 
@@ -320,7 +320,7 @@ class ubuntudesktop::aspect::software (
 
 
   ubuntudesktop::helpers::snap_install { $ide_snaps:
-    extra_args => "--classic"
+    extra_args => '--classic'
   }
 
   githubreleases_download { '/tmp/gitui-linux-x86_64.tar.gz':
@@ -328,7 +328,7 @@ class ubuntudesktop::aspect::software (
     repository        => 'gitui',
     asset             => true,
     asset_filepattern => 'gitui-linux-x86_64.tar.gz',
-    notify            => Exec["gitui_install"]
+    notify            => Exec['gitui_install']
   }
   exec { 'gitui_install':
     user        => 'root',
@@ -340,7 +340,7 @@ class ubuntudesktop::aspect::software (
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    require => Exec["gitui_install"]
+    require => Exec['gitui_install']
   }
 
 
@@ -349,7 +349,7 @@ class ubuntudesktop::aspect::software (
     repository        => 'lazygit',
     asset             => true,
     asset_filepattern => 'lazygit_.*_Linux_x86_64.tar.gz',
-    notify            => Exec["lazygit_install"]
+    notify            => Exec['lazygit_install']
   }
 
   exec { 'lazygit_install':
@@ -362,7 +362,7 @@ class ubuntudesktop::aspect::software (
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    require => Exec["lazygit_install"]
+    require => Exec['lazygit_install']
   }
 
   githubreleases_download { '/tmp/logcli-linux-amd64.zip':
@@ -370,7 +370,7 @@ class ubuntudesktop::aspect::software (
     repository        => 'loki',
     asset             => true,
     asset_filepattern => 'logcli-linux-amd64.zip',
-    notify            => Exec["logcli_install"]
+    notify            => Exec['logcli_install']
   }
   exec { 'logcli_install':
     user        => 'root',
@@ -382,22 +382,22 @@ class ubuntudesktop::aspect::software (
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    require => Exec["k9s_install"]
+    require => Exec['k9s_install']
   }
 
   if ($kubernetes_client) {
-    ubuntudesktop::helpers::snap_install { ["helm", "kubectl", "kubelogin"]:
-      extra_args => "--classic"
+    ubuntudesktop::helpers::snap_install { ['helm', 'kubectl', 'kubelogin']:
+      extra_args => '--classic'
     }
 
 
-    $k9s_file="k9s_Linux_amd64.tar.gz"
+    $k9s_file='k9s_Linux_amd64.tar.gz'
     githubreleases_download { "/tmp/${k9s_file}":
       author            => 'derailed',
       repository        => 'k9s',
       asset             => true,
-      asset_filepattern => "${k9s_file}",
-      notify            => Exec["k9s_install"]
+      asset_filepattern => $k9s_file,
+      notify            => Exec['k9s_install']
     }
     exec { 'k9s_install':
       user        => 'root',
@@ -409,7 +409,7 @@ class ubuntudesktop::aspect::software (
       owner   => 'root',
       group   => 'root',
       mode    => '0755',
-      require => Exec["k9s_install"]
+      require => Exec['k9s_install']
     }
     githubreleases_download {
       '/tmp/kubefwd_amd64.deb':
@@ -417,7 +417,7 @@ class ubuntudesktop::aspect::software (
       repository => 'kubefwd',
       asset_filepattern => 'kubefwd_amd64.deb',
       asset             => true,
-      notify            => Exec["kubefwd_install"]
+      notify            => Exec['kubefwd_install']
     }
     exec { 'kubefwd_install':
       user        => 'root',
@@ -433,7 +433,7 @@ class ubuntudesktop::aspect::software (
 ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
 "
     }
-    #ubuntudesktop::helpers::install_helper {"ubuntu-desktop_install_argocd": }
+    #ubuntudesktop::helpers::install_helper {'ubuntu-desktop_install_argocd': }
 
     $kind_file='kind-linux-amd64'
     githubreleases_download { "/tmp/${kind_file}":
@@ -451,17 +451,17 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
 
   }
 
-  $rustdesk_file="/var/tmp/rustdesk.deb"
-  githubreleases_download { "rustdesk":
-     target            => $rustdesk_file,
-     author            => 'rustdesk',
-     repository        => 'rustdesk',
-     asset             => true,
-     asset_filepattern => 'rustdesk-.*-x86_64\.deb',
+  $rustdesk_file='/var/tmp/rustdesk.deb'
+  githubreleases_download { 'rustdesk':
+    target            => $rustdesk_file,
+    author            => 'rustdesk',
+    repository        => 'rustdesk',
+    asset             => true,
+    asset_filepattern => 'rustdesk-.*-x86_64\.deb',
   }
 
-  ubuntudesktop::helpers::snap_install { ["chromium"]: }
-  ubuntudesktop::helpers::snap_install { "firefox": }
+  ubuntudesktop::helpers::snap_install { ['chromium']: }
+  ubuntudesktop::helpers::snap_install { 'firefox': }
 
   file { '/usr/share/keyrings/element-io-archive-keyring.gpg':
     ensure => present,
@@ -469,8 +469,8 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
     group  => 'root',
     mode   => '0644',
     source => 'https://packages.element.io/debian/element-io-archive-keyring.gpg',
-  } ->
-  file { '/etc/apt/sources.list.d/element-io.list':
+  }
+  -> file { '/etc/apt/sources.list.d/element-io.list':
     ensure  => present,
     owner   => 'root',
     group   => 'root',
@@ -481,16 +481,16 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
       |EOT
   }
   exec { 'apt-get update':
-    alias     => "apt-get-update-element",
-    unless    => "which element-desktop",
+    alias     => 'apt-get-update-element',
+    unless    => 'which element-desktop',
     user      => 'root',
     path      => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
     subscribe => [ File['/usr/share/keyrings/element-io-archive-keyring.gpg'], File[
-      "/etc/apt/sources.list.d/element-io.list"]]
+      '/etc/apt/sources.list.d/element-io.list']]
   } ->
-  package { "element-desktop":
+  package { 'element-desktop':
     require   => [ File['/usr/share/keyrings/element-io-archive-keyring.gpg'], File[
-      "/etc/apt/sources.list.d/element-io.list"]],
-    subscribe => Exec["apt-get-update-element"]
+      '/etc/apt/sources.list.d/element-io.list']],
+    subscribe => Exec['apt-get-update-element']
   }
 }
