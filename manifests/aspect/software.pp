@@ -434,6 +434,21 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
 "
     }
     #ubuntudesktop::helpers::install_helper {"ubuntu-desktop_install_argocd": }
+
+    $kind_file='kind-linux-amd64'
+    githubreleases_download { "/tmp/${kind_file}":
+      author            => 'kubernetes-sigs',
+      repository        => 'kind',
+      asset             => true,
+      asset_filepattern => $k9s_file,
+    }
+    -> file { '/usr/local/bin/kind':
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0755',
+      source => "file:///tmp/${kind_file}",
+    }
+
   }
 
   $rustdesk_file="/var/tmp/rustdesk.deb"
