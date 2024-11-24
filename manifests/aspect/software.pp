@@ -14,6 +14,7 @@ class ubuntudesktop::aspect::software (
   Array[String] $ide_snaps           = [
     'intellij-idea-community',
     'pycharm-community',
+    'rustrover',
     'gradle',
     'code',
     'dbeaver-ce'
