@@ -61,6 +61,7 @@ class ubuntudesktop::aspect::software (
 
   $default_packages = [ 'ubuntu-restricted-extras',
     'pandoc',
+    'wl-clipboard',
     'solaar',
     'wine-stable', 'playonlinux', 'winetricks',
     's3cmd',
@@ -461,6 +462,37 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
       group  => 'root',
       mode   => '0755',
     }
+    -> file { '/etc/systemd/system/user@.service.d/delegate.conf':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => "
+[Service]
+Delegate=yes
+",
+    notify => Exec['systemctl-daemon-reload']
+    }
+    -> file { '/etc/modules-load.d/iptables.conf':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => "
+ip6_tables
+ip6table_nat
+ip_tables
+iptable_nat
+"
+    }
+
+  exec { 'systemctl daemon-reload':
+    alias       => 'systemctl-daemon-reload',
+    user        => 'root',
+    path        => '/usr/bin:/usr/sbin:/bin',
+    refreshonly => true,
+  }
+
+
+
   }
 
   $rustdesk_file='/var/tmp/rustdesk.deb'
