@@ -483,15 +483,31 @@ ip_tables
 iptable_nat
 "
     }
+    exec { 'systemctl daemon-reload':
+      alias       => 'systemctl-daemon-reload',
+      user        => 'root',
+      path        => '/usr/bin:/usr/sbin:/bin',
+      refreshonly => true,
+    }
 
-  exec { 'systemctl daemon-reload':
-    alias       => 'systemctl-daemon-reload',
-    user        => 'root',
-    path        => '/usr/bin:/usr/sbin:/bin',
-    refreshonly => true,
-  }
-
-
+    githubreleases_download { '/tmp/stern_linux_arm64.tar.gz':
+      author            => 'stern',
+      repository        => 'stern',
+      asset             => true,
+      asset_filepattern => 'stern_.*_linux_amd64\.tar\.gz',
+      notify            => Exec['stern_install'],
+    }
+    exec { 'stern_install':
+      user        => 'root',
+      refreshonly => true,
+      command     => 'tar -C /usr/local/bin/ -zxvf /tmp/stern_linux_arm64.tar.gz stern',
+      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    }
+    -> file { '/usr/local/bin/stern':
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+    }
 
   }
 
