@@ -13,7 +13,8 @@ class ubuntudesktop::aspect::software (
   Array[String] $packages_exclude    = [],
   Array[String] $ide_snaps           = [
     'intellij-idea-community',
-    'pycharm-community',
+    #'pycharm-community',
+    'pycharm-professional',
     'rustrover',
     'gradle',
     'code',
@@ -462,27 +463,27 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
       group  => 'root',
       mode   => '0755',
     }
-    -> file { '/etc/systemd/system/user@.service.d/delegate.conf':
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => "
-[Service]
-Delegate=yes
-",
-    notify => Exec['systemctl-daemon-reload']
-    }
-    -> file { '/etc/modules-load.d/iptables.conf':
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => "
-ip6_tables
-ip6table_nat
-ip_tables
-iptable_nat
-"
-    }
+#    -> file { '/etc/systemd/system/user@.service.d/delegate.conf':
+#    owner   => 'root',
+#    group   => 'root',
+#    mode    => '0644',
+#    content => "
+#[Service]
+#Delegate=yes
+#",
+#    notify => Exec['systemctl-daemon-reload']
+#    }
+#    -> file { '/etc/modules-load.d/iptables.conf':
+#    owner   => 'root',
+#    group   => 'root',
+#    mode    => '0644',
+#    content => "
+#ip6_tables
+#ip6table_nat
+#ip_tables
+#iptable_nat
+#"
+#    }
     exec { 'systemctl daemon-reload':
       alias       => 'systemctl-daemon-reload',
       user        => 'root',
@@ -538,12 +539,6 @@ iptable_nat
     source   => "/tmp/${chrome_deb}",
     require  => Exec['download_chrome'],
   }
-  file_line { 'disable_i386_architecture':
-    path  => '/etc/apt/sources.list.d/google-chrome.sources',
-    match => 'Architectures:.*',
-    line  => 'Architectures: amd64',
-  }
-
   file { '/usr/share/keyrings/element-io-archive-keyring.gpg':
     ensure => present,
     owner  => 'root',
