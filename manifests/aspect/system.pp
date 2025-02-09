@@ -52,6 +52,15 @@ class ubuntudesktop::aspect::system {
     purge   => true,
   }
 
+  # configure sudo
+  file { '/dev/uinput':
+    ensure => 'present',
+    owner  => 'marc',
+    group  => 'root',
+    mode   => '0750',
+  }
+
+
   # Install a tiny script to update the system
   file { '/usr/local/sbin/ubuntu-update':
     owner  => 'root',
