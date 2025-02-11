@@ -513,6 +513,7 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
   }
 
   $rustdesk_file='/var/tmp/rustdesk.deb'
+
   githubreleases_download { 'rustdesk':
     target            => $rustdesk_file,
     author            => 'rustdesk',
@@ -520,6 +521,20 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
     asset             => true,
     asset_filepattern => 'rustdesk-.*-x86_64\.deb',
   }
+  -> package { 'libxdo3':
+    ensure   => installed,
+  }
+  -> package { 'rustdesk':
+    ensure   => installed,
+    provider => 'dpkg',
+    source   => "/tmp/${rustdesk_file}",
+    require  => Exec['download_chrome'],
+  }
+  -> service { 'rustdesk':
+    ensure => 'stopped',
+    enable => false,
+  }
+
 
   ubuntudesktop::helpers::snap_install { ['chromium']: }
   ubuntudesktop::helpers::snap_install { 'firefox': }
@@ -539,6 +554,8 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
     source   => "/tmp/${chrome_deb}",
     require  => Exec['download_chrome'],
   }
+
+
   file { '/usr/share/keyrings/element-io-archive-keyring.gpg':
     ensure => present,
     owner  => 'root',

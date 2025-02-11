@@ -1,11 +1,5 @@
 
 
-* rustdesk
-  sudo apt-get install libxdo3
-  wget https://github.com/rustdesk/rustdesk/releases/download/1.3.7/rustdesk-1.3.7-x86_64.deb
-  dpkg -i rustdesk-1.3.7-x86_64.deb
-  systemctl disable rustdesk
-* Google-Chrome
 * Auf Openvox umstellen
 * Mousbutton per UDEV Rule, dann kann Solaar weg
    # https://discussion.fedoraproject.org/t/how-to-remap-mouse-buttons-on-gnome-with-wayland-without-running-an-extra-service/89700/5

@@ -12,10 +12,13 @@ class ubuntudesktop::aspect::system {
 
   augeas { 'set_grub_opts':
     context => '/files/etc/default/grub',
-    changes => "set GRUB_TIMEOUT '\"-1\"'",
+    changes => [
+      "set GRUB_TIMEOUT '\"-1\"'",
+      "set GRUB_GFXMODE '\"1280x1024\"'",
+    ],
     notify  => Exec['update-grub']
   }
-  exec { 'update-grub':
+  -> exec { 'update-grub':
     user        => 'root',
     path        => '/usr/bin:/usr/sbin:/bin',
     refreshonly => true,
