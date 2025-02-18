@@ -556,6 +556,8 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
   }
 
 
+  ubuntudesktop::helpers::snap_uninstall { 'element-desktop': }
+
   file { '/usr/share/keyrings/element-io-archive-keyring.gpg':
     ensure => present,
     owner  => 'root',
