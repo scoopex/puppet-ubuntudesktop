@@ -176,7 +176,7 @@ class ubuntudesktop::aspect::software (
 
   ensure_resource('package', $install_python_packages, { 'ensure' => 'present' })
 
-  $install_pipx_packages = ['yaookctl', 'kubectl-yaook']
+  $install_pipx_packages = ['yaookctl']
   ensure_resource('ubuntudesktop::helpers::pipx_install', $install_pipx_packages)
 
   if ($zoom) {
