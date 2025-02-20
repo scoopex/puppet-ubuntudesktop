@@ -155,7 +155,7 @@ class ubuntudesktop::aspect::software (
     'subversion',
     'devscripts', 'debhelper', 'dh-make',
     'ldap-utils',
-    'python3-pip', 'virtualenv', 'virtualenvwrapper', 'python3-virtualenv', 'build-essential', 'libssl-dev',
+    'python3-pip', 'virtualenv', 'virtualenvwrapper', 'python3-virtualenv', 'build-essential', 'libssl-dev', 'pipx',
     'libffi-dev', 'python3-dev', 'pylint',
     'ipython3', 'python3-autopep8',
     'python3-pylint-flask', 'python3-flake8', 'python3-packaging',
@@ -175,6 +175,9 @@ class ubuntudesktop::aspect::software (
   $install_python_packages = ['python3', 'python3-dev', 'python3-doc', 'python3-venv', 'libpython3-stdlib']
 
   ensure_resource('package', $install_python_packages, { 'ensure' => 'present' })
+
+  $install_pipx_packages = ['yaookctl', 'kubectl-yaook']
+  ensure_resource('ubuntudesktop::helpers::pipx_install', $install_pipx_packages)
 
   if ($zoom) {
     ensure_resource('package', ['libxcb-xtest0', 'libegl1-mesa', 'libgl1-mesa-glx'], { 'ensure' => 'present' })
@@ -436,7 +439,7 @@ class ubuntudesktop::aspect::software (
 ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
 "
     }
-    #ubuntudesktop::helpers::install_helper {'ubuntu-desktop_install_argocd': }
+    ubuntudesktop::helpers::install_helper {'ubuntu-desktop_install_argocd': }
 
     $kind_file='kind-linux-amd64'
     githubreleases_download { "/tmp/${kind_file}":
