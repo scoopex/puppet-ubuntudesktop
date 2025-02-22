@@ -13,6 +13,7 @@ class ubuntudesktop (
 ) {
   include ubuntudesktop::aspect::kernel
   include ubuntudesktop::aspect::software
+  include ubuntudesktop::aspect::kubernetes
   include ubuntudesktop::aspect::system
   include ubuntudesktop::aspect::user
 }

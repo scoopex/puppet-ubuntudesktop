@@ -4,11 +4,10 @@ VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/
 
 
 if [ "$1" = "check" ];then
-   if [ -f "/opt/ubuntudestop/argocd-linux-amd64_${VERSION}" ];then
-      touch "/opt/ubuntudestop/argocd-linux-amd64_${VERSION}"
+   if [ -f "/opt/ubuntudesktop/argocd-linux-amd64_${VERSION}" ];then
+      touch "/opt/ubuntudesktop/argocd-linux-amd64_${VERSION}"
       exit 0
    fi
-   echo "INFO: /opt/ubuntudestop/argocd-linux-amd64_${VERSION} is not installed"
    exit 1
 fi
 
