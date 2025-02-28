@@ -26,7 +26,7 @@ class ubuntudesktop::aspect::software (
   Boolean $openvpn                   = true,
   Boolean $wireguard                 = false,
   Boolean $spotify                   = true,
-  Boolean $zoom                      = false,
+  Boolean $zoom                      = true,
   Boolean $signal                    = true,
 ) {
   # Install Helper Files
