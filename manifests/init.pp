@@ -10,7 +10,9 @@
 class ubuntudesktop (
   String[2] $user = 'marc',
   String[2] $homedir = '/home/marc',
+  String[2] $cachedir = '/var/cache/puppet-ubuntudesktop',
 ) {
+  include ubuntudesktop::aspect::base
   include ubuntudesktop::aspect::kernel
   include ubuntudesktop::aspect::software
   include ubuntudesktop::aspect::kubernetes

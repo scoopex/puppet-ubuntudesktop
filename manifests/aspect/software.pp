@@ -26,7 +26,7 @@ class ubuntudesktop::aspect::software (
   Boolean $openvpn                   = true,
   Boolean $wireguard                 = false,
   Boolean $spotify                   = true,
-  Boolean $zoom                      = true,
+  Boolean $zoom                      = false,
   Boolean $signal                    = true,
 ) {
   # Install Helper Files
@@ -326,8 +326,8 @@ class ubuntudesktop::aspect::software (
     extra_args => '--classic'
   }
 
-  githubreleases_download { '/tmp/gitui-linux-x86_64.tar.gz':
-    author            => 'extrawurst',
+  githubreleases_download { "${ubuntudesktop::cachedir}/gitui-linux-x86_64.tar.gz":
+    author            => 'gitui-org',
     repository        => 'gitui',
     asset             => true,
     asset_filepattern => 'gitui-linux-x86_64.tar.gz',
@@ -336,7 +336,7 @@ class ubuntudesktop::aspect::software (
   exec { 'gitui_install':
     user        => 'root',
     refreshonly => true,
-    command     => 'tar -C /usr/local/bin/ -zxvf /tmp/gitui-linux-x86_64.tar.gz ./gitui',
+    command     => "tar -C /usr/local/bin/ -zxvf ${ubuntudesktop::cachedir}/gitui-linux-x86_64.tar.gz ./gitui",
     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
   }
   file { '/usr/local/bin/gitui':
@@ -347,7 +347,7 @@ class ubuntudesktop::aspect::software (
   }
 
 
-  githubreleases_download { '/tmp/lazygit_Linux_x86_64.tar.gz':
+  githubreleases_download { "${ubuntudesktop::cachedir}/lazygit_Linux_x86_64.tar.gz":
     author            => 'jesseduffield',
     repository        => 'lazygit',
     asset             => true,
@@ -358,7 +358,7 @@ class ubuntudesktop::aspect::software (
   exec { 'lazygit_install':
     user        => 'root',
     refreshonly => true,
-    command     => 'tar -C /usr/local/bin/ -zxvf /tmp/lazygit_Linux_x86_64.tar.gz lazygit',
+    command     => "tar -C /usr/local/bin/ -zxvf ${ubuntudesktop::cachedir}/lazygit_Linux_x86_64.tar.gz lazygit",
     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
   }
   file { '/usr/local/bin/lazygit':
@@ -368,7 +368,7 @@ class ubuntudesktop::aspect::software (
     require => Exec['lazygit_install']
   }
 
-  githubreleases_download { '/tmp/logcli-linux-amd64.zip':
+  githubreleases_download { "${ubuntudesktop::cachedir}/logcli-linux-amd64.zip":
     author            => 'grafana',
     repository        => 'loki',
     asset             => true,
@@ -378,7 +378,7 @@ class ubuntudesktop::aspect::software (
   exec { 'logcli_install':
     user        => 'root',
     refreshonly => true,
-    command     => 'unzip -o -d /tmp/ /tmp/logcli-linux-amd64.zip logcli-linux-amd64 && mv /tmp/logcli-linux-amd64 /usr/local/bin/logcli',
+    command     => "unzip -o -d ${ubuntudesktop::cachedir}/ ${ubuntudesktop::cachedir}/logcli-linux-amd64.zip logcli-linux-amd64 && mv ${ubuntudesktop::cachedir}/logcli-linux-amd64 /usr/local/bin/logcli",
     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
   }
   file { '/usr/local/bin/logcli':
@@ -388,7 +388,7 @@ class ubuntudesktop::aspect::software (
     require => Exec['k9s_install']
   }
 
-  $rustdesk_file='/var/tmp/rustdesk.deb'
+  $rustdesk_file="${ubuntudesktop::cachedir}/rustdesk.deb"
 
   githubreleases_download { 'rustdesk':
     target            => $rustdesk_file,
@@ -403,7 +403,7 @@ class ubuntudesktop::aspect::software (
   -> package { 'rustdesk':
     ensure   => installed,
     provider => 'dpkg',
-    source   => "/tmp/${rustdesk_file}",
+    source   => "${ubuntudesktop::cachedir}/${rustdesk_file}",
   }
   -> service { 'rustdesk':
     ensure => 'stopped',

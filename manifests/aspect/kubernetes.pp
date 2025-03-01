@@ -3,18 +3,18 @@ class ubuntudesktop::aspect::kubernetes (
   ubuntudesktop::helpers::snap_install { ['helm', 'kubectl', 'kubelogin']:
     extra_args => '--classic'
   }
-  -> archive { "/tmp/krew-linux_amd64.tar.gz":
+  -> archive { "${ubuntudesktop::cachedir}/user/krew-linux_amd64.tar.gz":
     source       => "https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-linux_amd64.tar.gz",
     cleanup      => false,
     extract      => true,
-    extract_path => "/tmp/",
+    extract_path => "${ubuntudesktop::cachedir}/user/",
     user         => $ubuntudesktop::user,
-    creates      => "/tmp/krew-linux_amd64",
+    creates      => "${ubuntudesktop::cachedir}/krew-linux_amd64",
   }
   -> exec { 'krew_install':
     user    => $ubuntudesktop::user,
     environment => ["HOME=${ubuntudesktop::homedir}"],
-    command => "/tmp/krew-linux_amd64 install krew",
+    command => "${ubuntudesktop::cachedir}/user/krew-linux_amd64 install krew",
     logoutput => true,
     unless => 'kubectl krew',
     path    => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:${ubuntudesktop::homedir}/.krew/bin",
@@ -24,7 +24,7 @@ class ubuntudesktop::aspect::kubernetes (
   }
 
   $k9s_file = 'k9s_Linux_amd64.tar.gz'
-  githubreleases_download { "/tmp/${k9s_file}":
+  githubreleases_download { "${ubuntudesktop::cachedir}/${k9s_file}":
     author            => 'derailed',
     repository        => 'k9s',
     asset             => true,
@@ -34,7 +34,7 @@ class ubuntudesktop::aspect::kubernetes (
   exec { 'k9s_install':
     user        => 'root',
     refreshonly => true,
-    command     => "tar -C /usr/local/bin/ -zxvf /tmp/${k9s_file} k9s",
+    command     => "tar -C /usr/local/bin/ -zxvf ${ubuntudesktop::cachedir}/${k9s_file} k9s",
     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
   }
   file { '/usr/local/bin/k9s':
@@ -44,7 +44,7 @@ class ubuntudesktop::aspect::kubernetes (
     require => Exec['k9s_install']
   }
   githubreleases_download {
-    '/tmp/kubefwd_amd64.deb':
+    "${ubuntudesktop::cachedir}/kubefwd_amd64.deb":
       author            => 'txn2',
       repository        => 'kubefwd',
       asset_filepattern => 'kubefwd_amd64.deb',
@@ -54,7 +54,7 @@ class ubuntudesktop::aspect::kubernetes (
   exec { 'kubefwd_install':
     user        => 'root',
     refreshonly => true,
-    command     => 'dpkg -i /tmp/kubefwd_amd64.deb',
+    command     => "dpkg -i ${ubuntudesktop::cachedir}/kubefwd_amd64.deb",
     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
   }
   file { '/etc/sudoers.d/kubefwd':
@@ -68,7 +68,7 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
   ubuntudesktop::helpers::install_helper { 'ubuntu-desktop_install_argocd': }
 
   $kind_file = 'kind-linux-amd64'
-  githubreleases_download { "/tmp/${kind_file}":
+  githubreleases_download { "${ubuntudesktop::cachedir}/${kind_file}":
     author            => 'kubernetes-sigs',
     repository        => 'kind',
     asset             => true,
@@ -78,7 +78,7 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
     owner  => 'root',
     group  => 'root',
     mode   => '0755',
-    source => "file:///tmp/${kind_file}",
+    source => "file://${ubuntudesktop::cachedir}/${kind_file}",
   }
   -> exec { 'kind_install':
     user        => 'root',
@@ -120,7 +120,7 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
   #       refreshonly => true,
   #     }
 
-  githubreleases_download { '/tmp/stern_linux_arm64.tar.gz':
+  githubreleases_download { "${ubuntudesktop::cachedir}/stern_linux_arm64.tar.gz":
     author            => 'stern',
     repository        => 'stern',
     asset             => true,
@@ -130,7 +130,7 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
   exec { 'stern_install':
     user        => 'root',
     refreshonly => true,
-    command     => 'tar -C /usr/local/bin/ -zxvf /tmp/stern_linux_arm64.tar.gz stern',
+    command     => "tar -C /usr/local/bin/ -zxvf ${ubuntudesktop::cachedir}/stern_linux_arm64.tar.gz stern",
     path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
   }
   -> file { '/usr/local/bin/stern':
@@ -141,5 +141,4 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
 
   $install_pipx_packages = ['yaookctl']
   ensure_resource('ubuntudesktop::helpers::pipx_install', $install_pipx_packages)
-
 }
