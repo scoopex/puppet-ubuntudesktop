@@ -15,7 +15,7 @@ mkdir /tmp/setup-ubuntu
 cd /tmp/setup-ubuntu
 
 
-sudo apt-get purge puppet* hiera* openvox* -y 
+sudo apt-get purge puppet* hiera* -y 
 sudo rm -rf /etc/puppet*
 sudo apt-get autoremove -y
 sudo rm -rf /var/tmp/puppet*
