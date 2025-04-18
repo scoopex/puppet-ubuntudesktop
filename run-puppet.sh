@@ -3,6 +3,7 @@ set -e
 
 cachedir="/var/cache/puppet-ubuntudesktop/"
 age="$(( $(date +%s) - $(stat -c %Y $cachedir) ))"
+sdir="$(dirname $(readlink -f $0))"
 
 if [ $age -gt $(( 3600 * 24 * 8 )) ];then
    rm -rvf "${cachedir?CACHEDIR}/*"
@@ -14,8 +15,9 @@ fi
 set -x
 cd /etc/puppetlabs/pxp-agent
 #sudo librarian-puppet install --verbose
-sudo r10k puppetfile install --puppetfile=Puppetfile --force -v
+sudo bash -c "PATH='$HOME/.local/share/gem/ruby/3.3.0/bin/:$PATH' r10k puppetfile install --puppetfile=Puppetfile -v"
+sudo ln -snf ${sdir} /etc/puppetlabs/pxp-agent/modules/ubuntudesktop
 sudo puppet apply \
    --modulepath /etc/puppetlabs/pxp-agent/modules/ \
-   /etc/puppetlabs/pxp-agent/modules/ubuntudesktop/manifests/local.pp  --test $@
+   ${sdir}/manifests/local.pp  --test $@
 echo

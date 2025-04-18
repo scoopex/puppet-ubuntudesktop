@@ -238,14 +238,27 @@ class ubuntudesktop::aspect::software (
   ### Docker
 
   if ($docker) {
-    class { '::docker':
+    apt::source { 'docker':
+      location     => ' https://download.docker.com/linux/ubuntu',
+      architecture => $facts['os']['architecture'],
+      release      => "oracular",
+      repos        => "stable",
+      key          => {
+        'name'     => 'docker-keyring.asc',
+        'source'   => 'https://download.docker.com/linux/ubuntu/gpg',
+      },
+      include      => {
+        src => false,
+      },
+    }
+    -> class { '::docker':
       dns                         => '8.8.8.8',
       version                     => 'latest',
       ip_forward                  => true,
       iptables                    => true,
       ip_masq                     => true,
       docker_users                => [ $::ubuntudesktop::user ],
-      use_upstream_package_source => true,
+      use_upstream_package_source => false,
     }
 
     file { '/etc/cron.d/docker-gc':
