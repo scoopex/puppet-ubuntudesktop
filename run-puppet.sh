@@ -13,7 +13,8 @@ fi
 
 set -x
 cd /etc/puppetlabs/pxp-agent
-sudo librarian-puppet install --verbose
+#sudo librarian-puppet install --verbose
+sudo r10k puppetfile install --puppetfile=Puppetfile --force -v
 sudo puppet apply \
    --modulepath /etc/puppetlabs/pxp-agent/modules/ \
    /etc/puppetlabs/pxp-agent/modules/ubuntudesktop/manifests/local.pp  --test $@
