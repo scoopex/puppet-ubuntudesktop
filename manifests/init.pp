@@ -18,4 +18,5 @@ class ubuntudesktop (
   include ubuntudesktop::aspect::kubernetes
   include ubuntudesktop::aspect::system
   include ubuntudesktop::aspect::user
+  include ubuntudesktop::aspect::hardware
 }

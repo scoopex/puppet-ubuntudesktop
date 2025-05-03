@@ -62,7 +62,6 @@ class ubuntudesktop::aspect::software (
   $default_packages = [ 'ubuntu-restricted-extras',
     'pandoc',
     'wl-clipboard',
-    'solaar',
     'wine-stable', 'playonlinux', 'winetricks',
     's3cmd',
     'rpm',
@@ -161,7 +160,8 @@ class ubuntudesktop::aspect::software (
     'percona-toolkit',
     'ipmiutil', 'xtightvncviewer',
     'hotspot',
-    'apt-listchanges', 'apt-file'
+    'apt-listchanges', 'apt-file',
+    'flatpak',
   ]
 
   $install_packages = $default_packages + $packages_additional

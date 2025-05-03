@@ -139,6 +139,6 @@ ${ubuntudesktop::user} ALL=(ALL) SETENV: NOPASSWD: /usr/local/bin/kubefwd *
     mode  => '0755',
   }
 
-  $install_pipx_packages = ['yaookctl']
-  ensure_resource('ubuntudesktop::helpers::pipx_install', $install_pipx_packages)
+  #$install_pipx_packages = ['yaookctl']
+  #ensure_resource('ubuntudesktop::helpers::pipx_install', $install_pipx_packages)
 }
