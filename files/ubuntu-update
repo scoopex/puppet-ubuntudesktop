@@ -15,4 +15,5 @@ apt upgrade -o Acquire::ForceIPv4=true
 apt autoremove -o Acquire::ForceIPv4=true --purge
 apt dist-upgrade -o Acquire::ForceIPv4=true
 apt autoremove -o Acquire::ForceIPv4=true --purge
-fwupdmgr update
+which fwupdmgr &>/dev/null && fwupdmgr update
+flatpak update --assumeyes

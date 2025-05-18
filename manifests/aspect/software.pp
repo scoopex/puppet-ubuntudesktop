@@ -160,8 +160,8 @@ class ubuntudesktop::aspect::software (
     'percona-toolkit',
     'ipmiutil', 'xtightvncviewer',
     'hotspot',
-    'apt-listchanges', 'apt-file',
-    'flatpak',
+    'apt-listchanges', 'apt-file', 
+    'flatpak', 'kde-config-flatpak', 'plasma-discover-backend-flatpak',
   ]
 
   $install_packages = $default_packages + $packages_additional
