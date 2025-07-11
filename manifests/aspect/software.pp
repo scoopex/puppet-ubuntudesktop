@@ -162,6 +162,8 @@ class ubuntudesktop::aspect::software (
     'hotspot',
     'apt-listchanges', 'apt-file', 
     'flatpak', 'kde-config-flatpak', 'plasma-discover-backend-flatpak',
+    'python3-openstackclient', 'python3-octaviaclient', 'python3-keystoneclient', 'python3-osc-placement',
+    'python-openstackclient-doc', 'python-octaviaclient-doc', 'python-keystoneclient-doc', 'python-osc-placement-doc'
   ]
 
   $install_packages = $default_packages + $packages_additional
