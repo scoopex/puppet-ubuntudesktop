@@ -6,12 +6,14 @@ age="$(( $(date +%s) - $(stat -c %Y $cachedir) ))"
 sdir="$(dirname $(readlink -f $0))"
 
 if [ $age -gt $(( 3600 * 24 * 8 )) ];then
-   rm -rvf "${cachedir?CACHEDIR}/*"
+   echo "sudo rm -rf ${cachedir?}/*"
+   sudo rm -rvf "${cachedir?}/*"
 else
-   echo "INFO: Cache not old enough, delete cachedir for reinstall: rm -rf ${cachedir?CACHEDIR}/*"
+   echo "INFO: Cache not old enough, delete cachedir for reinstall:"
+   echo "sudo rm -rf ${cachedir?CACHEDIR}/*"
 fi
 
-
+echo 
 set -x
 cd /etc/puppetlabs/pxp-agent
 #sudo librarian-puppet install --verbose
