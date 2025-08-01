@@ -159,7 +159,6 @@ class ubuntudesktop::aspect::software (
     'pdfarranger', 'diffpdf', 'pdfpc', 
     'percona-toolkit',
     'ipmiutil', 'xtightvncviewer',
-    'hotspot',
     'apt-listchanges', 'apt-file', 
     'flatpak', 'kde-config-flatpak', 'plasma-discover-backend-flatpak',
     'python3-openstackclient', 'python3-octaviaclient', 'python3-keystoneclient', 'python3-osc-placement',
