@@ -25,7 +25,7 @@ sudo dpkg -i /var/tmp/puppet${PUPPET_REL}-release-${REL}.deb
 sudo apt update
 sudo apt upgrade -y
 sudo apt dist-upgrade -y
-sudo apt install puppet-agent librarian-puppet git -y
+sudo apt install puppet-agent librarian-puppet git r10k -y
 
 sudo grep -q include_legacy_facts /etc/puppetlabs/puppet/puppet.conf || sudo bash -c 'echo "include_legacy_facts=true" >> /etc/puppetlabs/puppet/puppet.conf'
 sudo apt autoremove -y
