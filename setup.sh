@@ -20,19 +20,13 @@ sudo rm -rf /etc/puppet*
 sudo apt-get autoremove -y
 sudo rm -rf /var/tmp/puppet*
 
-sudo wget -P /var/tmp/ http://apt.puppetlabs.com/puppet${PUPPET_REL}-release-${REL}.deb
-sudo dpkg -i /var/tmp/puppet${PUPPET_REL}-release-${REL}.deb
+# https://github.com/OpenVoxProject/openvox/pkgs/rubygems/openvox
+
 sudo apt update
 sudo apt upgrade -y
 sudo apt dist-upgrade -y
-sudo apt install puppet-agent librarian-puppet git r10k -y
-
-sudo grep -q include_legacy_facts /etc/puppetlabs/puppet/puppet.conf || sudo bash -c 'echo "include_legacy_facts=true" >> /etc/puppetlabs/puppet/puppet.conf'
+sudo apt install git r10k ruby-rubygems -y
 sudo apt autoremove -y
-sudo ln -snf /opt/puppetlabs/bin/puppet /usr/local/sbin/puppet
-sudo ln -snf ${SDIR}/Puppetfile /etc/puppetlabs/pxp-agent/Puppetfile
-sudo mkdir -p /etc/puppetlabs/pxp-agent/modules
-sudo ln -snf ${SDIR} /etc/puppetlabs/pxp-agent/modules/ubuntudesktop
 
-sudo systemctl disable puppet.service
-sudo systemctl stop puppet.service
+gem install openvox --version "8.21.1" 
+#sudo grep -q include_legacy_facts /etc/puppetlabs/puppet/puppet.conf || sudo bash -c 'echo "include_legacy_facts=true" >> /etc/puppetlabs/puppet/puppet.conf'
