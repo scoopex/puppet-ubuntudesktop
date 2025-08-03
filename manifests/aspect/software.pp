@@ -156,10 +156,10 @@ class ubuntudesktop::aspect::software (
     'libffi-dev', 'python3-dev', 'pylint',
     'ipython3', 'python3-autopep8',
     'python3-pylint-flask', 'python3-flake8', 'python3-packaging',
-    'pdfarranger', 'diffpdf', 'pdfpc', 
+    'pdfarranger', 'diffpdf', 'pdf-presenter-console',
     'percona-toolkit',
     'ipmiutil', 'xtightvncviewer',
-    'apt-listchanges', 'apt-file', 
+    'apt-listchanges', 'apt-file',
     'flatpak', 'kde-config-flatpak', 'plasma-discover-backend-flatpak',
     'python3-openstackclient', 'python3-octaviaclient', 'python3-keystoneclient', 'python3-osc-placement',
     'python-openstackclient-doc', 'python-octaviaclient-doc', 'python-keystoneclient-doc', 'python-osc-placement-doc'

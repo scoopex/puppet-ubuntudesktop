@@ -4,7 +4,11 @@ class ubuntudesktop::aspect::hardware (){
     ensure => installed,
   }
 
-  file { "${ubuntudesktop::homedir}/.config/input-remapper-2/presets/Logitech MX Master 3S/":
+  file { [
+          "${ubuntudesktop::homedir}/.config/input-remapper-2/",
+          "${ubuntudesktop::homedir}/.config/input-remapper-2/presets/",
+          "${ubuntudesktop::homedir}/.config/input-remapper-2/presets/Logitech MX Master 3S/"
+  ]:
     ensure  => 'directory',
     owner   => "${ubuntudesktop::user}",
     group   => "${ubuntudesktop::user}",
@@ -12,6 +16,7 @@ class ubuntudesktop::aspect::hardware (){
     recurse => true,
     purge   => true,
   }
+
   file { "${ubuntudesktop::homedir}/.config/input-remapper-2/presets/Logitech MX Master 3S/Mouse.json":
     owner   => "${ubuntudesktop::user}",
     group   => "${ubuntudesktop::user}",
