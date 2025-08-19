@@ -170,6 +170,13 @@ class ubuntudesktop::aspect::software (
 
   ensure_resource('package', $install_packages, { 'ensure' => 'present' })
 
+  # flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+  exec { 'add_flathub_repo':
+    command => 'flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo',
+    path    => ['/usr/bin', '/bin'],
+    unless  => 'flatpak remote-list | grep -q "^flathub"',
+    require => Package['flatpak'],
+  }
 
   $install_python_packages = ['python3', 'python3-dev', 'python3-doc', 'python3-venv', 'libpython3-stdlib']
 
