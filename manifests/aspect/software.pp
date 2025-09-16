@@ -156,11 +156,10 @@ class ubuntudesktop::aspect::software (
     'libffi-dev', 'python3-dev', 'pylint',
     'ipython3', 'python3-autopep8',
     'python3-pylint-flask', 'python3-flake8', 'python3-packaging',
-    'pdfarranger', 'diffpdf', 'pdfpc', 
+    'pdfarranger', 'diffpdf', 'pdf-presenter-console',
     'percona-toolkit',
     'ipmiutil', 'xtightvncviewer',
-    'hotspot',
-    'apt-listchanges', 'apt-file', 
+    'apt-listchanges', 'apt-file',
     'flatpak', 'kde-config-flatpak', 'plasma-discover-backend-flatpak',
     'python3-openstackclient', 'python3-octaviaclient', 'python3-keystoneclient', 'python3-osc-placement',
     'python-openstackclient-doc', 'python-octaviaclient-doc', 'python-keystoneclient-doc', 'python-osc-placement-doc'
@@ -171,6 +170,13 @@ class ubuntudesktop::aspect::software (
 
   ensure_resource('package', $install_packages, { 'ensure' => 'present' })
 
+  # flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+  exec { 'add_flathub_repo':
+    command => 'flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo',
+    path    => ['/usr/bin', '/bin'],
+    unless  => 'flatpak remote-list | grep -q "^flathub"',
+    require => Package['flatpak'],
+  }
 
   $install_python_packages = ['python3', 'python3-dev', 'python3-doc', 'python3-venv', 'libpython3-stdlib']
 
