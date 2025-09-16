@@ -10,6 +10,8 @@ class ubuntudesktop::aspect::kubernetes (
     extract_path => "${ubuntudesktop::cachedir}/user/",
     user         => $ubuntudesktop::user,
     creates      => "${ubuntudesktop::cachedir}/krew-linux_amd64",
+    provider         => 'wget',
+    download_options => '--timestamping',
   }
   -> exec { 'krew_install':
     user    => $ubuntudesktop::user,
