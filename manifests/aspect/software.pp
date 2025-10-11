@@ -27,6 +27,7 @@ class ubuntudesktop::aspect::software (
   Boolean $wireguard                 = false,
   Boolean $spotify                   = true,
   Boolean $zoom                      = false,
+  Boolean $openstack                 = true,
   Boolean $signal                    = true,
 ) {
   # Install Helper Files
@@ -62,7 +63,7 @@ class ubuntudesktop::aspect::software (
   $default_packages = [ 'ubuntu-restricted-extras',
     'pandoc',
     'wl-clipboard',
-    'wine-stable', 'playonlinux', 'winetricks',
+    'wine-stable', 'winetricks',
     's3cmd',
     'rpm',
     'mosh',
@@ -159,16 +160,15 @@ class ubuntudesktop::aspect::software (
     'pdfarranger', 'diffpdf', 'pdf-presenter-console',
     'percona-toolkit',
     'ipmiutil', 'xtightvncviewer',
-    'apt-listchanges', 'apt-file',
+    'apt-file',
     'flatpak', 'kde-config-flatpak', 'plasma-discover-backend-flatpak',
-    'python3-openstackclient', 'python3-octaviaclient', 'python3-keystoneclient', 'python3-osc-placement',
-    'python-openstackclient-doc', 'python-octaviaclient-doc', 'python-keystoneclient-doc', 'python-osc-placement-doc'
   ]
 
   $install_packages = $default_packages + $packages_additional
   $install_packages_with_excludes = $install_packages - $packages_exclude
 
-  ensure_resource('package', $install_packages, { 'ensure' => 'present' })
+  ensure_resource('package', $install_packages_with_excludes, { 'ensure' => 'present' })
+  ensure_resource('package', $packages_exclude, { 'ensure' => 'absent' })
 
   # flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
   exec { 'add_flathub_repo':
@@ -193,6 +193,58 @@ class ubuntudesktop::aspect::software (
     ensure_resource('package', ['libxcb-xtest0', 'libegl1-mesa', 'libgl1-mesa-glx', 'zoom'], { 'ensure' => 'absent' })
   }
 
+
+  #########################################################################
+  ### Openstack
+
+  $install_openstack_packages = [
+    'python3-openstackclient', 'python3-octaviaclient', 'python3-keystoneclient', 'python3-osc-placement',
+    'python-openstackclient-doc', 'python-octaviaclient-doc', 'python-keystoneclient-doc', 'python-osc-placement-doc'
+  ]
+
+  if ($openstack) {
+    ensure_resource('package', $install_openstack_packages, { 'ensure' => 'present' })
+
+    githubreleases_download { "${ubuntudesktop::cachedir}/openstack_cli-x86_64-unknown-linux-gnu.tar.xz":
+      author            => 'gtema',
+      repository        => 'openstack',
+      asset             => true,
+      asset_filepattern => 'openstack_cli-x86_64-unknown-linux-gnu.tar.xz',
+      notify            => Exec['openstack_osc_install']
+    }
+    exec { 'openstack_osc_install':
+      user        => 'root',
+      refreshonly => true,
+      command     => "tar -C /usr/local/bin/ -xvf ${ubuntudesktop::cachedir}/openstack_cli-x86_64-unknown-linux-gnu.tar.xz --strip-components=1 openstack_cli-x86_64-unknown-linux-gnu/osc",
+      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    }
+    file { '/usr/local/bin/osc':
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      require => Exec['openstack_osc_install']
+    }
+
+    githubreleases_download { "${ubuntudesktop::cachedir}/openstack_tui-x86_64-unknown-linux-gnu.tar.xz":
+      author            => 'gtema',
+      repository        => 'openstack',
+      asset             => true,
+      asset_filepattern => 'openstack_tui-x86_64-unknown-linux-gnu.tar.xz',
+      notify            => Exec['openstack_ostui_install']
+    }
+    exec { 'openstack_ostui_install':
+      user        => 'root',
+      refreshonly => true,
+      command     => "tar -C /usr/local/bin/ -xvf ${ubuntudesktop::cachedir}/openstack_tui-x86_64-unknown-linux-gnu.tar.xz --strip-components=1 openstack_tui-x86_64-unknown-linux-gnu/ostui ",
+      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+    }
+    file { '/usr/local/bin/ostui':
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      require => Exec['openstack_ostui_install']
+    }
+  }
 
   #########################################################################
   ### Nextcloud

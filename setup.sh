@@ -1,8 +1,6 @@
 #!/bin/bash
 
 SDIR="$(dirname $(readlink -f $0))"
-REL="jammy"
-PUPPET_REL="8"
 
 set -x
 set -e
@@ -26,7 +24,7 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt dist-upgrade -y
 sudo apt install git r10k ruby-rubygems -y
+sudo apt install augeas-tools libaugeas0 ruby-augeas -y
 sudo apt autoremove -y
-
-gem install openvox --version "8.21.1" 
+sudo gem install openvox --version "8.23.1" 
 #sudo grep -q include_legacy_facts /etc/puppetlabs/puppet/puppet.conf || sudo bash -c 'echo "include_legacy_facts=true" >> /etc/puppetlabs/puppet/puppet.conf'
