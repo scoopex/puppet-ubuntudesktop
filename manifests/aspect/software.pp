@@ -319,6 +319,7 @@ class ubuntudesktop::aspect::software (
       ip_masq                     => true,
       docker_users                => [ $::ubuntudesktop::user ],
       use_upstream_package_source => false,
+      fixed_cidr                  => '172.26.0.1/16',
     }
 
     file { '/etc/cron.d/docker-gc':
