@@ -26,5 +26,5 @@ sudo apt dist-upgrade -y
 sudo apt install git r10k ruby-rubygems -y
 sudo apt install augeas-tools libaugeas0 ruby-augeas -y
 sudo apt autoremove -y
-sudo gem install openvox --version "8.23.1" 
-#sudo grep -q include_legacy_facts /etc/puppetlabs/puppet/puppet.conf || sudo bash -c 'echo "include_legacy_facts=true" >> /etc/puppetlabs/puppet/puppet.conf'
+sudo gem install openvox #--version "8.23.1" 
+#sudo gem install librarian-puppet
