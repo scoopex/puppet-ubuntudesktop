@@ -117,6 +117,7 @@ class ubuntudesktop::aspect::software (
     'default-jdk', 'maven', 'visualvm', 'icedtea-netx',
     'git', 'git-man', 'tig', 'diffutils', 'diffstat', 'myrepos', 'git-review',
     'flameshot',
+    'vlc',
     'curl', 'wget',
     'htop',
     'iftop', 'iptraf-ng',
