@@ -376,6 +376,20 @@ class ubuntudesktop::aspect::software (
   }
 
   #########################################################################
+  ### Telepresence
+
+  # due to https://github.com/telepresenceio/telepresence/issues/3992
+  alternatives { 'sudo':
+    path    => '/usr/bin/sudo.ws',
+    require => Package['vim']
+  }
+  exec { "curl -c -q -fL https://github.com/telepresenceio/telepresence/releases/latest/download/telepresence-linux-amd64 -o ${ubuntudesktop::cachedir}/telepresence && cp -f ${ubuntudesktop::cachedir}/telepresence /usr/locl/bin/telepresence":
+    user   => 'root',
+    unless => "test -f ${ubuntudesktop::cachedir}/telepresence",
+    path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
+  }
+
+  #########################################################################
   ### SPOTIFY
 
   if ($spotify) {
