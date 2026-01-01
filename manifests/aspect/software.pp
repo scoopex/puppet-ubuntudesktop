@@ -24,7 +24,7 @@ class ubuntudesktop::aspect::software (
   Boolean $virtualbox                = true,
   Boolean $docker                    = true,
   Boolean $openvpn                   = true,
-  Boolean $wireguard                 = false,
+  Boolean $wireguard                 = true,
   Boolean $spotify                   = true,
   Boolean $zoom                      = false,
   Boolean $openstack                 = true,
@@ -405,6 +405,8 @@ class ubuntudesktop::aspect::software (
       path   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin',
     }
   }
+
+  ubuntudesktop::helpers::snap_install { 'typst': }
 
 
   #########################################################################
