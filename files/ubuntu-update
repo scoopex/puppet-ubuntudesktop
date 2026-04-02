@@ -9,11 +9,11 @@ unset LC_ALL
 unset LANG
 set -x
 set -e
-apt autoremove -o Acquire::ForceIPv4=true --purge
-apt update -o Acquire::ForceIPv4=true
-apt upgrade -o Acquire::ForceIPv4=true
-apt autoremove -o Acquire::ForceIPv4=true --purge
-apt dist-upgrade -o Acquire::ForceIPv4=true
-apt autoremove -o Acquire::ForceIPv4=true --purge
-which fwupdmgr &>/dev/null && fwupdmgr update
-flatpak update --assumeyes
+systemd-inhibit apt autoremove -o Acquire::ForceIPv4=true --purge
+systemd-inhibit apt update -o Acquire::ForceIPv4=true
+systemd-inhibit apt upgrade -o Acquire::ForceIPv4=true
+systemd-inhibit apt autoremove -o Acquire::ForceIPv4=true --purge
+systemd-inhibit apt dist-upgrade -o Acquire::ForceIPv4=true
+systemd-inhibit apt autoremove -o Acquire::ForceIPv4=true --purge
+which fwupdmgr &>/dev/null && systemd-inhibit fwupdmgr update
+systemd-inhibit flatpak update --assumeyes
