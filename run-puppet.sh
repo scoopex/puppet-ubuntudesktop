@@ -6,12 +6,12 @@ cachedir="/var/cache/puppet-ubuntudesktop/"
 age="$(( $(date +%s) - $(stat -c %Y $cachedir) ))"
 sdir="$(dirname $(readlink -f $0))"
 
-if ! [ -f $cachedir ] || [ $age -gt $(( 3600 * 24 * 8 )) ];then
-   echo "sudo rm -rf ${cachedir?}/*"
+if ! [ -f "$cachedir" ] || [ "$age" -gt "$(( 3600 * 24 * 8 ))" ];then
+   echo "sudo rm -rvf ${cachedir?}/*"
    sudo rm -rvf "${cachedir?}/*"
 else
    echo "INFO: Cache not old enough, delete cachedir for reinstall:"
-   echo "sudo rm -rf ${cachedir?CACHEDIR}/*"
+   echo "Optional: sudo rm -rf ${cachedir?CACHEDIR}/*"
 fi
 
 echo 
