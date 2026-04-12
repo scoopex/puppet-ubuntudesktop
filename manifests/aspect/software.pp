@@ -163,6 +163,7 @@ class ubuntudesktop::aspect::software (
     'ipmiutil', 'xtightvncviewer',
     'apt-file',
     'flatpak', 'kde-config-flatpak', 'plasma-discover-backend-flatpak',
+    'kde-full',
   ]
 
   $install_packages = $default_packages + $packages_additional
