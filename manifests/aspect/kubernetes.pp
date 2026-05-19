@@ -22,7 +22,7 @@ class ubuntudesktop::aspect::kubernetes (
     path    => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:${ubuntudesktop::homedir}/.krew/bin",
   }
   -> ubuntudesktop::helpers::krew_install {
-    ['neat', 'who-can', 'sniff' ,'trace', 'df-pv', 'access-matrix' , 'node-admin' ,'spy', 'view-secret']:
+    ['neat', 'who-can', 'sniff' ,'trace', 'df-pv', 'access-matrix' , 'node-admin' ,'spy', 'view-secret', 'ns', 'ctx' ]:
   }
 
   $k9s_file = 'k9s_Linux_amd64.tar.gz'
