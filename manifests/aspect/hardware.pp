@@ -44,7 +44,7 @@ class ubuntudesktop::aspect::hardware (){
     mode    => '0640',
     content => @("EOF")
     {
-        "version": "2.1.1",
+        "version": "2.2.0",
         "autoload": {
             "Logitech MX Master 3S": "Mouse"
         }
