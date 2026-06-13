@@ -360,6 +360,7 @@ class ubuntudesktop::aspect::software (
     ${ubuntudesktop::user} ALL = NOPASSWD:/usr/sbin/vpnc
     ${ubuntudesktop::user} ALL = NOPASSWD:/usr/bin/wg-quick
     ${ubuntudesktop::user} ALL = NOPASSWD:/usr/bin/wg
+    ${ubuntudesktop::user} ALL = NOPASSWD:${ubuntudesktop::homedir}/ms-env/bin/vpn
     | EOF
   }
   if ($wireguard) {
