@@ -23,6 +23,7 @@ mod 'puppetlabs-augeas_core', '1.5.0'
 mod 'puppetlabs-mount_core', '1.3.0'
 mod 'dodevops-githubreleases', '4.1.0'
 mod 'puppetlabs-apt', '10.0.1'
+mod 'puppet-unattended_upgrades', '9.1.0'
 
 #mod 'dodevops-githubreleases',
 #    :git => 'https://github.com/scoopex/puppet-githubreleases.git'

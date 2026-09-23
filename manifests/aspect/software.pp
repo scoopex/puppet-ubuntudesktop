@@ -29,6 +29,7 @@ class ubuntudesktop::aspect::software (
   Boolean $zoom                      = false,
   Boolean $openstack                 = true,
   Boolean $signal                    = true,
+  Boolean $unattended_upgrades       = true,
 ) {
   # Install Helper Files
   file { '/opt/ubuntudesktop/':
@@ -185,6 +186,12 @@ class ubuntudesktop::aspect::software (
   ensure_resource('package', $install_python_packages, { 'ensure' => 'present' })
 
 
+  if ($unattended_upgrades) {
+    class { 'unattended_upgrades':
+      update => 'always',
+      upgrade => 'always',
+    }
+  }
   if ($zoom) {
     ensure_resource('package', ['libxcb-xtest0', 'libegl1-mesa', 'libgl1-mesa-glx'], { 'ensure' => 'present' })
     ubuntudesktop::helpers::deb_package_install_from_url { 'zoom':
