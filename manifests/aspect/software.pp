@@ -83,6 +83,7 @@ class ubuntudesktop::aspect::software (
     'dialog',
     'keepassxc-full',
     'wavemon',
+    'kooha',
     'wakeonlan',
     'w3m',
     'xalan',
@@ -337,7 +338,7 @@ class ubuntudesktop::aspect::software (
       group   => 'root',
       mode    => '0644',
       content => "
-@daily root /usr/bin/docker system prune -a --filter 'until=48h' -f 2>&1|logger -t docker-system-prune
+* */3 * * * root /usr/bin/docker system prune -a --filter 'until=48h' -f 2>&1|logger -t docker-system-prune
       "
     }
     file { '/etc/docker/daemon.json':
