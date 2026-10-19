@@ -1,6 +1,6 @@
 class ubuntudesktop::aspect::hardware (){
 
-  package { 'libinput-tools':
+  package { [ 'libinput-tools', 'input-remapper', 'input-remapper-daemon']:
     ensure => installed,
   }
 

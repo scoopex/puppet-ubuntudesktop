@@ -27,4 +27,5 @@ sudo apt install git r10k ruby-rubygems -y
 sudo apt install augeas-tools libaugeas0 ruby-augeas -y
 sudo apt autoremove -y
 sudo gem install openvox #--version "8.23.1" 
+sudo gem update openvox
 #sudo gem install librarian-puppet
