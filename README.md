@@ -4,7 +4,7 @@ Overview
 I use this repo/code to setup my personal workstation/laptop system.
 Puppet is executed in serverless mode using "puppet apply".
 
-This setup is crafted for Ubuntu 22.04 / Jammy.
+This setup is crafted for Ubuntu 26.04.
 
 This project is GNU GPLv3 (see LICENCE file). Contributions or forks are welcome.
 
@@ -55,25 +55,10 @@ rake
 Open TODOs
 ==========
 
- * https://docs.docker.com/engine/install/ubuntu/
- * https://www.omgubuntu.co.uk/2022/04/how-to-install-firefox-deb-apt-ubuntu-22-04
- * Do not use my own virtualbox release
-   * https://github.com/scoopex/puppet-virtualbox
-   * https://github.com/voxpupuli/puppet-virtualbox/issues/57
  * Add a custom/local configuration
  * Rollout ms-env 
  * Add the correct Virtualbox apt keys
- * Use gconftool to provision specific settings
-   ```
-   gconftool-2  --recursive-list /
-   ```
  * Autostart & Configure: clipit
  * Set Terminal Settings
    * Scrolling
    * Hotkeys
- * Configure Nextcloud
- * Configure Backup
- * Testing
-   * Puppet-Lint
-   * RSPec Tests
-   * Serverspec Tests
